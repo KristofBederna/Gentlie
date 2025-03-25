@@ -1,5 +1,0 @@
-0 void
-1 iceBrick
-2 IceTile
-3 ice
-4 snow
