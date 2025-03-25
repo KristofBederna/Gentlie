@@ -3,6 +3,7 @@ package inf.elte.hu.gameengine_javafx.Misc.MapClasses;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
+import inf.elte.hu.gameengine_javafx.Misc.Config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +120,7 @@ public class Chunk {
                 "/assets/tiles/" + TileLoader.getTilePath(value) + ".png",
                 tileEntity.getComponent(DimensionComponent.class).getWidth(),
                 tileEntity.getComponent(DimensionComponent.class).getHeight(),
-                value != 2
+                Config.wallTiles.contains(value)
         );
         chunk.get(x).set(y, newTileEntity);
     }

@@ -8,6 +8,7 @@ import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The {@code EntityHub} class is a singleton responsible for managing entities and their associated
@@ -22,7 +23,11 @@ public class EntityHub {
     private static EntityHub instance;
     private final Map<Class<?>, EntityManager<?>> entityManagers;
     final Map<Integer, Entity> entities = new HashMap<>();
-    private final Map<Class<? extends Component>, List<Integer>> componentCache = new HashMap<>();
+    private final Map<Class<? extends Component>, List<Integer>> componentCache = new ConcurrentHashMap<>();
+
+    public static void resetInstance() {
+        instance = null;
+    }
 
     public Map<Class<? extends Component>, List<Integer>> getComponentCache() {
         return componentCache;
@@ -32,7 +37,7 @@ public class EntityHub {
      * Private constructor for initializing the entity hub.
      */
     private EntityHub() {
-        entityManagers = new HashMap<>();
+        entityManagers = new ConcurrentHashMap<>();
     }
 
     /**
@@ -91,7 +96,9 @@ public class EntityHub {
      * Unloads all entities managed by the entity managers.
      */
     public void unloadAll() {
-        entityManagers.values().forEach(EntityManager::unloadAll);
+        entities.clear();
+        entityManagers.clear();
+        componentCache.clear();
     }
 
     /**

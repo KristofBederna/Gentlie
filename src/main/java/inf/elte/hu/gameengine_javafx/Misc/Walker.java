@@ -32,7 +32,7 @@ public class Walker {
     public void walk() {
         Random r = new Random();
         while (getFilledPercentage() < STOP_PERCENTAGE) {
-            if (world.getComponent(WorldDataComponent.class).getElement(x, y).getComponent(TileValueComponent.class).getTileValue() == 1) {
+            if (!Config.wallTiles.contains(world.getComponent(WorldDataComponent.class).getElement(x, y).getComponent(TileValueComponent.class).getTileValue())) {
                 changeDirection();
                 continue;
             }

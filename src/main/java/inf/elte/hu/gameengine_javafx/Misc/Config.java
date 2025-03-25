@@ -14,7 +14,7 @@ public class Config {
     public static int loadDistance = 2;
     public static double drag = 0.001;
     public static double friction = 0.001;
-    public static boolean renderDebugMode = false;
+    public static boolean renderDebugMode = true;
     public static boolean fullScreenMode = false;
     public static List<Integer> wallTiles = new ArrayList<>(List.of(0, 1, 3));
 }

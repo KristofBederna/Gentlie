@@ -51,7 +51,11 @@ public class MainScene extends GameScene {
         label.addStyleClass("main-menu-label");
         this.getRoot().getStyleClass().add("main-menu-scene");
 
-        new GameLoopStartUp();
+        if (GameLoopStartUp.getGameLoop() == null) {
+            new GameLoopStartUp();
+        } else {
+            GameLoopStartUp.getGameLoop().setRunning(true);
+        }
     }
 
     private void systemStartUp() {
@@ -59,16 +63,19 @@ public class MainScene extends GameScene {
         SystemHub systemHub = SystemHub.getInstance();
         systemHub.addSystem(ResourceSystem.class, new ResourceSystem(),1);
         systemHub.addSystem(SoundSystem.class, new SoundSystem(), 2);
+        systemHub.addSystem(RenderSystem.class, new RenderSystem(), 3);
     }
 
     @Override
     public void breakdown() {
         EntityHub.getInstance().unloadAll();
-        EntityHub.getInstance().removeAllEntityManagers();
+        EntityHub.resetInstance();
         CameraEntity.resetInstance();
         SystemHub.getInstance().shutDownSystems();
         GameLoopStartUp.stopGameLoop();
         ResourceHub.getInstance().clearResources();
+        ResourceHub.resetInstance();
         uiRoot.getInstance().unloadAll();
+        System.gc();
     }
 }

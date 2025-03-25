@@ -32,6 +32,10 @@ public class ResourceHub {
         return instance;
     }
 
+    public static void resetInstance() {
+        instance = null;
+    }
+
     /**
      * Adds a {@code ResourceManager} to the {@code ResourceHub}.
      *

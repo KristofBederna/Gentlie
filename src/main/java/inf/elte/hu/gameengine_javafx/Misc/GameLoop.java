@@ -63,7 +63,7 @@ public abstract class GameLoop extends Thread {
                     try {
                         Thread.sleep(sleepTime / 1_000_000, (int) (sleepTime % 1_000_000));
                     } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
+
                     }
                 } else {
                     Thread.yield();
@@ -78,4 +78,8 @@ public abstract class GameLoop extends Thread {
      * This method is called every frame after time updates, and it contains the game's primary logic to execute during each frame.
      */
     public abstract void update();
+
+    public void setRunning(boolean b) {
+        running = b;
+    }
 }

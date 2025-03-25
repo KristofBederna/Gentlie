@@ -1,5 +1,7 @@
 package Game.Misc.Scenes;
 
+import Game.Entities.ExitEntity;
+import Game.Systems.EventTileSystem;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
@@ -7,19 +9,18 @@ import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerCompone
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.StateComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
+import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.*;
 import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.MouseInputHandler;
+import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
-import inf.elte.hu.gameengine_javafx.Misc.SoundEffect;
-import inf.elte.hu.gameengine_javafx.Misc.SoundEffectStore;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.ResourceStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.SystemStartUp;
-import inf.elte.hu.gameengine_javafx.Misc.Time;
 import inf.elte.hu.gameengine_javafx.Systems.InputHandlingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PathfindingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.CollisionSystem;
@@ -40,33 +41,36 @@ public class HomeScene extends GameScene {
         new ResourceStartUp();
         WorldEntity.getInstance("/assets/maps/gentlieHome.txt", "/assets/tileSets/gameTileSet.txt");
 
-        new PlayerEntity(1920/2, 1080/2, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.tileSize*2, Config.tileSize*2);
+        new PlayerEntity(6*Config.tileSize+ (double) Config.tileSize /2, 4*Config.tileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.tileSize*2, Config.tileSize*2);
+
+        new ExitEntity(6*Config.tileSize, 11*Config.tileSize+Config.tileSize*0.8, 3*Config.tileSize, 0.2*Config.tileSize);
 
         CameraEntity.getInstance(1920, 1080, 16* Config.tileSize, 16*Config.tileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
 
-        interactionSetup();
-
         new SystemStartUp(this::SystemStartUp);
 
-        new GameLoopStartUp();
+        interactionSetup();
+
+        GameLoopStartUp.restartLoop();
     }
 
     private void SystemStartUp() {
         //Define systems to be started up here
         SystemHub systemHub = SystemHub.getInstance();
-        systemHub.addSystem(AnimationSystem.class, new AnimationSystem(), 1);
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(),2);
-        systemHub.addSystem(LightingSystem.class, new LightingSystem(),3);
-        systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(),4);
-        systemHub.addSystem(MovementSystem.class, new MovementSystem(),5);
-        systemHub.addSystem(ParticleSystem.class, new ParticleSystem(),6);
-        systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(),7);
-        systemHub.addSystem(CollisionSystem.class, new CollisionSystem(),8);
-        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(),9);
-        systemHub.addSystem(CameraSystem.class, new CameraSystem(), 10);
-        systemHub.addSystem(SoundSystem.class, new SoundSystem(), 11);
-        systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 12);
+        systemHub.addSystem(EventTileSystem.class, new EventTileSystem(),1);
+        systemHub.addSystem(AnimationSystem.class, new AnimationSystem(), 2);
+        systemHub.addSystem(RenderSystem.class, new RenderSystem(),3);
+        systemHub.addSystem(LightingSystem.class, new LightingSystem(),4);
+        systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(),5);
+        systemHub.addSystem(MovementSystem.class, new MovementSystem(),6);
+        systemHub.addSystem(ParticleSystem.class, new ParticleSystem(),7);
+        systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(),8);
+        systemHub.addSystem(CollisionSystem.class, new CollisionSystem(),9);
+        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(),10);
+        systemHub.addSystem(CameraSystem.class, new CameraSystem(), 11);
+        systemHub.addSystem(SoundSystem.class, new SoundSystem(), 12);
+        systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 13);
     }
 
     private void interactionSetup() {
@@ -127,6 +131,14 @@ public class HomeScene extends GameScene {
 
     @Override
     public void breakdown() {
-
+        EntityHub.getInstance().unloadAll();
+        EntityHub.resetInstance();
+        CameraEntity.resetInstance();
+        SystemHub.getInstance().shutDownSystems();
+        GameLoopStartUp.stopGameLoop();
+        ResourceHub.getInstance().clearResources();
+        ResourceHub.resetInstance();
+        uiRoot.getInstance().unloadAll();
+        System.gc();
     }
 }

@@ -45,4 +45,16 @@ public class GameLoopStartUp {
     public static void stopGameLoop() {
         gameLoop.stopLoop();
     }
+
+    public static GameLoop getGameLoop() {
+        return gameLoop;
+    }
+
+    public static void startGameLoop() {
+        gameLoop.startLoop();
+    }
+
+    public static void restartLoop() {
+        gameLoop.setRunning(true);
+    }
 }

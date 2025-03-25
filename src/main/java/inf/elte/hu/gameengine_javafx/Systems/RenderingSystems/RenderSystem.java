@@ -10,6 +10,7 @@ import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.RadiusComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ImageComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ZIndexComponent;
+import inf.elte.hu.gameengine_javafx.Components.ShapeComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.MapMeshComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDataComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
@@ -84,11 +85,21 @@ public class RenderSystem extends GameSystem {
                 renderMapMesh(gc);
                 renderPathFindingRoute(gc);
                 renderPathFindingNeighbours(gc);
+                renderShapes(gc);
             }
             //handleLighting(gc);
 
             setFocused();
         });
+    }
+
+    private static void renderShapes(GraphicsContext gc) {
+        for (Entity entity : EntityHub.getInstance().getEntitiesWithComponent(ShapeComponent.class)) {
+            if (entity == null) {
+                continue;
+            }
+            entity.getComponent(ShapeComponent.class).getShape().render(gc, Color.PINK);
+        }
     }
 
     private static void renderPathFindingNeighbours(GraphicsContext gc) {
@@ -209,6 +220,9 @@ public class RenderSystem extends GameSystem {
      * Renders the tile currently occupied by the player.
      */
     private static void renderCurrentlyOccupiedTile() {
+        if (EntityHub.getInstance().getEntitiesWithType(PlayerEntity.class).isEmpty()) {
+            return;
+        }
         TileEntity tile = WorldEntity.getInstance().getComponent(WorldDataComponent.class).getElement(EntityHub.getInstance().getEntitiesWithType(PlayerEntity.class).getFirst().getComponent(CentralMassComponent.class).getCentral());
         Rectangle rectangle = new Rectangle(tile.getComponent(PositionComponent.class).getGlobal(), tile.getComponent(DimensionComponent.class).getWidth(), tile.getComponent(DimensionComponent.class).getHeight());
         rectangle.renderFill(GameCanvas.getInstance().getGraphicsContext2D(), Color.ORANGE);
