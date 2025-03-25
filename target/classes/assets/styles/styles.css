@@ -1,0 +1,11 @@
+.my-custom-button {
+    -fx-background-color: #ff0000;
+    -fx-border-color: #000000;
+    -fx-padding: 10px;
+}
+
+.my-custom-button-green {
+    -fx-background-color: #4cff00;
+    -fx-border-color: #000000;
+    -fx-padding: 10px;
+}
