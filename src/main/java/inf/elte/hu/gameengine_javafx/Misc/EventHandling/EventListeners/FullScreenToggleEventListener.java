@@ -12,4 +12,9 @@ public class FullScreenToggleEventListener implements EventListener<FullScreenTo
         Stage stage = event.getStage();
         Platform.runLater(() -> stage.setFullScreen(!stage.isFullScreen()));
     }
+
+    @Override
+    public void onExit() {
+
+    }
 }

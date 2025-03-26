@@ -13,6 +13,11 @@ public class EventComponent<T extends Event> extends Component {
         this.eventHandler = eventHandler;
     }
 
+    public EventComponent(T event, EventListener<T> eventHandler, T eventOnExit) {
+        this.event = event;
+        this.eventHandler = eventHandler;
+    }
+
     public Event getEvent() {
         return event;
     }

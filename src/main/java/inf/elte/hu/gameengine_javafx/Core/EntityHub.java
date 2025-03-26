@@ -6,6 +6,7 @@ import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ImageCompone
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Component;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
+import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -203,5 +204,14 @@ public class EntityHub {
             }
         }
         return entitiesWithType;
+    }
+
+    public void removeEntity(Entity entity) {
+        entities.remove(entity.getId());
+        for(List<Integer> componentIds : componentCache.values()) {
+            if (componentIds.contains(entity.getId())) {
+                componentIds.removeIf(entityId -> entityId == entity.getId());
+            }
+        }
     }
 }

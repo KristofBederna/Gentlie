@@ -1,14 +1,13 @@
 package Game.Systems;
 
 import Game.Components.EventComponent;
+import Game.Components.isInsideEventComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
 import inf.elte.hu.gameengine_javafx.Components.ShapeComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Shape;
-import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Event;
-import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListener;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventManager;
 
 public class EventTileSystem extends GameSystem {
@@ -20,14 +19,20 @@ public class EventTileSystem extends GameSystem {
     @Override
     protected void update() {
         EventManager eventManager = new EventManager();
-        var entities = EntityHub.getInstance().getEntitiesWithComponent(EventComponent.class);
+        var events = EntityHub.getInstance().getEntitiesWithComponent(EventComponent.class);
         var player = EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class);
 
-        for (var entity : entities) {
-            eventManager.registerListener(entity.getComponent(EventComponent.class).getEvent().getClass(), entity.getComponent(EventComponent.class).getEventHandler());
-            if (Shape.intersect(entity.getComponent(ShapeComponent.class).getShape(), player.getFirst().getComponent(HitBoxComponent.class).getHitBox())) {
-                eventManager.fireEvent(entity.getComponent(EventComponent.class).getEvent());
-            };
+        for (var event : events) {
+            eventManager.registerListener(event.getComponent(EventComponent.class).getEvent().getClass(), event.getComponent(EventComponent.class).getEventHandler());
+            if (Shape.intersect(event.getComponent(ShapeComponent.class).getShape(), player.getFirst().getComponent(HitBoxComponent.class).getHitBox())) {
+                eventManager.fireEvent(event.getComponent(EventComponent.class).getEvent());
+                event.getComponent(isInsideEventComponent.class).setInside(true, event);
+            } else {
+                if (event.getComponent(isInsideEventComponent.class).isInside()) {
+                    event.getComponent(EventComponent.class).getEventHandler().onExit();
+                }
+                event.getComponent(isInsideEventComponent.class).setInside(false, null);
+            }
         }
     }
 }

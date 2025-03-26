@@ -8,4 +8,9 @@ public class TestEventListener implements EventListener<TestEvent> {
     public void onEvent(TestEvent event) {
         System.out.println("TestEvent: " + event);
     }
+
+    @Override
+    public void onExit() {
+
+    }
 }

@@ -1,5 +1,6 @@
 package inf.elte.hu.gameengine_javafx.Systems.RenderingSystems;
 
+import Game.Entities.WaterEntity;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.LightHitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.LightComponent;
@@ -86,6 +87,10 @@ public class RenderSystem extends GameSystem {
                 renderPathFindingRoute(gc);
                 renderPathFindingNeighbours(gc);
                 renderShapes(gc);
+            }
+            if (!EntityHub.getInstance().getEntitiesWithType(WaterEntity.class).isEmpty()) {
+                EntityHub.getInstance().getEntitiesWithType(WaterEntity.class).getFirst().getComponent(ShapeComponent.class).getShape().renderFill(gc, new Color(0.29, 0.56, 0.89, 0.8) // Water-like blue with transparency
+                );
             }
             //handleLighting(gc);
 

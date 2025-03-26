@@ -1,5 +1,8 @@
+-1 transparent
 0 void
 1 iceBrick
 2 IceTile
 3 ice
 4 snow
+5 leftIce
+6 rightIce

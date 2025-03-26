@@ -75,6 +75,8 @@ public class MainScene extends GameScene {
         GameLoopStartUp.stopGameLoop();
         ResourceHub.getInstance().clearResources();
         ResourceHub.resetInstance();
+        this.getRoot().getStyleClass().clear();
+        uiRoot.getInstance().getStylesheets().clear();
         uiRoot.getInstance().unloadAll();
         System.gc();
     }

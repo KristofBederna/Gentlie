@@ -15,4 +15,5 @@ public interface EventListener<T extends Event> {
      * @param event The event instance to be processed.
      */
     void onEvent(T event);
+    void onExit();
 }

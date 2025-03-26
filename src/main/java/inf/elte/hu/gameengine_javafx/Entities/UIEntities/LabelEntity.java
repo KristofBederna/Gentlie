@@ -10,5 +10,4 @@ public class LabelEntity extends UIEntity<LabelComponent> {
         addToManager();
         this.addToUI();
     }
-
 }

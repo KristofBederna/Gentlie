@@ -19,4 +19,9 @@ public class ResolutionChangeEventListener implements EventListener<ResolutionCh
         CameraEntity.getInstance().setWidth(canvas.getWidth());
     }
 
+    @Override
+    public void onExit() {
+
+    }
+
 }
