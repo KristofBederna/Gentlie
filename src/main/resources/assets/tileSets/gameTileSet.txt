@@ -6,3 +6,4 @@
 4 snow
 5 leftIce
 6 rightIce
+7 transparent
