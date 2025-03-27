@@ -19,6 +19,7 @@ import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
+import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.MouseInputHandler;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
@@ -43,6 +44,8 @@ import javafx.scene.text.TextAlignment;
 import java.util.List;
 
 public class HomeIslandScene extends GameScene {
+    Point spawn;
+
     /**
      * Constructs a new {@code GameScene} with the specified parent node, width, and height.
      *
@@ -50,8 +53,9 @@ public class HomeIslandScene extends GameScene {
      * @param width  The width of the scene in pixels.
      * @param height The height of the scene in pixels.
      */
-    public HomeIslandScene(Parent parent, double width, double height) {
+    public HomeIslandScene(Parent parent, double width, double height, Point spawn) {
         super(parent, width, height);
+        this.spawn = spawn;
     }
 
     @Override
@@ -61,7 +65,7 @@ public class HomeIslandScene extends GameScene {
         new ResourceStartUp();
         WorldEntity.getInstance("/assets/maps/homeIsland.txt", "/assets/tileSets/gameTileSet.txt");
 
-        new PlayerEntity(7* Config.tileSize-Config.tileSize*0.25-1, 2*Config.tileSize+Config.tileSize*0.25-1, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", (double) Config.tileSize * 0.75, (double) Config.tileSize * 0.75);
+        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", (double) Config.tileSize * 0.75, (double) Config.tileSize * 0.75);
 
         new WaterEntity();
 

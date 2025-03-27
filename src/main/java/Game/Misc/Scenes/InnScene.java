@@ -1,6 +1,8 @@
 package Game.Misc.Scenes;
 
 import Game.Entities.ExitEntity;
+import Game.Misc.EventHandling.EventListeners.ExitInnEventListener;
+import Game.Misc.EventHandling.Events.ExitInnEvent;
 import Game.Systems.EventTileSystem;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
@@ -46,11 +48,11 @@ public class InnScene extends GameScene {
         Config.wallTiles = List.of(0, 1, 3);
 
         new ResourceStartUp();
-        WorldEntity.getInstance("/assets/maps/gentlieHome.txt", "/assets/tileSets/gameTileSet.txt");
+        WorldEntity.getInstance("/assets/maps/inn.txt", "/assets/tileSets/innTileSet.txt");
 
-        new PlayerEntity(6*Config.tileSize+ (double) Config.tileSize /2, 4*Config.tileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.tileSize*2, Config.tileSize*2);
+        new PlayerEntity(5*Config.tileSize+ (double) Config.tileSize /2, 8*Config.tileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.tileSize*2, Config.tileSize*2);
 
-        new ExitEntity(6*Config.tileSize, 11*Config.tileSize+Config.tileSize*0.8, 3*Config.tileSize, 0.2*Config.tileSize);
+        new ExitEntity(5*Config.tileSize, 10*Config.tileSize+Config.tileSize*0.8, 3*Config.tileSize, 0.2*Config.tileSize, new ExitInnEvent(), new ExitInnEventListener());
 
         CameraEntity.getInstance(1920, 1080, 16* Config.tileSize, 16*Config.tileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
