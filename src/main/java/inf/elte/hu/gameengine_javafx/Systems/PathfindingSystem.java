@@ -10,6 +10,7 @@ import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Maths.Vector;
+import inf.elte.hu.gameengine_javafx.Misc.Pathfinding;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
 
 import java.util.*;
@@ -47,7 +48,7 @@ public class PathfindingSystem extends GameSystem {
             }
 
             if (pathfindingComponent.getPath() == null) {
-                pathfindingComponent.setPath(selectPath(start, end, entity));
+                pathfindingComponent.setPath(Pathfinding.selectPath(start, end, entity));
             } else {
                 if (!pathfindingComponent.getPath().isEmpty()) {
                     Point node = pathfindingComponent.getPath().getFirst();
@@ -149,64 +150,5 @@ public class PathfindingSystem extends GameSystem {
 
     private void counterLeft(Entity e) {
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(0);
-    }
-
-    /**
-     * Selects a path from the start point to the end point using the A* algorithm.
-     * The algorithm calculates the shortest path considering the neighbors of each point.
-     *
-     * @param start The start point of the pathfinding.
-     * @param end The end point of the pathfinding.
-     * @param entity The entity for which the pathfinding is being calculated.
-     * @return A list of points representing the path from start to end.
-     */
-    private List<Point> selectPath(Point start, Point end, Entity entity) {
-        List<Point> path = new ArrayList<>();
-        Map<Point, Point> cameFrom = new HashMap<>();
-        PriorityQueue<Point> openSet = new PriorityQueue<>(Comparator.comparingDouble(p -> p.distanceTo(end)));
-        Set<Point> closedSet = new HashSet<>();
-        Map<Point, Double> gScore = new HashMap<>();
-
-        openSet.add(start);
-        gScore.put(start, 0.0);
-
-        while (!openSet.isEmpty()) {
-            Point current = openSet.poll();
-            if (current.compareCoordinates(end)) {
-                return reconstructPath(cameFrom, current);
-            }
-
-            closedSet.add(current);
-            List<Point> neighbours = entity.getComponent(PathfindingComponent.class).getNeighbours(current);
-
-            for (Point neighbor : neighbours) {
-                if (closedSet.contains(neighbor)) continue;
-
-                double tentativeGScore = gScore.getOrDefault(current, Double.MAX_VALUE) + current.distanceTo(neighbor);
-
-                if (!gScore.containsKey(neighbor) || tentativeGScore < gScore.get(neighbor)) {
-                    cameFrom.put(neighbor, current);
-                    gScore.put(neighbor, tentativeGScore);
-                    if (!openSet.contains(neighbor)) openSet.add(neighbor);
-                }
-            }
-        }
-        return path;
-    }
-
-    /**
-     * Reconstructs the path from the start to the end based on the `cameFrom` map.
-     *
-     * @param cameFrom The map that tracks the best previous point for each point.
-     * @param current The current point from which the path is being reconstructed.
-     * @return A list of points representing the reconstructed path from start to end.
-     */
-    private List<Point> reconstructPath(Map<Point, Point> cameFrom, Point current) {
-        List<Point> path = new LinkedList<>();
-        while (cameFrom.containsKey(current)) {
-            path.add(0, current);
-            current = cameFrom.get(current);
-        }
-        return path;
     }
 }
