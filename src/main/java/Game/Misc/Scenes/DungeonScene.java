@@ -1,29 +1,21 @@
 package Game.Misc.Scenes;
 
-import Game.Entities.*;
-import Game.Misc.EventHandling.EventListeners.EnterAdventureEventListener;
-import Game.Misc.EventHandling.EventListeners.EnterHomeEventListener;
-import Game.Misc.EventHandling.EventListeners.EnterInnListener;
-import Game.Misc.EventHandling.Events.EnterAdventureEvent;
-import Game.Misc.EventHandling.Events.EnterHomeEvent;
-import Game.Misc.EventHandling.Events.EnterInnEvent;
+import Game.Entities.ExitEntity;
+import Game.Misc.EventHandling.EventListeners.ExitHomeEventListener;
+import Game.Misc.EventHandling.Events.ExitHomeEvent;
 import Game.Systems.EventTileSystem;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.StateComponent;
-import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
-import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDataComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
-import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
-import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.MouseInputHandler;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
@@ -37,65 +29,32 @@ import inf.elte.hu.gameengine_javafx.Systems.PathfindingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.CollisionSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.*;
+import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.DynamicWorldLoaderSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.WorldLoaderSystem;
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
-import javafx.scene.text.TextAlignment;
 
 import java.util.List;
 
-public class HomeIslandScene extends GameScene {
-    Point spawn;
-
-    /**
-     * Constructs a new {@code GameScene} with the specified parent node, width, and height.
-     *
-     * @param parent The root node of the scene.
-     * @param width  The width of the scene in pixels.
-     * @param height The height of the scene in pixels.
-     */
-    public HomeIslandScene(Parent parent, double width, double height, Point spawn) {
+public class DungeonScene extends GameScene {
+    public DungeonScene(Parent parent, double width, double height) {
         super(parent, width, height);
-        this.spawn = spawn;
     }
 
     @Override
     public void setup() {
-        Config.wallTiles = List.of(3, 5, 6, 7);
+        Config.wallTiles = List.of(0, 1, 3);
 
         new ResourceStartUp();
-        WorldEntity.getInstance("/assets/maps/homeIsland.txt", "/assets/tileSets/gameTileSet.txt");
 
-        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", (double) Config.tileSize * 0.75, (double) Config.tileSize * 0.75);
+        WorldEntity.getInstance(32, 32, "/assets/maps/gentlieHome.txt", "/assets/tileSets/gameTileSet.txt");
 
-        new WaterEntity();
+        new PlayerEntity(6*Config.tileSize+ (double) Config.tileSize /2, 4*Config.tileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.tileSize*2, Config.tileSize*2);
 
-        new IglooEntity(6*Config.tileSize, Config.tileSize, 2*Config.tileSize, 2*Config.tileSize);
-        new ShipEntity(14*Config.tileSize, 1.5*Config.tileSize, 2*Config.tileSize, 2*Config.tileSize);
-        new InnEntity(2*Config.tileSize, Config.tileSize, 2*Config.tileSize, 2*Config.tileSize);
-
-
-        EnterHomeLabel homeLabel = new EnterHomeLabel("Press 'E' to enter your home", 6* Config.tileSize, 3*Config.tileSize, Config.tileSize* 0.75, Config.tileSize* 0.75);
-        homeLabel.removeFromUI();
-        homeLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
-
-        EnterInnLabel innLabel = new EnterInnLabel("Press 'E' to enter the inn", 3* Config.tileSize, 3*Config.tileSize, Config.tileSize* 0.75, Config.tileSize* 0.75);
-        innLabel.removeFromUI();
-        innLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
-
-        AdventureLabel adventureLabel = new AdventureLabel("Press 'E' to go on an adventure", 10 * Config.tileSize, 3*Config.tileSize, Config.tileSize* 0.75, Config.tileSize* 0.75);
-        adventureLabel.removeFromUI();
-        adventureLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
-
-
-        new EntryEntity(7* Config.tileSize-Config.tileSize*0.25-1, 2*Config.tileSize+Config.tileSize*0.25-1, Config.tileSize* 0.75, Config.tileSize* 0.75, new EnterHomeEvent(), new EnterHomeEventListener());
-        new EntryEntity(2* Config.tileSize+Config.tileSize*0.25-1, 2*Config.tileSize+Config.tileSize*0.25-1, Config.tileSize* 0.75, Config.tileSize* 0.75, new EnterInnEvent(), new EnterInnListener());
-        new EntryEntity(14*Config.tileSize, 2.5*Config.tileSize, 2*Config.tileSize, (double) Config.tileSize /2, new EnterAdventureEvent(), new EnterAdventureEventListener());
-
-        CameraEntity.getInstance(1920, 1080, 16* Config.tileSize, 16*Config.tileSize);
+        CameraEntity.getInstance(1920, 1080, 32* Config.tileSize, 32*Config.tileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
 
         new SystemStartUp(this::SystemStartUp);
@@ -120,15 +79,29 @@ public class HomeIslandScene extends GameScene {
         systemHub.addSystem(ResourceSystem.class, new ResourceSystem(),10);
         systemHub.addSystem(CameraSystem.class, new CameraSystem(), 11);
         systemHub.addSystem(SoundSystem.class, new SoundSystem(), 12);
-        systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 13);
+        systemHub.addSystem(DynamicWorldLoaderSystem.class, new DynamicWorldLoaderSystem(2, 2), 13);
     }
 
     private void interactionSetup() {
         PlayerEntity player = (PlayerEntity)EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst();
         InteractiveComponent playerInteractiveComponent = player.getComponent(InteractiveComponent.class);
+        playerInteractiveComponent.mapInput(KeyCode.UP, 10, () -> moveUp(player), () -> counterUp(player));
+        playerInteractiveComponent.mapInput(KeyCode.DOWN, 10, () -> moveDown(player), () -> counterDown(player));
         playerInteractiveComponent.mapInput(KeyCode.LEFT, 10, () -> moveLeft(player), () -> counterLeft(player));
         playerInteractiveComponent.mapInput(KeyCode.RIGHT, 10, () -> moveRight(player), () -> counterRight(player));
         playerInteractiveComponent.mapInput(MouseButton.PRIMARY, 100, () -> {player.getComponent(PositionComponent.class).setLocalX(MouseInputHandler.getInstance().getMouseX(), player); player.getComponent(PositionComponent.class).setLocalY(MouseInputHandler.getInstance().getMouseY(), player);});
+    }
+
+    private void moveUp(Entity e) {
+        double dy = -4 * Time.getInstance().getDeltaTime();
+        e.getComponent(AccelerationComponent.class).getAcceleration().setDy(dy);
+        e.getComponent(StateComponent.class).setCurrentState("up");
+    }
+
+    private void moveDown(Entity e) {
+        double dy = 4 * Time.getInstance().getDeltaTime();
+        e.getComponent(AccelerationComponent.class).getAcceleration().setDy(dy);
+        e.getComponent(StateComponent.class).setCurrentState("down");
     }
 
     private void moveLeft(Entity e) {
@@ -141,6 +114,16 @@ public class HomeIslandScene extends GameScene {
         double dx = 4 * Time.getInstance().getDeltaTime();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
         e.getComponent(StateComponent.class).setCurrentState("right");
+    }
+
+    private void counterUp(Entity e) {
+        e.getComponent(AccelerationComponent.class).getAcceleration().setDy(0);
+        e.getComponent(StateComponent.class).setCurrentState("idle");
+    }
+
+    private void counterDown(Entity e) {
+        e.getComponent(AccelerationComponent.class).getAcceleration().setDy(0);
+        e.getComponent(StateComponent.class).setCurrentState("idle");
     }
 
     private void counterRight(Entity e) {

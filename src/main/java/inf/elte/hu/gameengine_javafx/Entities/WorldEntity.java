@@ -46,6 +46,14 @@ public class WorldEntity extends Entity {
         addToManager();
     }
 
+    private WorldEntity(double width, double height, String tileSetPath) {
+        this.addComponent(new WorldDimensionComponent(width, height));
+        this.addComponent(new WorldDataComponent());
+        this.addComponent(new TileSetComponent(tileSetPath));
+        this.addComponent(new MapMeshComponent());
+        addToManager();
+    }
+
     public static WorldEntity getInstance(double width, double height, String filePath, String tileSetPath, String separator) {
         if (instance == null) {
             instance = new WorldEntity(width, height, filePath, tileSetPath, separator);
@@ -70,6 +78,13 @@ public class WorldEntity extends Entity {
     public static WorldEntity getInstance(String filePath, String tileSetPath, String separator) {
         if (instance == null) {
             instance = new WorldEntity(filePath, tileSetPath, separator);
+        }
+        return instance;
+    }
+
+    public static WorldEntity getInstance(double width, double height, String tileSetPath) {
+        if (instance == null) {
+            instance = new WorldEntity(width, height, tileSetPath);
         }
         return instance;
     }

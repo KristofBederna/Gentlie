@@ -220,23 +220,23 @@ public class DynamicWorldLoaderSystem extends GameSystem {
         for (int x = 0; x < Config.chunkWidth; x++) {
             for (int y = 0; y < Config.chunkHeight; y++) {
                 if (x == 0 && y == 0 && chunkX == 0 && chunkY == 0) {
-                    chunk.setElement(x, y, 3); // topLeftWall
+                    chunk.setElement(x, y, 1); // topLeftWall
                 } else if (x == Config.chunkWidth - 1 && y == 0 && chunkX == 0 && chunkY == height - 1) {
                     chunk.setElement(x, y, 1); // BottomLeftWall
                 } else if (x == 0 && y == Config.chunkHeight - 1 && chunkX == width - 1 && chunkY == 0) {
-                    chunk.setElement(x, y, 4); // topRightWall
+                    chunk.setElement(x, y, 1); // topRightWall
                 } else if (x == Config.chunkWidth - 1 && y == Config.chunkHeight - 1 && chunkX == width - 1 && chunkY == height - 1) {
-                    chunk.setElement(x, y, 2); // bottomRightWall
+                    chunk.setElement(x, y, 1); // bottomRightWall
                 } else if (x == 0 && chunkY == 0) {
-                    chunk.setElement(x, y, 7); // topWall
+                    chunk.setElement(x, y, 1); // topWall
                 } else if (x == Config.chunkWidth - 1 && chunkY == height - 1) {
-                    chunk.setElement(x, y, 8); // bottomWall
+                    chunk.setElement(x, y, 1); // bottomWall
                 } else if (y == 0 && chunkX == 0) {
-                    chunk.setElement(x, y, 5); // leftWall
+                    chunk.setElement(x, y, 1); // leftWall
                 } else if (y == Config.chunkHeight - 1 && chunkX == width - 1) {
-                    chunk.setElement(x, y, 6); // rightWall
+                    chunk.setElement(x, y, 1); // rightWall
                 } else {
-                    chunk.setElement(x, y, 9); // windowWall
+                    chunk.setElement(x, y, 4); // walkable tile
                 }
             }
         }

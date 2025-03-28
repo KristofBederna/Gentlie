@@ -1,5 +1,6 @@
 package inf.elte.hu.gameengine_javafx.Misc.MapClasses;
 
+import inf.elte.hu.gameengine_javafx.Components.TileValueComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.TileSetComponent;
 import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
@@ -26,7 +27,6 @@ public class WorldGenerator {
      */
     public static Chunk generateChunk(int chunkX, int chunkY, int chunkWidth, int chunkHeight) {
         List<List<TileEntity>> tiles = new ArrayList<>();
-        TileSetComponent tileSet = WorldEntity.getInstance().getComponent(TileSetComponent.class);
 
         int[][] tileValues = new int[chunkWidth][chunkHeight];
 
@@ -45,11 +45,10 @@ public class WorldGenerator {
                 int worldY = chunkY * chunkHeight * Config.tileSize + y * Config.tileSize;
 
                 int tileValue = tileValues[y][x];
-                String tilePath = tileSet.getTileLoader().getTilePath(tileValue);
+                String tilePath = TileLoader.getTilePath(tileValue);
                 if (tilePath == null) {
                     tilePath = "default.png";
                 }
-
                 TileEntity tile = new TileEntity(tileValue, worldX, worldY, "/assets/tiles/" + tilePath + ".png", Config.tileSize, Config.tileSize, Config.wallTiles.contains(tileValue));
                 row.add(tile);
             }
@@ -61,7 +60,7 @@ public class WorldGenerator {
 
     /**
      * Returns the tile value for the next tile to be placed at the specified coordinates.
-     * Currently, it always returns the tile value 9.
+     * Currently, it always returns the tile value 4.
      *
      * @param x          the x-coordinate of the tile in the chunk
      * @param y          the y-coordinate of the tile in the chunk
@@ -71,6 +70,6 @@ public class WorldGenerator {
      * @return the tile value to be placed at the specified coordinates
      */
     private static int getNextTileValue(int x, int y, int[][] tileValues, int chunkWidth, int chunkHeight) {
-        return 9; // Currently, the method returns a static value of 9 for all tiles.
+        return 4; // Currently, the method returns a static value of 4 for all tiles.
     }
 }

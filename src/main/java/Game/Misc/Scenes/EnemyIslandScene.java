@@ -1,12 +1,10 @@
 package Game.Misc.Scenes;
 
 import Game.Entities.*;
-import Game.Misc.EventHandling.EventListeners.EnterAdventureEventListener;
-import Game.Misc.EventHandling.EventListeners.EnterHomeEventListener;
-import Game.Misc.EventHandling.EventListeners.EnterInnListener;
-import Game.Misc.EventHandling.Events.EnterAdventureEvent;
-import Game.Misc.EventHandling.Events.EnterHomeEvent;
-import Game.Misc.EventHandling.Events.EnterInnEvent;
+import Game.Misc.EventHandling.EventListeners.EnterDungeonEventListener;
+import Game.Misc.EventHandling.EventListeners.GoHomeEventListener;
+import Game.Misc.EventHandling.Events.EnterDungeonEvent;
+import Game.Misc.EventHandling.Events.GoHomeEvent;
 import Game.Systems.EventTileSystem;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
@@ -14,14 +12,12 @@ import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationCo
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.StateComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
-import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDataComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
-import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
@@ -47,7 +43,7 @@ import javafx.scene.text.TextAlignment;
 
 import java.util.List;
 
-public class HomeIslandScene extends GameScene {
+public class EnemyIslandScene extends GameScene {
     Point spawn;
 
     /**
@@ -57,7 +53,7 @@ public class HomeIslandScene extends GameScene {
      * @param width  The width of the scene in pixels.
      * @param height The height of the scene in pixels.
      */
-    public HomeIslandScene(Parent parent, double width, double height, Point spawn) {
+    public EnemyIslandScene(Parent parent, double width, double height, Point spawn) {
         super(parent, width, height);
         this.spawn = spawn;
     }
@@ -67,33 +63,27 @@ public class HomeIslandScene extends GameScene {
         Config.wallTiles = List.of(3, 5, 6, 7);
 
         new ResourceStartUp();
-        WorldEntity.getInstance("/assets/maps/homeIsland.txt", "/assets/tileSets/gameTileSet.txt");
+        WorldEntity.getInstance("/assets/maps/enemyIsland.txt", "/assets/tileSets/gameTileSet.txt");
 
         new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", (double) Config.tileSize * 0.75, (double) Config.tileSize * 0.75);
 
         new WaterEntity();
 
         new IglooEntity(6*Config.tileSize, Config.tileSize, 2*Config.tileSize, 2*Config.tileSize);
-        new ShipEntity(14*Config.tileSize, 1.5*Config.tileSize, 2*Config.tileSize, 2*Config.tileSize);
-        new InnEntity(2*Config.tileSize, Config.tileSize, 2*Config.tileSize, 2*Config.tileSize);
+        new ShipEntity(0, 1.5*Config.tileSize, 2*Config.tileSize, 2*Config.tileSize);
 
 
-        EnterHomeLabel homeLabel = new EnterHomeLabel("Press 'E' to enter your home", 6* Config.tileSize, 3*Config.tileSize, Config.tileSize* 0.75, Config.tileSize* 0.75);
-        homeLabel.removeFromUI();
-        homeLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
+        DungeonLabel dungeonLabel = new DungeonLabel("Press 'E' to enter the dungeon", 6* Config.tileSize, 3*Config.tileSize, Config.tileSize* 0.75, Config.tileSize* 0.75);
+        dungeonLabel.removeFromUI();
+        dungeonLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
-        EnterInnLabel innLabel = new EnterInnLabel("Press 'E' to enter the inn", 3* Config.tileSize, 3*Config.tileSize, Config.tileSize* 0.75, Config.tileSize* 0.75);
-        innLabel.removeFromUI();
-        innLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
+        GoHomeLabel goHomeLabel = new GoHomeLabel("Press 'E' to go home", 2* Config.tileSize, 3*Config.tileSize, Config.tileSize* 0.75, Config.tileSize* 0.75);
+        goHomeLabel.removeFromUI();
+        goHomeLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
-        AdventureLabel adventureLabel = new AdventureLabel("Press 'E' to go on an adventure", 10 * Config.tileSize, 3*Config.tileSize, Config.tileSize* 0.75, Config.tileSize* 0.75);
-        adventureLabel.removeFromUI();
-        adventureLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
+        new EntryEntity(7* Config.tileSize-Config.tileSize*0.25-1, 2*Config.tileSize+Config.tileSize*0.25-1, Config.tileSize* 0.75, Config.tileSize* 0.75, new EnterDungeonEvent(), new EnterDungeonEventListener());
+        new EntryEntity(2*Config.tileSize, 2*Config.tileSize, Config.tileSize, (double) Config.tileSize /2, new GoHomeEvent(), new GoHomeEventListener());
 
-
-        new EntryEntity(7* Config.tileSize-Config.tileSize*0.25-1, 2*Config.tileSize+Config.tileSize*0.25-1, Config.tileSize* 0.75, Config.tileSize* 0.75, new EnterHomeEvent(), new EnterHomeEventListener());
-        new EntryEntity(2* Config.tileSize+Config.tileSize*0.25-1, 2*Config.tileSize+Config.tileSize*0.25-1, Config.tileSize* 0.75, Config.tileSize* 0.75, new EnterInnEvent(), new EnterInnListener());
-        new EntryEntity(14*Config.tileSize, 2.5*Config.tileSize, 2*Config.tileSize, (double) Config.tileSize /2, new EnterAdventureEvent(), new EnterAdventureEventListener());
 
         CameraEntity.getInstance(1920, 1080, 16* Config.tileSize, 16*Config.tileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
