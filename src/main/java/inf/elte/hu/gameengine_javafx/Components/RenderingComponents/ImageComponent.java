@@ -1,6 +1,7 @@
 package inf.elte.hu.gameengine_javafx.Components.RenderingComponents;
 
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Component;
+import inf.elte.hu.gameengine_javafx.Misc.Config;
 
 public class ImageComponent extends Component {
     private String imagePath;
@@ -47,5 +48,7 @@ public class ImageComponent extends Component {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+        this.height = Config.tileSize;
+        this.width = Config.tileSize;
     }
 }

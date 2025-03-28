@@ -8,6 +8,7 @@ import inf.elte.hu.gameengine_javafx.Components.WorldComponents.MapMeshComponent
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDataComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDimensionComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
+import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
@@ -54,6 +55,7 @@ public class DynamicWorldLoaderSystem extends GameSystem {
         loadFullWorld();
 
         runWalkerAlgorithm(WorldEntity.getInstance());
+
         addWorldMesh();
     }
 

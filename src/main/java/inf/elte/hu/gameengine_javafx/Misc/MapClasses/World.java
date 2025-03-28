@@ -132,7 +132,7 @@ public class World {
         return null;
     }
 
-    public void setElementAt(Point point, TileEntity tile) {
+    public void setElementAt(Point point, int value) {
         int tileX = Math.floorDiv((int) point.getX(), Config.tileSize);
         int tileY = Math.floorDiv((int) point.getY(), Config.tileSize);
 
@@ -144,7 +144,7 @@ public class World {
 
         Chunk chunk = chunks.get(new Tuple<>(chunkX, chunkY));
         if (chunk != null) {
-            chunk.setElement(localX, localY, tile.getComponent(TileValueComponent.class).getTileValue());
+            chunk.setElement(localX, localY, value);
         }
     }
 }

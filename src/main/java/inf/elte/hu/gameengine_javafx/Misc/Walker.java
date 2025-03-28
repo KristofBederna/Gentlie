@@ -88,7 +88,7 @@ public class Walker {
 
     private void placeTile() {
         // Mark the tile as non-walkable (1)
-        this.world.getComponent(WorldDataComponent.class).getMapData().setElementAt(new Point(x*Config.tileSize, y*Config.tileSize), new TileEntity(1, x*Config.tileSize, y*Config.tileSize, "/assets/images/default.png", Config.tileSize, Config.tileSize, true));
+        this.world.getComponent(WorldDataComponent.class).getMapData().setElementAt(new Point(x*Config.tileSize, y*Config.tileSize), 1);
         this.world.getComponent(WorldDataComponent.class).getMapData().getSavedChunks().get(new Tuple<>(Math.floorDiv(x, Config.chunkWidth), Math.floorDiv(y, Config.chunkHeight))).setElement(x % Config.chunkWidth, y % Config.chunkHeight, 1);
     }
 
