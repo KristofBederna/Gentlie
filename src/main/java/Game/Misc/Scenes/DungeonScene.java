@@ -50,7 +50,7 @@ public class DungeonScene extends GameScene {
 
         new ResourceStartUp();
 
-        WorldEntity.getInstance(32, 32, "/assets/maps/gentlieHome.txt", "/assets/tileSets/gameTileSet.txt");
+        WorldEntity.getInstance(32, 32, "/assets/tileSets/gameTileSet.txt");
 
         new PlayerEntity(6*Config.tileSize+ (double) Config.tileSize /2, 4*Config.tileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.tileSize*0.8, Config.tileSize*0.8);
 

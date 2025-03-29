@@ -4,6 +4,7 @@ import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
+import inf.elte.hu.gameengine_javafx.Components.TileValueComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.MapMeshComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDataComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDimensionComponent;
@@ -54,18 +55,41 @@ public class DynamicWorldLoaderSystem extends GameSystem {
         if (map == null) return;
         loadFullWorld();
 
-        runWalkerAlgorithm(WorldEntity.getInstance());
+        runWalkerAlgorithm();
+
+        applyConditioning();
 
         addWorldMesh();
     }
 
-    public void runWalkerAlgorithm(WorldEntity world) {
+    private void applyConditioning() {
+        WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getWorld().entrySet().forEach(entry -> {
+            Tuple<Integer, Integer> chunkKey = entry.getKey();
+            Chunk chunk = entry.getValue();
+
+            chunk.getChunk().forEach(tiles -> {
+                tiles.forEach(tile -> {
+                    PositionComponent pos = tile.getComponent(PositionComponent.class);
+                    if (pos.getGlobal().getX() <= 3 * Config.tileSize
+                            && pos.getGlobal().getY() <= 3 * Config.tileSize
+                            && pos.getGlobal().getY() >= Config.tileSize
+                            && pos.getGlobal().getX() >= Config.tileSize) {
+
+                        tile.changeValues(0);
+                    }
+                });
+            });
+            WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getSavedChunks().put(chunkKey, chunk);
+        });
+    }
+
+    public void runWalkerAlgorithm() {
         Random random = new Random();
 
         // Start with one walker at a random position
         int startX = random.nextInt(Config.chunkWidth);
         int startY = random.nextInt(Config.chunkHeight);
-        Walker walker = new Walker(startX, startY, world, new ArrayList<>());
+        Walker walker = new Walker(startX, startY, WorldEntity.getInstance(), new ArrayList<>());
 
         walker.walk();
     }
