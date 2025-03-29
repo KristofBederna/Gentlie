@@ -48,7 +48,7 @@ public class PathfindingSystem extends GameSystem {
             }
 
             if (pathfindingComponent.getPath() == null) {
-                pathfindingComponent.setPath(Pathfinding.selectPath(start, end, entity));
+                pathfindingComponent.setPath(Pathfinding.selectPath(entity));
             } else {
                 if (!pathfindingComponent.getPath().isEmpty()) {
                     Point node = pathfindingComponent.getPath().getFirst();

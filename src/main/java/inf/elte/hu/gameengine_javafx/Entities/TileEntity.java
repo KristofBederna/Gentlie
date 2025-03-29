@@ -65,6 +65,8 @@ public class TileEntity extends Entity {
         this.getComponent(ImageComponent.class).setImagePath("/assets/tiles/"+WorldEntity.getInstance().getComponent(TileSetComponent.class).getTileLoader().getTilePath(value)+".png");
         if (Config.wallTiles.contains(value)) {
             this.addHitBox(getComponent(PositionComponent.class).getGlobalX(), getComponent(PositionComponent.class).getGlobalY(), getComponent(DimensionComponent.class).getWidth(), getComponent(DimensionComponent.class).getHeight());
+        } else {
+            this.removeComponentsByType(HitBoxComponent.class);
         }
     }
 }

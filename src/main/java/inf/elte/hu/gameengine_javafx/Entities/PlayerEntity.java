@@ -95,7 +95,6 @@ public class PlayerEntity extends Entity {
                         }
                         break;
                     case "idle":
-
                         entity.removeComponentsByType(AnimationComponent.class);
                         entity.getComponent(ImageComponent.class).setNextFrame("/assets/images/Gentlie/Gentlie_Down_Idle.png");
                         break;

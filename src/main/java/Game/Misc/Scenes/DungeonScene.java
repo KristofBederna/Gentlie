@@ -52,7 +52,7 @@ public class DungeonScene extends GameScene {
 
         WorldEntity.getInstance(32, 32, "/assets/tileSets/gameTileSet.txt");
 
-        new PlayerEntity(6*Config.tileSize+ (double) Config.tileSize /2, 4*Config.tileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.tileSize*0.8, Config.tileSize*0.8);
+        new PlayerEntity(Config.tileSize+ (double) Config.tileSize /2, Config.tileSize+ (double) Config.tileSize /2, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.tileSize*0.8, Config.tileSize*0.8);
 
         CameraEntity.getInstance(1920, 1080, 32* Config.tileSize, 32*Config.tileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());

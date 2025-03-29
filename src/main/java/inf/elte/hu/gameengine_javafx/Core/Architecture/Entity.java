@@ -56,7 +56,11 @@ public abstract class Entity {
      * @param <T>
      */
     public <T extends Component> void removeComponentsByType(Class<T> componentType) {
-        components.entrySet().removeIf(entry -> componentType.isAssignableFrom(entry.getKey()));
+       if(components.entrySet().removeIf(entry -> componentType.isAssignableFrom(entry.getKey()))) {
+           if (EntityHub.getInstance().getComponentCache().get(componentType) != null) {
+               EntityHub.getInstance().getComponentCache().get(componentType).removeIf(integer -> integer == this.id);
+           }
+       }
     }
 
     /**

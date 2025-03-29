@@ -11,12 +11,12 @@ public class Pathfinding {
      * Selects a path from the start point to the end point using the A* algorithm.
      * The algorithm calculates the shortest path considering the neighbors of each point.
      *
-     * @param start The start point of the pathfinding.
-     * @param end The end point of the pathfinding.
      * @param entity The entity for which the pathfinding is being calculated.
      * @return A list of points representing the path from start to end.
      */
-    public static List<Point> selectPath(Point start, Point end, Entity entity) {
+    public static List<Point> selectPath(Entity entity) {
+        Point start = entity.getComponent(PathfindingComponent.class).getStart();
+        Point end = entity.getComponent(PathfindingComponent.class).getEnd();
         List<Point> path = new ArrayList<>();
         Map<Point, Point> cameFrom = new HashMap<>();
         PriorityQueue<Point> openSet = new PriorityQueue<>(Comparator.comparingDouble(p -> p.distanceTo(end)));
