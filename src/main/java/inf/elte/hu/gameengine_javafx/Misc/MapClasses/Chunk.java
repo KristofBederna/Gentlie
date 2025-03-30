@@ -113,15 +113,5 @@ public class Chunk {
      */
     public void setElement(int x, int y, int value) {
         chunk.get(x).get(y).changeValues(value);
-//        TileEntity newTileEntity = new TileEntity(
-//                value,
-//                tileEntity.getComponent(PositionComponent.class).getGlobalX(),
-//                tileEntity.getComponent(PositionComponent.class).getGlobalY(),
-//                "/assets/tiles/" + TileLoader.getTilePath(value) + ".png",
-//                tileEntity.getComponent(DimensionComponent.class).getWidth(),
-//                tileEntity.getComponent(DimensionComponent.class).getHeight(),
-//                Config.wallTiles.contains(value)
-//        );
-//        chunk.get(x).set(y, newTileEntity);
     }
 }

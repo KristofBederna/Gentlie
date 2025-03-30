@@ -26,10 +26,6 @@ public class WorldDataComponent extends Component {
         this.world.addChunk(x, y, tileEntities);
     }
 
-    public TileEntity getElement(int x, int y) {
-        return world.getElementAt(x, y);
-    }
-
     public TileEntity getElement(Point point) {
         return world.getElementAt(point);
     }

@@ -17,6 +17,7 @@ public class Pathfinding {
     public static List<Point> selectPath(Entity entity) {
         Point start = entity.getComponent(PathfindingComponent.class).getStart();
         Point end = entity.getComponent(PathfindingComponent.class).getEnd();
+        if (start.distanceTo(end) < 5) return List.of(start);
         List<Point> path = new ArrayList<>();
         Map<Point, Point> cameFrom = new HashMap<>();
         PriorityQueue<Point> openSet = new PriorityQueue<>(Comparator.comparingDouble(p -> p.distanceTo(end)));

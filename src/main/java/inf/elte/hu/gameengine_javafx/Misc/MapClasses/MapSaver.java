@@ -4,6 +4,7 @@ import inf.elte.hu.gameengine_javafx.Components.TileValueComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDataComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDimensionComponent;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
+import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 
 import java.io.BufferedWriter;
@@ -18,7 +19,7 @@ public class MapSaver {
 
             for (int y = 0; y < map.getComponent(WorldDimensionComponent.class).getWorldHeight() / Config.tileSize; y++) {
                 for (int x = 0; x < map.getComponent(WorldDimensionComponent.class).getWorldWidth() / Config.tileSize; x++) {
-                    writer.write(map.getComponent(WorldDataComponent.class).getElement(x, y).getComponent(TileValueComponent.class).getTileValue() + " ");
+                    writer.write(map.getComponent(WorldDataComponent.class).getMapData().getElementAt(new Point(y*Config.tileSize+Config.tileSize/2, x*Config.tileSize+Config.tileSize/2)).getComponent(TileValueComponent.class).getTileValue() + " ");
                 }
                 writer.newLine();
             }
