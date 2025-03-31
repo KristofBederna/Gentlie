@@ -2,7 +2,6 @@ package inf.elte.hu.gameengine_javafx.Entities;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
-import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PathfindingComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.DragComponent;
@@ -40,7 +39,7 @@ public class DummyEntity extends Entity {
         this.addComponent(new HitBoxComponent(new Rectangle(new Point(x, y), width, height).getPoints()));
         this.addComponent(new ZIndexComponent(2));
         this.addComponent(new CentralMassComponent((double) x + width / 2, (double) y + height / 2));
-        this.addComponent(new PathfindingComponent(new Point(this.getComponent(CentralMassComponent.class).getCentralX(), this.getComponent(CentralMassComponent.class).getCentralY()), new Point(x + (Config.tileSize * 21) + 50, y + (Config.tileSize * 7) + 50)));
+        this.addComponent(new PathfindingComponent(new Point(this.getComponent(CentralMassComponent.class).getCentralX(), this.getComponent(CentralMassComponent.class).getCentralY()), new Point(x + (Config.scaledTileSize * 21) + 50, y + (Config.scaledTileSize * 7) + 50)));
         this.addComponent(new AnimationStateMachineComponent(new AnimationStateMachine(this) {
             @Override
             public void setAnimationState() {

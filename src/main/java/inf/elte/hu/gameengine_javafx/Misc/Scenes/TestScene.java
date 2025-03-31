@@ -14,7 +14,6 @@ import inf.elte.hu.gameengine_javafx.Core.EntityManager;
 import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.*;
-import inf.elte.hu.gameengine_javafx.Entities.UIEntities.*;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
 import inf.elte.hu.gameengine_javafx.Misc.*;
@@ -114,15 +113,15 @@ public class TestScene extends GameScene {
     }
 
     private void cameraSetup() {
-        CameraEntity.getInstance(Config.gameCanvasWidth, Config.gameCanvasHeight, WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldWidth() * Config.tileSize, WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldHeight() * Config.tileSize);
+        CameraEntity.getInstance(Config.gameCanvasWidth, Config.gameCanvasHeight, WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldWidth() * Config.scaledTileSize, WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldHeight() * Config.scaledTileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
     }
 
     private void entitySetup() {
-        new PlayerEntity(420, 120, "idle", "/assets/images/PlayerIdle.png", 0.8 * Config.tileSize, 0.8 * Config.tileSize);
-        new DummyEntity(220, 220, "idle", "/assets/images/PlayerIdle.png", 0.8 * Config.tileSize, 0.8 * Config.tileSize);
+        new PlayerEntity(420, 120, "idle", "/assets/images/PlayerIdle.png", 0.8 * Config.scaledTileSize, 0.8 * Config.scaledTileSize);
+        new DummyEntity(220, 220, "idle", "/assets/images/PlayerIdle.png", 0.8 * Config.scaledTileSize, 0.8 * Config.scaledTileSize);
         new ParticleEmitterEntity(400, 400, new ParticleEntity(0, 0, 2, 2, new Rectangle(new Point(0, 0), 2, 2), Color.ORANGE, 300), Direction.RIGHT, 50, 100);
-        new ParticleEmitterEntity(5*Config.tileSize, 500, new ParticleEntity(0, 0, 20, 20, "/assets/images/snowflake.png", 2000), Direction.ALL, 20, 1000);
+        new ParticleEmitterEntity(5*Config.scaledTileSize, 500, new ParticleEntity(0, 0, 20, 20, "/assets/images/snowflake.png", 2000), Direction.ALL, 20, 1000);
         new LightingEntity(250, 250, LightType.POINT, 0.01, Color.YELLOW, 100, 100);
         new LightingEntity(1050, 550, LightType.POINT, 0.01, Color.YELLOW, 100, 100);
         new LightingEntity(750, 650, LightType.POINT, 0.01, Color.YELLOW, 100, 100);

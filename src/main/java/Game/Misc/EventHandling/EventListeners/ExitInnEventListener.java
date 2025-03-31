@@ -1,6 +1,5 @@
 package Game.Misc.EventHandling.EventListeners;
 
-import Game.Misc.EventHandling.Events.ExitHomeEvent;
 import Game.Misc.EventHandling.Events.ExitInnEvent;
 import Game.Misc.Scenes.HomeIslandScene;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
@@ -13,7 +12,7 @@ import javafx.scene.layout.BorderPane;
 public class ExitInnEventListener implements EventListener<ExitInnEvent> {
     @Override
     public void onEvent(ExitInnEvent event) {
-        SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeIslandScene(new BorderPane(), 1920, 1080, new Point(3* Config.tileSize-Config.tileSize*0.25-1, 2*Config.tileSize+Config.tileSize*0.25-1)));
+        SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeIslandScene(new BorderPane(), 1920, 1080, new Point(3* Config.scaledTileSize -Config.scaledTileSize *0.25-1, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1)));
     }
 
     @Override

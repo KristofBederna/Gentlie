@@ -66,8 +66,8 @@ public class InfiniteWorldLoaderSystem extends GameSystem {
         Set<Tuple<Integer, Integer>> loadedChunks = worldData.getWorld().keySet();
 
         // Calculate the player's current chunk position
-        int playerChunkX = Math.floorDiv((int) (camX + camWidth / 2), Config.chunkWidth * Config.tileSize);
-        int playerChunkY = Math.floorDiv((int) (camY + camHeight / 2), Config.chunkHeight * Config.tileSize);
+        int playerChunkX = Math.floorDiv((int) (camX + camWidth / 2), (int) (Config.chunkWidth * Config.scaledTileSize));
+        int playerChunkY = Math.floorDiv((int) (camY + camHeight / 2), (int) (Config.chunkHeight * Config.scaledTileSize));
 
         // Load chunks within a specified distance from the player
         for (int dx = -Config.loadDistance; dx <= Config.loadDistance; dx++) {

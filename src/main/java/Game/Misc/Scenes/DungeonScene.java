@@ -1,8 +1,5 @@
 package Game.Misc.Scenes;
 
-import Game.Entities.ExitEntity;
-import Game.Misc.EventHandling.EventListeners.ExitHomeEventListener;
-import Game.Misc.EventHandling.Events.ExitHomeEvent;
 import Game.Systems.EventTileSystem;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
@@ -32,7 +29,6 @@ import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.*;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.DynamicWorldLoaderSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
-import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.WorldLoaderSystem;
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -47,14 +43,15 @@ public class DungeonScene extends GameScene {
     @Override
     public void setup() {
         Config.wallTiles = List.of(0, 1, 3);
+        Config.setTileScale(2.0);
 
         new ResourceStartUp();
 
         WorldEntity.getInstance(32, 32, "/assets/tileSets/gameTileSet.txt");
 
-        new PlayerEntity(Config.tileSize+ (double) Config.tileSize /2, Config.tileSize+ (double) Config.tileSize /2, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.tileSize*0.8, Config.tileSize*0.8);
+        new PlayerEntity(Config.scaledTileSize + (double) Config.scaledTileSize /2, Config.scaledTileSize + (double) Config.scaledTileSize /2, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize *0.8, Config.scaledTileSize *0.8);
 
-        CameraEntity.getInstance(1920, 1080, 32* Config.tileSize, 32*Config.tileSize);
+        CameraEntity.getInstance(1920, 1080, 32* Config.scaledTileSize, 32*Config.scaledTileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
 
         new SystemStartUp(this::SystemStartUp);
@@ -93,25 +90,25 @@ public class DungeonScene extends GameScene {
     }
 
     private void moveUp(Entity e) {
-        double dy = -4 * Time.getInstance().getDeltaTime();
+        double dy = -4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(dy);
         e.getComponent(StateComponent.class).setCurrentState("up");
     }
 
     private void moveDown(Entity e) {
-        double dy = 4 * Time.getInstance().getDeltaTime();
+        double dy = 4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(dy);
         e.getComponent(StateComponent.class).setCurrentState("down");
     }
 
     private void moveLeft(Entity e) {
-        double dx = -4 * Time.getInstance().getDeltaTime();
+        double dx = -4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
         e.getComponent(StateComponent.class).setCurrentState("left");
     }
 
     private void moveRight(Entity e) {
-        double dx = 4 * Time.getInstance().getDeltaTime();
+        double dx = 4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
         e.getComponent(StateComponent.class).setCurrentState("right");
     }

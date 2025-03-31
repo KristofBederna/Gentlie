@@ -65,27 +65,27 @@ public class EnemyIslandScene extends GameScene {
         new ResourceStartUp();
         WorldEntity.getInstance("/assets/maps/enemyIsland.txt", "/assets/tileSets/gameTileSet.txt");
 
-        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", (double) Config.tileSize * 0.75, (double) Config.tileSize * 0.75);
+        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", (double) Config.scaledTileSize * 0.75, (double) Config.scaledTileSize * 0.75);
 
         new WaterEntity();
 
-        new IglooEntity(6*Config.tileSize, Config.tileSize, 2*Config.tileSize, 2*Config.tileSize);
-        new ShipEntity(0, 1.5*Config.tileSize, 2*Config.tileSize, 2*Config.tileSize);
+        new IglooEntity(6*Config.scaledTileSize, Config.scaledTileSize, 2*Config.scaledTileSize, 2*Config.scaledTileSize);
+        new ShipEntity(0, 1.5*Config.scaledTileSize, 2*Config.scaledTileSize, 2*Config.scaledTileSize);
 
 
-        DungeonLabel dungeonLabel = new DungeonLabel("Press 'E' to enter the dungeon", 6* Config.tileSize, 3*Config.tileSize, Config.tileSize* 0.75, Config.tileSize* 0.75);
+        DungeonLabel dungeonLabel = new DungeonLabel("Press 'E' to enter the dungeon", 6* Config.scaledTileSize, 3*Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
         dungeonLabel.removeFromUI();
         dungeonLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
-        GoHomeLabel goHomeLabel = new GoHomeLabel("Press 'E' to go home", 2* Config.tileSize, 3*Config.tileSize, Config.tileSize* 0.75, Config.tileSize* 0.75);
+        GoHomeLabel goHomeLabel = new GoHomeLabel("Press 'E' to go home", 2* Config.scaledTileSize, 3*Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
         goHomeLabel.removeFromUI();
         goHomeLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
-        new EntryEntity(7* Config.tileSize-Config.tileSize*0.25-1, 2*Config.tileSize+Config.tileSize*0.25-1, Config.tileSize* 0.75, Config.tileSize* 0.75, new EnterDungeonEvent(), new EnterDungeonEventListener());
-        new EntryEntity(2*Config.tileSize, 2*Config.tileSize, Config.tileSize, (double) Config.tileSize /2, new GoHomeEvent(), new GoHomeEventListener());
+        new EntryEntity(7* Config.scaledTileSize -Config.scaledTileSize *0.25-1, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75, new EnterDungeonEvent(), new EnterDungeonEventListener());
+        new EntryEntity(2*Config.scaledTileSize, 2*Config.scaledTileSize, Config.scaledTileSize, (double) Config.scaledTileSize /2, new GoHomeEvent(), new GoHomeEventListener());
 
 
-        CameraEntity.getInstance(1920, 1080, 16* Config.tileSize, 16*Config.tileSize);
+        CameraEntity.getInstance(1920, 1080, 16* Config.scaledTileSize, 16*Config.scaledTileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
 
         new SystemStartUp(this::SystemStartUp);
@@ -122,13 +122,13 @@ public class EnemyIslandScene extends GameScene {
     }
 
     private void moveLeft(Entity e) {
-        double dx = -4 * Time.getInstance().getDeltaTime();
+        double dx = -4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
         e.getComponent(StateComponent.class).setCurrentState("left");
     }
 
     private void moveRight(Entity e) {
-        double dx = 4 * Time.getInstance().getDeltaTime();
+        double dx = 4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
         e.getComponent(StateComponent.class).setCurrentState("right");
     }

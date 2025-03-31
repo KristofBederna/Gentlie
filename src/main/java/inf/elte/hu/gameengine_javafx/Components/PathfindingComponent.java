@@ -81,8 +81,8 @@ public class PathfindingComponent extends Component {
         List<Point> neighbours = new ArrayList<>();
         MapMeshComponent mapMeshComponent = WorldEntity.getInstance().getComponent(MapMeshComponent.class);
 
-        int currentX = (int) Math.floor(current.getX() / Config.tileSize);
-        int currentY = (int) Math.floor(current.getY() / Config.tileSize);
+        int currentX = (int) Math.floor(current.getX() / Config.scaledTileSize);
+        int currentY = (int) Math.floor(current.getY() / Config.scaledTileSize);
 
         int worldWidth = (int) WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldWidth();
         int worldHeight = (int) WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldHeight();

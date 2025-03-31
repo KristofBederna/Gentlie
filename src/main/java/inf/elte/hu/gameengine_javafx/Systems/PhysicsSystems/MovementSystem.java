@@ -86,7 +86,7 @@ public class MovementSystem extends GameSystem {
         double mass = (massComponent != null) ? massComponent.getMass() : 1.0;
         double drag = (dragComponent != null) ? dragComponent.getDrag() : Config.drag;
         double dragFactor = Math.pow(1 - drag, Time.getInstance().getDeltaTime());
-        double maxSpeed = velocity.getMaxVelocity();
+        double maxSpeed = velocity.getMaxVelocity()*Config.getTileScale();
 
         double newDx = velocity.getVelocity().getDx();
         double newDy = velocity.getVelocity().getDy();

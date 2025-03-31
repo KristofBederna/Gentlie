@@ -1,11 +1,8 @@
 package Game.Misc.EventHandling.EventListeners;
 
 import Game.Entities.AdventureLabel;
-import Game.Entities.EnterHomeLabel;
 import Game.Misc.EventHandling.Events.EnterAdventureEvent;
-import Game.Misc.EventHandling.Events.EnterHomeEvent;
 import Game.Misc.Scenes.EnemyIslandScene;
-import Game.Misc.Scenes.HomeScene;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
@@ -22,7 +19,7 @@ public class EnterAdventureEventListener implements EventListener<EnterAdventure
     public void onEvent(EnterAdventureEvent event) {
         ((AdventureLabel)EntityHub.getInstance().getEntitiesWithType(AdventureLabel.class).getFirst()).addToUI();
         if (KeyboardInputHandler.getInstance().isKeyPressed(KeyCode.E))
-            SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new EnemyIslandScene(new BorderPane(), 1920, 1080, new Point(2*Config.tileSize, 2*Config.tileSize+Config.tileSize*0.25-1)));
+            SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new EnemyIslandScene(new BorderPane(), 1920, 1080, new Point(2*Config.scaledTileSize, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1)));
     }
 
     @Override

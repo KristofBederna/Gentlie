@@ -14,14 +14,12 @@ import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationCo
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.StateComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
-import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDataComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
-import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
@@ -69,33 +67,33 @@ public class HomeIslandScene extends GameScene {
         new ResourceStartUp();
         WorldEntity.getInstance("/assets/maps/homeIsland.txt", "/assets/tileSets/gameTileSet.txt");
 
-        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", (double) Config.tileSize * 0.75, (double) Config.tileSize * 0.75);
+        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", (double) Config.scaledTileSize * 0.75, (double) Config.scaledTileSize * 0.75);
 
         new WaterEntity();
 
-        new IglooEntity(6*Config.tileSize, Config.tileSize, 2*Config.tileSize, 2*Config.tileSize);
-        new ShipEntity(14*Config.tileSize, 1.5*Config.tileSize, 2*Config.tileSize, 2*Config.tileSize);
-        new InnEntity(2*Config.tileSize, Config.tileSize, 2*Config.tileSize, 2*Config.tileSize);
+        new IglooEntity(6*Config.scaledTileSize, Config.scaledTileSize, 2*Config.scaledTileSize, 2*Config.scaledTileSize);
+        new ShipEntity(14*Config.scaledTileSize, 1.5*Config.scaledTileSize, 2*Config.scaledTileSize, 2*Config.scaledTileSize);
+        new InnEntity(2*Config.scaledTileSize, Config.scaledTileSize, 2*Config.scaledTileSize, 2*Config.scaledTileSize);
 
 
-        EnterHomeLabel homeLabel = new EnterHomeLabel("Press 'E' to enter your home", 6* Config.tileSize, 3*Config.tileSize, Config.tileSize* 0.75, Config.tileSize* 0.75);
+        EnterHomeLabel homeLabel = new EnterHomeLabel("Press 'E' to enter your home", 6* Config.scaledTileSize, 3*Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
         homeLabel.removeFromUI();
         homeLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
-        EnterInnLabel innLabel = new EnterInnLabel("Press 'E' to enter the inn", 3* Config.tileSize, 3*Config.tileSize, Config.tileSize* 0.75, Config.tileSize* 0.75);
+        EnterInnLabel innLabel = new EnterInnLabel("Press 'E' to enter the inn", 3* Config.scaledTileSize, 3*Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
         innLabel.removeFromUI();
         innLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
-        AdventureLabel adventureLabel = new AdventureLabel("Press 'E' to go on an adventure", 10 * Config.tileSize, 3*Config.tileSize, Config.tileSize* 0.75, Config.tileSize* 0.75);
+        AdventureLabel adventureLabel = new AdventureLabel("Press 'E' to go on an adventure", 10 * Config.scaledTileSize, 3*Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
         adventureLabel.removeFromUI();
         adventureLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
 
-        new EntryEntity(7* Config.tileSize-Config.tileSize*0.25-1, 2*Config.tileSize+Config.tileSize*0.25-1, Config.tileSize* 0.75, Config.tileSize* 0.75, new EnterHomeEvent(), new EnterHomeEventListener());
-        new EntryEntity(2* Config.tileSize+Config.tileSize*0.25-1, 2*Config.tileSize+Config.tileSize*0.25-1, Config.tileSize* 0.75, Config.tileSize* 0.75, new EnterInnEvent(), new EnterInnListener());
-        new EntryEntity(14*Config.tileSize, 2.5*Config.tileSize, 2*Config.tileSize, (double) Config.tileSize /2, new EnterAdventureEvent(), new EnterAdventureEventListener());
+        new EntryEntity(7* Config.scaledTileSize -Config.scaledTileSize *0.25-1, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75, new EnterHomeEvent(), new EnterHomeEventListener());
+        new EntryEntity(2* Config.scaledTileSize +Config.scaledTileSize *0.25-1, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75, new EnterInnEvent(), new EnterInnListener());
+        new EntryEntity(14*Config.scaledTileSize, 2.5*Config.scaledTileSize, 2*Config.scaledTileSize, (double) Config.scaledTileSize /2, new EnterAdventureEvent(), new EnterAdventureEventListener());
 
-        CameraEntity.getInstance(1920, 1080, 16* Config.tileSize, 16*Config.tileSize);
+        CameraEntity.getInstance(1920, 1080, 16* Config.scaledTileSize, 16*Config.scaledTileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
 
         new SystemStartUp(this::SystemStartUp);
@@ -132,13 +130,13 @@ public class HomeIslandScene extends GameScene {
     }
 
     private void moveLeft(Entity e) {
-        double dx = -4 * Time.getInstance().getDeltaTime();
+        double dx = -4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
         e.getComponent(StateComponent.class).setCurrentState("left");
     }
 
     private void moveRight(Entity e) {
-        double dx = 4 * Time.getInstance().getDeltaTime();
+        double dx = 4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
         e.getComponent(StateComponent.class).setCurrentState("right");
     }

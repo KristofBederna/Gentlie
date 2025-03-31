@@ -8,7 +8,7 @@ import inf.elte.hu.gameengine_javafx.Misc.Config;
 
 public class WaterEntity extends Entity {
     public WaterEntity() {
-        addComponent(new ShapeComponent<>(new Rectangle(new Point(0, 4*Config.tileSize-0.75*Config.tileSize), Config.tileSize*Config.chunkWidth, Config.tileSize*Config.chunkHeight)));
+        addComponent(new ShapeComponent<>(new Rectangle(new Point(0, 4*Config.scaledTileSize -0.75*Config.scaledTileSize), Config.scaledTileSize *Config.chunkWidth, Config.scaledTileSize *Config.chunkHeight)));
         addToManager();
     }
 }

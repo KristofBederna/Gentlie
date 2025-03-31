@@ -5,20 +5,15 @@ import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
-import inf.elte.hu.gameengine_javafx.Components.TileValueComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.MapMeshComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDataComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDimensionComponent;
-import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Entities.*;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
-import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.MapClasses.Chunk;
-import inf.elte.hu.gameengine_javafx.Misc.MapClasses.World;
 import inf.elte.hu.gameengine_javafx.Misc.MapClasses.WorldGenerator;
 import inf.elte.hu.gameengine_javafx.Misc.Pathfinding;
 import inf.elte.hu.gameengine_javafx.Misc.Tuple;
@@ -73,9 +68,8 @@ public class DynamicWorldLoaderSystem extends GameSystem {
                 }
             }
             walkablePercent = walkable/(Config.chunkWidth*width*Config.chunkHeight*height);
-            System.out.println(walkablePercent);
         }
-        while (walkablePercent < 0.63);
+        while (walkablePercent < Config.dynamicMapWalkability);
     }
 
     private void removeIsolated() {
@@ -100,10 +94,10 @@ public class DynamicWorldLoaderSystem extends GameSystem {
                     PositionComponent pos = tile.getComponent(PositionComponent.class);
                     //Spawn location
                     if (chunkKey.first() == 0 && chunkKey.second() == 0
-                            && pos.getGlobal().getX() <= 3 * Config.tileSize
-                            && pos.getGlobal().getY() <= 3 * Config.tileSize
-                            && pos.getGlobal().getY() >= Config.tileSize
-                            && pos.getGlobal().getX() >= Config.tileSize) {
+                            && pos.getGlobal().getX() <= 3 * Config.scaledTileSize
+                            && pos.getGlobal().getY() <= 3 * Config.scaledTileSize
+                            && pos.getGlobal().getY() >= Config.scaledTileSize
+                            && pos.getGlobal().getX() >= Config.scaledTileSize) {
                         tile.changeValues(4);
                     }
                 });
@@ -138,8 +132,8 @@ public class DynamicWorldLoaderSystem extends GameSystem {
         double camWidth = camera.getComponent(DimensionComponent.class).getWidth();
         double camHeight = camera.getComponent(DimensionComponent.class).getHeight();
 
-        int playerChunkX = Math.floorDiv((int) (camX + camWidth / 2), Config.chunkWidth * Config.tileSize);
-        int playerChunkY = Math.floorDiv((int) (camY + camHeight / 2), Config.chunkHeight * Config.tileSize);
+        int playerChunkX = Math.floorDiv((int) (camX + camWidth / 2), (int) (Config.chunkWidth * Config.scaledTileSize));
+        int playerChunkY = Math.floorDiv((int) (camY + camHeight / 2), (int) (Config.chunkHeight * Config.scaledTileSize));
 
         loadSurroundingChunks(playerChunkX, playerChunkY);
         unloadFarChunks(playerChunkX, playerChunkY);
@@ -149,9 +143,9 @@ public class DynamicWorldLoaderSystem extends GameSystem {
      * Loads the entire world initially, chunk by chunk.
      */
     private void loadFullWorld() {
-        for (int cx = 0; cx < width; cx++) {
-            for (int cy = 0; cy < height; cy++) {
-                loadOrGenerateChunk(cy, cx);
+        for (int cy = 0; cy < width; cy++) {
+            for (int cx = 0; cx < height; cx++) {
+                loadOrGenerateChunk(cx, cy);
             }
         }
     }
@@ -211,7 +205,7 @@ public class DynamicWorldLoaderSystem extends GameSystem {
         } else {
             Chunk newChunk = WorldGenerator.generateChunk(chunkX, chunkY, Config.chunkWidth, Config.chunkHeight);
             WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getSavedChunks().put(chunkKey, newChunk);
-            WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().addChunk(chunkX, chunkY, newChunk);
+            WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getWorld().put(chunkKey, newChunk);
         }
         addBoundaryWalls(WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getWorld().get(chunkKey), chunkX, chunkY);
     }
@@ -235,7 +229,7 @@ public class DynamicWorldLoaderSystem extends GameSystem {
         for (int row = 0; row < worldHeight; row++) {
             List<Point> meshRow = new ArrayList<>();
             for (int col = 0; col < worldWidth; col++) {
-                TileEntity entity = map.getComponent(WorldDataComponent.class).getMapData().getElementAt(new Point(col * Config.tileSize + (double)Config.tileSize / 2, row * Config.tileSize + (double)Config.tileSize / 2));
+                TileEntity entity = map.getComponent(WorldDataComponent.class).getMapData().getElementAt(new Point(col * Config.scaledTileSize + (double)Config.scaledTileSize / 2, row * Config.scaledTileSize + (double)Config.scaledTileSize / 2));
                 if (entity.getComponent(HitBoxComponent.class) == null) {
                     meshRow.add(entity.getComponent(CentralMassComponent.class).getCentral());
                 } else {

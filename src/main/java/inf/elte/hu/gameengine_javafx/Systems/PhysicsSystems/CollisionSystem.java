@@ -8,7 +8,6 @@ import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassCo
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
-import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.ComplexShape;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Shape;
@@ -83,7 +82,7 @@ public class CollisionSystem extends GameSystem {
         }
 
         List<Entity> hitBoxesToProcess = new ArrayList<>(hitBoxes);
-        hitBoxesToProcess.removeIf(hitbox -> hitbox == null || hitbox.getComponent(CentralMassComponent.class).getCentral().distanceTo(entity.getComponent(CentralMassComponent.class).getCentral()) > Config.tileSize + Config.tileSize * 2 || hitbox == entity);
+        hitBoxesToProcess.removeIf(hitbox -> hitbox == null || hitbox.getComponent(CentralMassComponent.class).getCentral().distanceTo(entity.getComponent(CentralMassComponent.class).getCentral()) > Config.scaledTileSize + Config.scaledTileSize * 2 || hitbox == entity);
 
         moveDiagonally(hitBoxesToProcess, entity, futureHitBox, velocity);
     }

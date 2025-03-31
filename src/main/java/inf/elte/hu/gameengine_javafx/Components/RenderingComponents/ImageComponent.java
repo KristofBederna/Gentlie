@@ -48,7 +48,7 @@ public class ImageComponent extends Component {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
-        this.height = Config.tileSize;
-        this.width = Config.tileSize;
+        this.height = Config.scaledTileSize;
+        this.width = Config.scaledTileSize;
     }
 }

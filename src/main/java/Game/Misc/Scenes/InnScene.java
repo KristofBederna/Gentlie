@@ -46,15 +46,16 @@ public class InnScene extends GameScene {
     @Override
     public void setup() {
         Config.wallTiles = List.of(0, 1, 3);
+        Config.setTileScale(1.5);
 
         new ResourceStartUp();
         WorldEntity.getInstance("/assets/maps/inn.txt", "/assets/tileSets/innTileSet.txt");
 
-        new PlayerEntity(5*Config.tileSize+ (double) Config.tileSize /2, 8*Config.tileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.tileSize*2, Config.tileSize*2);
+        new PlayerEntity(5*Config.scaledTileSize + Config.scaledTileSize /2, 8*Config.scaledTileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize *2, Config.scaledTileSize *2);
 
-        new ExitEntity(5*Config.tileSize, 10*Config.tileSize+Config.tileSize*0.8, 3*Config.tileSize, 0.2*Config.tileSize, new ExitInnEvent(), new ExitInnEventListener());
+        new ExitEntity(5*Config.scaledTileSize, 10*Config.scaledTileSize +Config.scaledTileSize *0.8, 3*Config.scaledTileSize, 0.2*Config.scaledTileSize, new ExitInnEvent(), new ExitInnEventListener());
 
-        CameraEntity.getInstance(1920, 1080, 16* Config.tileSize, 16*Config.tileSize);
+        CameraEntity.getInstance(1920, 1080, 16* Config.scaledTileSize, 16*Config.scaledTileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
 
         new SystemStartUp(this::SystemStartUp);
@@ -93,25 +94,25 @@ public class InnScene extends GameScene {
     }
 
     private void moveUp(Entity e) {
-        double dy = -4 * Time.getInstance().getDeltaTime();
+        double dy = -4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(dy);
         e.getComponent(StateComponent.class).setCurrentState("up");
     }
 
     private void moveDown(Entity e) {
-        double dy = 4 * Time.getInstance().getDeltaTime();
+        double dy = 4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(dy);
         e.getComponent(StateComponent.class).setCurrentState("down");
     }
 
     private void moveLeft(Entity e) {
-        double dx = -4 * Time.getInstance().getDeltaTime();
+        double dx = -4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
         e.getComponent(StateComponent.class).setCurrentState("left");
     }
 
     private void moveRight(Entity e) {
-        double dx = 4 * Time.getInstance().getDeltaTime();
+        double dx = 4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
         e.getComponent(StateComponent.class).setCurrentState("right");
     }

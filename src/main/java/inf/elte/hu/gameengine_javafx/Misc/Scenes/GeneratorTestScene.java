@@ -40,7 +40,7 @@ public class GeneratorTestScene extends GameScene {
     }
 
     private void entitySetup() {
-        new PlayerEntity(220, 220, "idle", "/assets/images/PlayerIdle.png", 0.8 * Config.tileSize, 0.8 * Config.tileSize);
+        new PlayerEntity(220, 220, "idle", "/assets/images/PlayerIdle.png", 0.8 * Config.scaledTileSize, 0.8 * Config.scaledTileSize);
     }
 
     private void interactionSetup() {
