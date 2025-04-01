@@ -110,8 +110,14 @@ public class PathfindingSystem extends GameSystem {
                 }
 
                 if (pathfindingComponent.getPath().isEmpty()) {
-                    entity.getComponent(VelocityComponent.class).stopMovement();
                     pathfindingComponent.resetPathing(entity);
+                    counterRight(entity);
+                    counterLeft(entity);
+                    counterUp(entity);
+                    counterDown(entity);
+
+                    entity.getComponent(VelocityComponent.class).stopMovement();
+                    entity.getComponent(AccelerationComponent.class).stopMovement();
                 }
             }
         }

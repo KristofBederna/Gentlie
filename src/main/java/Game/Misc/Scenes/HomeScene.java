@@ -26,6 +26,7 @@ import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.SystemStartUp;
 import inf.elte.hu.gameengine_javafx.Systems.InputHandlingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PathfindingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.CollisionSystem;
+import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementDeterminerSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.*;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.*;
@@ -65,6 +66,7 @@ public class HomeScene extends GameScene {
     private void SystemStartUp() {
         //Define systems to be started up here
         SystemHub systemHub = SystemHub.getInstance();
+        systemHub.addSystem(MovementDeterminerSystem.class, new MovementDeterminerSystem(),0);
         systemHub.addSystem(EventTileSystem.class, new EventTileSystem(),1);
         systemHub.addSystem(AnimationSystem.class, new AnimationSystem(), 2);
         systemHub.addSystem(RenderSystem.class, new RenderSystem(),3);
@@ -93,45 +95,37 @@ public class HomeScene extends GameScene {
     private void moveUp(Entity e) {
         double dy = -4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(dy);
-        e.getComponent(StateComponent.class).setCurrentState("up");
     }
 
     private void moveDown(Entity e) {
         double dy = 4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(dy);
-        e.getComponent(StateComponent.class).setCurrentState("down");
     }
 
     private void moveLeft(Entity e) {
         double dx = -4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
-        e.getComponent(StateComponent.class).setCurrentState("left");
     }
 
     private void moveRight(Entity e) {
         double dx = 4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
-        e.getComponent(StateComponent.class).setCurrentState("right");
     }
 
     private void counterUp(Entity e) {
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(0);
-        e.getComponent(StateComponent.class).setCurrentState("idle");
     }
 
     private void counterDown(Entity e) {
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(0);
-        e.getComponent(StateComponent.class).setCurrentState("idle");
     }
 
     private void counterRight(Entity e) {
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(0);
-        e.getComponent(StateComponent.class).setCurrentState("idle");
     }
 
     private void counterLeft(Entity e) {
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(0);
-        e.getComponent(StateComponent.class).setCurrentState("idle");
     }
 
     @Override

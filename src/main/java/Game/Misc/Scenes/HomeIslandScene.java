@@ -144,23 +144,19 @@ public class HomeIslandScene extends GameScene {
     private void moveLeft(Entity e) {
         double dx = -4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
-        e.getComponent(StateComponent.class).setCurrentState("left");
     }
 
     private void moveRight(Entity e) {
         double dx = 4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
-        e.getComponent(StateComponent.class).setCurrentState("right");
     }
 
     private void counterRight(Entity e) {
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(0);
-        e.getComponent(StateComponent.class).setCurrentState("idle");
     }
 
     private void counterLeft(Entity e) {
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(0);
-        e.getComponent(StateComponent.class).setCurrentState("idle");
     }
 
     @Override

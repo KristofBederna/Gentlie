@@ -1,17 +1,22 @@
-package inf.elte.hu.gameengine_javafx.Systems.ResourceSystems;
+package Game.Systems;
 
 import Game.Entities.PathfindingEntity;
+import Game.Entities.PolarBearEntity;
+import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
-import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.TileValueComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.MapMeshComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDataComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDimensionComponent;
+import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
-import inf.elte.hu.gameengine_javafx.Entities.*;
+import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
+import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
+import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
+import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.MapClasses.Chunk;
@@ -27,7 +32,7 @@ import java.util.*;
  * The DynamicWorldLoaderSystem is responsible for dynamically loading and unloading chunks of the world
  * based on the player's position in the game world.
  */
-public class DynamicWorldLoaderSystem extends GameSystem {
+public class DungeonGeneratorSystem extends GameSystem {
     private int width;
     private int height;
 
@@ -37,7 +42,7 @@ public class DynamicWorldLoaderSystem extends GameSystem {
      * @param width  The width of the world in chunks.
      * @param height The height of the world in chunks.
      */
-    public DynamicWorldLoaderSystem(int width, int height) {
+    public DungeonGeneratorSystem(int width, int height) {
         this.width = width;
         this.height = height;
 
@@ -53,9 +58,138 @@ public class DynamicWorldLoaderSystem extends GameSystem {
         this.active = true;
         WorldEntity map = WorldEntity.getInstance();
         if (map == null) return;
-        loadFullWorld();
-        runWalkerAlgorithm();
-        addWorldMesh();
+        double walkablePercent;
+        do {
+            for (Entity polarBear : EntityHub.getInstance().getEntitiesWithType(PolarBearEntity.class)) {
+                EntityHub.getInstance().removeEntity(polarBear);
+            }
+            loadFullWorld();
+            runWalkerAlgorithm();
+            addWorldMesh();
+            applyConditioning();
+            addWorldMesh();
+            removeIsolated();
+            double walkable = 0;
+            for (int i = 0; i < map.getComponent(MapMeshComponent.class).getMapCoordinates().size(); i++) {
+                for (int j = 0; j < map.getComponent(MapMeshComponent.class).getMapCoordinates().size(); j++) {
+                    if (map.getComponent(MapMeshComponent.class).getMapCoordinate(i, j) != null) {
+                        walkable++;
+                    }
+                }
+            }
+            walkablePercent = walkable/(Config.chunkWidth*width*Config.chunkHeight*height);
+        }
+        while (walkablePercent < 0.63);
+    }
+
+    private void removeIsolated() {
+        Random random = new Random();
+        double luckFactor = 0;
+        double spawnFactor = 0;
+        for (List<Point> row : WorldEntity.getInstance().getComponent(MapMeshComponent.class).getMapCoordinates()) {
+            for (Point p : row) {
+                if (p == null) continue;
+                List<Point> path = Pathfinding.selectPath(new PathfindingEntity(EntityHub.getInstance().getEntitiesWithType(PlayerEntity.class).getFirst().getComponent(CentralMassComponent.class).getCentral(), p.getCoordinates()));
+                if (path.isEmpty()) {
+                    row.set(row.indexOf(p), null);
+                    WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().setElementAt(p, 1);
+                }
+                luckFactor = placeChests(p, path, random, luckFactor);
+                spawnFactor = placeEnemySpawns(p, path, random, spawnFactor);
+            }
+        }
+    }
+
+    private double placeEnemySpawns(Point p, List<Point> path, Random random, double spawnFactor) {
+        if (path.size() > 8) {
+            double chance = random.nextDouble(0, 1);
+            if (chance + spawnFactor > 0.5) {
+                WorldDataComponent worldData = WorldEntity.getInstance().getComponent(WorldDataComponent.class);
+                World mapData = worldData.getMapData();
+
+                boolean left = mapData.getElementAt(new Point(p.getX() - Config.scaledTileSize, p.getY()))
+                        .getComponent(TileValueComponent.class).getTileValue() == 4;
+                boolean right = mapData.getElementAt(new Point(p.getX() + Config.scaledTileSize, p.getY()))
+                        .getComponent(TileValueComponent.class).getTileValue() == 4;
+                boolean up = mapData.getElementAt(new Point(p.getX(), p.getY() - Config.scaledTileSize))
+                        .getComponent(TileValueComponent.class).getTileValue() == 4;
+                boolean down = mapData.getElementAt(new Point(p.getX(), p.getY() + Config.scaledTileSize))
+                        .getComponent(TileValueComponent.class).getTileValue() == 4;
+
+                int count = (left ? 1 : 0) + (right ? 1 : 0) + (up ? 1 : 0) + (down ? 1 : 0);
+
+                if (count >= 3) {
+                    mapData.setElementAt(p, 6);
+                    new PolarBearEntity(p.getX()-Config.scaledTileSize*0.75/2, p.getY()-Config.scaledTileSize*0.75/2, "idle", "/assets/images/PolarBears/Polar_Bear_Down_Idle.png", Config.scaledTileSize*0.75, Config.scaledTileSize*0.75);
+                    spawnFactor = -100000;
+                    return spawnFactor;
+                }
+
+                spawnFactor += 0.01;
+            } else {
+                spawnFactor += 0.01;
+            }
+        }
+        return spawnFactor;
+    }
+
+    private double placeChests(Point p, List<Point> path, Random random, double luckFactor) {
+        if (path.size() > 10) {
+            double chance = random.nextDouble(0, 1);
+            if (chance + luckFactor > 0.95) {
+                WorldDataComponent worldData = WorldEntity.getInstance().getComponent(WorldDataComponent.class);
+                World mapData = worldData.getMapData();
+
+                boolean left = mapData.getElementAt(new Point(p.getX() - Config.scaledTileSize, p.getY()))
+                        .getComponent(TileValueComponent.class).getTileValue() == 1;
+                boolean right = mapData.getElementAt(new Point(p.getX() + Config.scaledTileSize, p.getY()))
+                        .getComponent(TileValueComponent.class).getTileValue() == 1;
+                boolean up = mapData.getElementAt(new Point(p.getX(), p.getY() - Config.scaledTileSize))
+                        .getComponent(TileValueComponent.class).getTileValue() == 1;
+                boolean down = mapData.getElementAt(new Point(p.getX(), p.getY() + Config.scaledTileSize))
+                        .getComponent(TileValueComponent.class).getTileValue() == 1;
+
+                int count = (left ? 1 : 0) + (right ? 1 : 0) + (up ? 1 : 0) + (down ? 1 : 0);
+
+                boolean isOpposingBlocked = (up && down && !left && !right) || (left && right && !up && !down);
+
+                if (count >= 2 && !isOpposingBlocked) {
+                    mapData.setElementAt(p, 0);
+                    luckFactor = -1;
+                    return luckFactor;
+                }
+
+                luckFactor += 0.01;
+            } else {
+                luckFactor += 0.01;
+            }
+        }
+        return luckFactor;
+    }
+
+    private void applyConditioning() {
+        WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getWorld().entrySet().forEach(entry -> {
+            Tuple<Integer, Integer> chunkKey = entry.getKey();
+            Chunk chunk = entry.getValue();
+
+            chunk.getChunk().forEach(tiles -> {
+                tiles.forEach(tile -> {
+                    PositionComponent pos = tile.getComponent(PositionComponent.class);
+                    //Spawn location
+                    if (chunkKey.first() == 0 && chunkKey.second() == 0
+                            && pos.getGlobal().getX() <= 3 * Config.scaledTileSize
+                            && pos.getGlobal().getY() <= 3 * Config.scaledTileSize
+                            && pos.getGlobal().getY() >= Config.scaledTileSize) {
+                        if (pos.getGlobal().getX() < Config.scaledTileSize) {
+                            tile.changeValues(0);
+                            return;
+                        }
+                        tile.changeValues(4);
+                    }
+                });
+            });
+            WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getSavedChunks().put(chunkKey, chunk);
+        });
     }
 
     public void runWalkerAlgorithm() {

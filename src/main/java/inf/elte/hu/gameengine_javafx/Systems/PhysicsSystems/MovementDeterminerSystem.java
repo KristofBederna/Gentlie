@@ -31,6 +31,23 @@ public class MovementDeterminerSystem extends GameSystem {
                     stateComponent.setCurrentState("idle");
                     break;
             }
+            switch ((int) Math.signum(velocity.getDy())) {
+                case -1:
+                    if (Math.abs(velocity.getDx()) < Math.abs(velocity.getDy())) {
+                        stateComponent.setCurrentState("up");
+                    }
+                    break;
+                case 1:
+                    if (Math.abs(velocity.getDx()) < Math.abs(velocity.getDy())) {
+                        stateComponent.setCurrentState("down");
+                    }
+                    break;
+                case 0:
+                    if (!stateComponent.getCurrentState().equals("idle")) {
+                        continue;
+                    }
+                    stateComponent.setCurrentState("idle");
+            }
         }
     }
 }

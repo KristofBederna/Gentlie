@@ -1,5 +1,6 @@
 package inf.elte.hu.gameengine_javafx.Components;
 
+import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.MapMeshComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDimensionComponent;
@@ -74,7 +75,7 @@ public class PathfindingComponent extends Component {
     public void resetPathing(Entity entity) {
         path = null;
         neighbours = null;
-        start = new Point(entity.getComponent(CentralMassComponent.class).getCentralX(), entity.getComponent(CentralMassComponent.class).getCentralY());
+        start = WorldEntity.getInstance().getComponent(MapMeshComponent.class).getMapCoordinate(Math.floorDiv((int) entity.getComponent(CentralMassComponent.class).getCentralX(), (int) Config.scaledTileSize), Math.floorDiv((int) entity.getComponent(CentralMassComponent.class).getCentralY(), (int) Config.scaledTileSize));
     }
 
     public List<Point> getNeighbours(Point current) {

@@ -260,6 +260,15 @@ public class RenderSystem extends GameSystem {
                 Line line = new Line(pathfindingComponent.getPath().getFirst(), neighbour);
                 line.render(gc, Color.ORANGE, 5);
             }
+            Point last = pathfindingComponent.getPath().getFirst();
+            for (Point point : pathfindingComponent.getPath()) {
+                if (point.equals(last)) {
+                    continue;
+                }
+                Line line = new Line(last, point);
+                last = point;
+                line.render(gc, Color.PINK, 5);
+            }
         }
     }
 

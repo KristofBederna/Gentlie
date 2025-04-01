@@ -61,7 +61,7 @@ public class Point {
     }
 
     public boolean compareCoordinates(Point other) {
-        return Math.abs(this.getX() - other.getX()) < 5 && Math.abs(this.getY() - other.getY()) < 5;
+        return Math.abs(this.getX() - other.getX()) < 10 && Math.abs(this.getY() - other.getY()) < 10;
     }
 
     public void setCoordinates(int x, int y) {

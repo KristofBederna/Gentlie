@@ -27,6 +27,7 @@ import inf.elte.hu.gameengine_javafx.Misc.Time;
 import inf.elte.hu.gameengine_javafx.Systems.InputHandlingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PathfindingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.CollisionSystem;
+import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementDeterminerSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.*;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
@@ -51,11 +52,11 @@ public class InnScene extends GameScene {
         new ResourceStartUp();
         WorldEntity.getInstance("/assets/maps/inn.txt", "/assets/tileSets/innTileSet.txt");
 
-        new PlayerEntity(5*Config.scaledTileSize + Config.scaledTileSize /2, 8*Config.scaledTileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize *2, Config.scaledTileSize *2);
+        new PlayerEntity(5 * Config.scaledTileSize + Config.scaledTileSize / 2, 8 * Config.scaledTileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 2, Config.scaledTileSize * 2);
 
-        new ExitEntity(5*Config.scaledTileSize, 10*Config.scaledTileSize +Config.scaledTileSize *0.8, 3*Config.scaledTileSize, 0.2*Config.scaledTileSize, new ExitInnEvent(), new ExitInnEventListener());
+        new ExitEntity(5 * Config.scaledTileSize, 10 * Config.scaledTileSize + Config.scaledTileSize * 0.8, 3 * Config.scaledTileSize, 0.2 * Config.scaledTileSize, new ExitInnEvent(), new ExitInnEventListener());
 
-        CameraEntity.getInstance(1920, 1080, 16* Config.scaledTileSize, 16*Config.scaledTileSize);
+        CameraEntity.getInstance(1920, 1080, 16 * Config.scaledTileSize, 16 * Config.scaledTileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
 
         new SystemStartUp(this::SystemStartUp);
@@ -68,73 +69,69 @@ public class InnScene extends GameScene {
     private void SystemStartUp() {
         //Define systems to be started up here
         SystemHub systemHub = SystemHub.getInstance();
-        systemHub.addSystem(EventTileSystem.class, new EventTileSystem(),1);
+        systemHub.addSystem(MovementDeterminerSystem.class, new MovementDeterminerSystem(),0);
+        systemHub.addSystem(EventTileSystem.class, new EventTileSystem(), 1);
         systemHub.addSystem(AnimationSystem.class, new AnimationSystem(), 2);
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(),3);
-        systemHub.addSystem(LightingSystem.class, new LightingSystem(),4);
-        systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(),5);
-        systemHub.addSystem(MovementSystem.class, new MovementSystem(),6);
-        systemHub.addSystem(ParticleSystem.class, new ParticleSystem(),7);
-        systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(),8);
-        systemHub.addSystem(CollisionSystem.class, new CollisionSystem(),9);
-        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(),10);
+        systemHub.addSystem(RenderSystem.class, new RenderSystem(), 3);
+        systemHub.addSystem(LightingSystem.class, new LightingSystem(), 4);
+        systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(), 5);
+        systemHub.addSystem(MovementSystem.class, new MovementSystem(), 6);
+        systemHub.addSystem(ParticleSystem.class, new ParticleSystem(), 7);
+        systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(), 8);
+        systemHub.addSystem(CollisionSystem.class, new CollisionSystem(), 9);
+        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(), 10);
         systemHub.addSystem(CameraSystem.class, new CameraSystem(), 11);
         systemHub.addSystem(SoundSystem.class, new SoundSystem(), 12);
         systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 13);
     }
 
     private void interactionSetup() {
-        PlayerEntity player = (PlayerEntity)EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst();
+        PlayerEntity player = (PlayerEntity) EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst();
         InteractiveComponent playerInteractiveComponent = player.getComponent(InteractiveComponent.class);
         playerInteractiveComponent.mapInput(KeyCode.UP, 10, () -> moveUp(player), () -> counterUp(player));
         playerInteractiveComponent.mapInput(KeyCode.DOWN, 10, () -> moveDown(player), () -> counterDown(player));
         playerInteractiveComponent.mapInput(KeyCode.LEFT, 10, () -> moveLeft(player), () -> counterLeft(player));
         playerInteractiveComponent.mapInput(KeyCode.RIGHT, 10, () -> moveRight(player), () -> counterRight(player));
-        playerInteractiveComponent.mapInput(MouseButton.PRIMARY, 100, () -> {player.getComponent(PositionComponent.class).setLocalX(MouseInputHandler.getInstance().getMouseX(), player); player.getComponent(PositionComponent.class).setLocalY(MouseInputHandler.getInstance().getMouseY(), player);});
+        playerInteractiveComponent.mapInput(MouseButton.PRIMARY, 100, () -> {
+            player.getComponent(PositionComponent.class).setLocalX(MouseInputHandler.getInstance().getMouseX(), player);
+            player.getComponent(PositionComponent.class).setLocalY(MouseInputHandler.getInstance().getMouseY(), player);
+        });
     }
 
     private void moveUp(Entity e) {
         double dy = -4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(dy);
-        e.getComponent(StateComponent.class).setCurrentState("up");
     }
 
     private void moveDown(Entity e) {
         double dy = 4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(dy);
-        e.getComponent(StateComponent.class).setCurrentState("down");
     }
 
     private void moveLeft(Entity e) {
         double dx = -4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
-        e.getComponent(StateComponent.class).setCurrentState("left");
     }
 
     private void moveRight(Entity e) {
         double dx = 4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
-        e.getComponent(StateComponent.class).setCurrentState("right");
     }
 
     private void counterUp(Entity e) {
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(0);
-        e.getComponent(StateComponent.class).setCurrentState("idle");
     }
 
     private void counterDown(Entity e) {
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(0);
-        e.getComponent(StateComponent.class).setCurrentState("idle");
     }
 
     private void counterRight(Entity e) {
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(0);
-        e.getComponent(StateComponent.class).setCurrentState("idle");
     }
 
     private void counterLeft(Entity e) {
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(0);
-        e.getComponent(StateComponent.class).setCurrentState("idle");
     }
 
     @Override

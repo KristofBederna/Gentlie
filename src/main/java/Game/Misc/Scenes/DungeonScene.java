@@ -4,7 +4,9 @@ import Game.Entities.EnterEnemyIslandLabel;
 import Game.Entities.EntryEntity;
 import Game.Misc.EventHandling.EventListeners.EnterEnemyIslandEventListener;
 import Game.Misc.EventHandling.Events.EnterEnemyIslandEvent;
+import Game.Systems.DungeonGeneratorSystem;
 import Game.Systems.EventTileSystem;
+import Game.Systems.PolarBearMoverSystem;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
@@ -30,6 +32,7 @@ import inf.elte.hu.gameengine_javafx.Misc.Time;
 import inf.elte.hu.gameengine_javafx.Systems.InputHandlingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PathfindingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.CollisionSystem;
+import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementDeterminerSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.*;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.DynamicWorldLoaderSystem;
@@ -77,10 +80,11 @@ public class DungeonScene extends GameScene {
     private void SystemStartUp() {
         //Define systems to be started up here
         SystemHub systemHub = SystemHub.getInstance();
+        systemHub.addSystem(MovementDeterminerSystem.class, new MovementDeterminerSystem(),0);
         systemHub.addSystem(EventTileSystem.class, new EventTileSystem(),1);
         systemHub.addSystem(AnimationSystem.class, new AnimationSystem(), 2);
         systemHub.addSystem(RenderSystem.class, new RenderSystem(),3);
-        systemHub.addSystem(LightingSystem.class, new LightingSystem(),4);
+        systemHub.addSystem(PolarBearMoverSystem.class, new PolarBearMoverSystem(),4);
         systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(),5);
         systemHub.addSystem(MovementSystem.class, new MovementSystem(),6);
         systemHub.addSystem(ParticleSystem.class, new ParticleSystem(),7);
@@ -89,7 +93,7 @@ public class DungeonScene extends GameScene {
         systemHub.addSystem(ResourceSystem.class, new ResourceSystem(),10);
         systemHub.addSystem(CameraSystem.class, new CameraSystem(), 11);
         systemHub.addSystem(SoundSystem.class, new SoundSystem(), 12);
-        systemHub.addSystem(DynamicWorldLoaderSystem.class, new DynamicWorldLoaderSystem(2, 2), 13);
+        systemHub.addSystem(DungeonGeneratorSystem.class, new DungeonGeneratorSystem(2, 2), 13);
     }
 
     private void interactionSetup() {
@@ -105,45 +109,37 @@ public class DungeonScene extends GameScene {
     private void moveUp(Entity e) {
         double dy = -4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(dy);
-        e.getComponent(StateComponent.class).setCurrentState("up");
     }
 
     private void moveDown(Entity e) {
         double dy = 4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(dy);
-        e.getComponent(StateComponent.class).setCurrentState("down");
     }
 
     private void moveLeft(Entity e) {
         double dx = -4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
-        e.getComponent(StateComponent.class).setCurrentState("left");
     }
 
     private void moveRight(Entity e) {
         double dx = 4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
-        e.getComponent(StateComponent.class).setCurrentState("right");
     }
 
     private void counterUp(Entity e) {
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(0);
-        e.getComponent(StateComponent.class).setCurrentState("idle");
     }
 
     private void counterDown(Entity e) {
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(0);
-        e.getComponent(StateComponent.class).setCurrentState("idle");
     }
 
     private void counterRight(Entity e) {
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(0);
-        e.getComponent(StateComponent.class).setCurrentState("idle");
     }
 
     private void counterLeft(Entity e) {
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(0);
-        e.getComponent(StateComponent.class).setCurrentState("idle");
     }
 
     @Override
