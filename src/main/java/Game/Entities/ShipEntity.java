@@ -12,7 +12,7 @@ public class ShipEntity extends Entity {
         this.getComponent(PositionComponent.class).setGlobal(new Point(x, y));
         this.addComponent(new ImageComponent("/assets/images/ship.png", width, height));
         this.addComponent(new DimensionComponent(width, height));
-        this.addComponent(new ZIndexComponent(2));
+        this.addComponent(new ZIndexComponent(3));
 
         addToManager();
     }

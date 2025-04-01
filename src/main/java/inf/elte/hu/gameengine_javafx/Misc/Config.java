@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Config {
-    public static int tileSize = 100;
+    private static final int tileSize = 100;
     private static double tileScale = 1.0;
     public static double scaledTileSize = tileSize * tileScale;
     public static double gameCanvasWidth = 1920;

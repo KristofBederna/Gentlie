@@ -1,10 +1,10 @@
 package Game.Misc.Scenes;
 
 import Game.Entities.*;
-import Game.Misc.EventHandling.EventListeners.EnterAdventureEventListener;
+import Game.Misc.EventHandling.EventListeners.EnterEnemyIslandEventListener;
 import Game.Misc.EventHandling.EventListeners.EnterHomeEventListener;
 import Game.Misc.EventHandling.EventListeners.EnterInnListener;
-import Game.Misc.EventHandling.Events.EnterAdventureEvent;
+import Game.Misc.EventHandling.Events.EnterEnemyIslandEvent;
 import Game.Misc.EventHandling.Events.EnterHomeEvent;
 import Game.Misc.EventHandling.Events.EnterInnEvent;
 import Game.Systems.EventTileSystem;
@@ -63,6 +63,7 @@ public class HomeIslandScene extends GameScene {
     @Override
     public void setup() {
         Config.wallTiles = List.of(3, 5, 6, 7);
+        Config.setTileScale(1.5);
 
         new ResourceStartUp();
         WorldEntity.getInstance("/assets/maps/homeIsland.txt", "/assets/tileSets/gameTileSet.txt");
@@ -84,14 +85,14 @@ public class HomeIslandScene extends GameScene {
         innLabel.removeFromUI();
         innLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
-        AdventureLabel adventureLabel = new AdventureLabel("Press 'E' to go on an adventure", 10 * Config.scaledTileSize, 3*Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
-        adventureLabel.removeFromUI();
-        adventureLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
+        EnterEnemyIslandLabel enterEnemyIslandLabel = new EnterEnemyIslandLabel("Press 'E' to go on an adventure", 10 * Config.scaledTileSize, 3*Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
+        enterEnemyIslandLabel.removeFromUI();
+        enterEnemyIslandLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
 
         new EntryEntity(7* Config.scaledTileSize -Config.scaledTileSize *0.25-1, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75, new EnterHomeEvent(), new EnterHomeEventListener());
         new EntryEntity(2* Config.scaledTileSize +Config.scaledTileSize *0.25-1, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75, new EnterInnEvent(), new EnterInnListener());
-        new EntryEntity(14*Config.scaledTileSize, 2.5*Config.scaledTileSize, 2*Config.scaledTileSize, (double) Config.scaledTileSize /2, new EnterAdventureEvent(), new EnterAdventureEventListener());
+        new EntryEntity(14*Config.scaledTileSize, 2.5*Config.scaledTileSize, 2*Config.scaledTileSize, Config.scaledTileSize /2, new EnterEnemyIslandEvent(new Point(3*Config.scaledTileSize, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1)), new EnterEnemyIslandEventListener());
 
         CameraEntity.getInstance(1920, 1080, 16* Config.scaledTileSize, 16*Config.scaledTileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());

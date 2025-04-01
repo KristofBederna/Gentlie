@@ -61,11 +61,12 @@ public class EnemyIslandScene extends GameScene {
     @Override
     public void setup() {
         Config.wallTiles = List.of(3, 5, 6, 7);
+        Config.setTileScale(1.5);
 
         new ResourceStartUp();
         WorldEntity.getInstance("/assets/maps/enemyIsland.txt", "/assets/tileSets/gameTileSet.txt");
 
-        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", (double) Config.scaledTileSize * 0.75, (double) Config.scaledTileSize * 0.75);
+        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
 
         new WaterEntity();
 
@@ -82,8 +83,7 @@ public class EnemyIslandScene extends GameScene {
         goHomeLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
         new EntryEntity(7* Config.scaledTileSize -Config.scaledTileSize *0.25-1, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75, new EnterDungeonEvent(), new EnterDungeonEventListener());
-        new EntryEntity(2*Config.scaledTileSize, 2*Config.scaledTileSize, Config.scaledTileSize, (double) Config.scaledTileSize /2, new GoHomeEvent(), new GoHomeEventListener());
-
+        new EntryEntity(2*Config.scaledTileSize, 2*Config.scaledTileSize+Config.scaledTileSize/2, Config.scaledTileSize/2, Config.scaledTileSize /2, new GoHomeEvent(), new GoHomeEventListener());
 
         CameraEntity.getInstance(1920, 1080, 16* Config.scaledTileSize, 16*Config.scaledTileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
