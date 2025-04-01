@@ -32,11 +32,7 @@ public class AnimationSystem extends GameSystem {
             if (entity == null) continue;
             PositionComponent position = entity.getComponent(PositionComponent.class);
             ImageComponent img = entity.getComponent(ImageComponent.class);
-            if (entity.getClass() == DummyEntity.class) {
-                ((DummyEntity) entity).setAnimationState();
-            } else if (entity.getClass() == PlayerEntity.class) {
-                entity.getComponent(AnimationStateMachineComponent.class).getAnimationStateMachine().setAnimationState();
-            }
+            entity.getComponent(AnimationStateMachineComponent.class).getAnimationStateMachine().setAnimationState();
             AnimationComponent animation = entity.getComponent(AnimationComponent.class);
 
             if (position != null && img != null && animation != null) {

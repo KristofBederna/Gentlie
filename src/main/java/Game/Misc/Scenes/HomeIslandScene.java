@@ -8,6 +8,7 @@ import Game.Misc.EventHandling.Events.EnterEnemyIslandEvent;
 import Game.Misc.EventHandling.Events.EnterHomeEvent;
 import Game.Misc.EventHandling.Events.EnterInnEvent;
 import Game.Systems.EventTileSystem;
+import Game.Systems.PenguinMoverSystem;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
@@ -33,7 +34,9 @@ import inf.elte.hu.gameengine_javafx.Misc.Time;
 import inf.elte.hu.gameengine_javafx.Systems.InputHandlingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PathfindingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.CollisionSystem;
+import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementDeterminerSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
+import inf.elte.hu.gameengine_javafx.Systems.PlatformerPathfindingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.*;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
@@ -44,6 +47,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.text.TextAlignment;
 
 import java.util.List;
+import java.util.Random;
 
 public class HomeIslandScene extends GameScene {
     Point spawn;
@@ -68,7 +72,13 @@ public class HomeIslandScene extends GameScene {
         new ResourceStartUp();
         WorldEntity.getInstance("/assets/maps/homeIsland.txt", "/assets/tileSets/gameTileSet.txt");
 
-        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", (double) Config.scaledTileSize * 0.75, (double) Config.scaledTileSize * 0.75);
+        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png",  Config.scaledTileSize * 0.75,  Config.scaledTileSize * 0.75);
+
+        Random random = new Random();
+        new PenguinEntity(spawn.getX()+random.nextInt(2, 5)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_Idle.png",  Config.scaledTileSize,  Config.scaledTileSize);
+        new PenguinEntity(spawn.getX()+random.nextInt(2, 5)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_Idle.png",  Config.scaledTileSize,  Config.scaledTileSize);
+        new PenguinEntity(spawn.getX()+random.nextInt(2, 5)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_Idle.png",  Config.scaledTileSize,  Config.scaledTileSize);
+
 
         new WaterEntity();
 
@@ -107,19 +117,20 @@ public class HomeIslandScene extends GameScene {
     private void SystemStartUp() {
         //Define systems to be started up here
         SystemHub systemHub = SystemHub.getInstance();
+        systemHub.addSystem(MovementDeterminerSystem.class, new MovementDeterminerSystem(),0);
         systemHub.addSystem(EventTileSystem.class, new EventTileSystem(),1);
         systemHub.addSystem(AnimationSystem.class, new AnimationSystem(), 2);
         systemHub.addSystem(RenderSystem.class, new RenderSystem(),3);
-        systemHub.addSystem(LightingSystem.class, new LightingSystem(),4);
-        systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(),5);
-        systemHub.addSystem(MovementSystem.class, new MovementSystem(),6);
-        systemHub.addSystem(ParticleSystem.class, new ParticleSystem(),7);
-        systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(),8);
-        systemHub.addSystem(CollisionSystem.class, new CollisionSystem(),9);
-        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(),10);
-        systemHub.addSystem(CameraSystem.class, new CameraSystem(), 11);
-        systemHub.addSystem(SoundSystem.class, new SoundSystem(), 12);
-        systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 13);
+        systemHub.addSystem(PenguinMoverSystem.class, new PenguinMoverSystem(),4);
+        systemHub.addSystem(PlatformerPathfindingSystem.class, new PlatformerPathfindingSystem(),5);
+        systemHub.addSystem(MovementSystem.class, new MovementSystem(),7);
+        systemHub.addSystem(ParticleSystem.class, new ParticleSystem(),8);
+        systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(),9);
+        systemHub.addSystem(CollisionSystem.class, new CollisionSystem(),10);
+        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(),11);
+        systemHub.addSystem(CameraSystem.class, new CameraSystem(), 12);
+        systemHub.addSystem(SoundSystem.class, new SoundSystem(), 13);
+        systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 14);
     }
 
     private void interactionSetup() {

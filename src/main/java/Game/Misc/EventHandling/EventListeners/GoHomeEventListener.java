@@ -19,7 +19,7 @@ public class GoHomeEventListener implements EventListener<GoHomeEvent> {
     public void onEvent(GoHomeEvent event) {
         ((GoHomeLabel) EntityHub.getInstance().getEntitiesWithType(GoHomeLabel.class).getFirst()).addToUI();
         if (KeyboardInputHandler.getInstance().isKeyPressed(KeyCode.E))
-            SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeIslandScene(new BorderPane(), 1920, 1080, new Point(14* Config.scaledTileSize -Config.scaledTileSize *0.25-1, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1)));
+            SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeIslandScene(new BorderPane(), 1920, 1080, new Point(13* Config.scaledTileSize -Config.scaledTileSize *0.25-1, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1)));
     }
 
     @Override

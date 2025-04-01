@@ -14,11 +14,11 @@ public class Pathfinding {
      * @param entity The entity for which the pathfinding is being calculated.
      * @return A list of points representing the path from start to end.
      */
-    public static List<Point> selectPath(Entity entity) {
+    public static ArrayList<Point> selectPath(Entity entity) {
         Point start = entity.getComponent(PathfindingComponent.class).getStart();
         Point end = entity.getComponent(PathfindingComponent.class).getEnd();
-        if (start.distanceTo(end) < 5) return List.of(start);
-        List<Point> path = new ArrayList<>();
+        if (start.distanceTo(end) < 5) return new ArrayList<>(List.of(start));
+        ArrayList<Point> path = new ArrayList<>();
         Map<Point, Point> cameFrom = new HashMap<>();
         PriorityQueue<Point> openSet = new PriorityQueue<>(Comparator.comparingDouble(p -> p.distanceTo(end)));
         Set<Point> closedSet = new HashSet<>();
@@ -58,8 +58,8 @@ public class Pathfinding {
      * @param current The current point from which the path is being reconstructed.
      * @return A list of points representing the reconstructed path from start to end.
      */
-    private static List<Point> reconstructPath(Map<Point, Point> cameFrom, Point current) {
-        List<Point> path = new LinkedList<>();
+    private static ArrayList<Point> reconstructPath(Map<Point, Point> cameFrom, Point current) {
+        ArrayList<Point> path = new ArrayList<>();
         while (cameFrom.containsKey(current)) {
             path.add(0, current);
             current = cameFrom.get(current);

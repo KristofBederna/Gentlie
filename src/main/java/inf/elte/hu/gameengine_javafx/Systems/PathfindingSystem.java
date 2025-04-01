@@ -111,6 +111,7 @@ public class PathfindingSystem extends GameSystem {
 
                 if (pathfindingComponent.getPath().isEmpty()) {
                     entity.getComponent(VelocityComponent.class).stopMovement();
+                    pathfindingComponent.resetPathing(entity);
                 }
             }
         }

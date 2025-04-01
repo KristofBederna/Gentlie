@@ -17,7 +17,7 @@ public class PathfindingComponent extends Component {
     private Point end;
     private Point current;
     private List<Point> neighbours;
-    private List<Point> path;
+    private ArrayList<Point> path;
 
     public PathfindingComponent(Point start, Point end) {
         this.start = start;
@@ -32,7 +32,7 @@ public class PathfindingComponent extends Component {
         return end;
     }
 
-    public List<Point> getPath() {
+    public ArrayList<Point> getPath() {
         return path;
     }
 
@@ -52,7 +52,7 @@ public class PathfindingComponent extends Component {
         this.current = current;
     }
 
-    public void setPath(List<Point> path) {
+    public void setPath(ArrayList<Point> path) {
         this.path = path;
     }
 
@@ -130,4 +130,7 @@ public class PathfindingComponent extends Component {
         return neighbours;
     }
 
+    public void setStart(Point start) {
+        this.start = start;
+    }
 }
