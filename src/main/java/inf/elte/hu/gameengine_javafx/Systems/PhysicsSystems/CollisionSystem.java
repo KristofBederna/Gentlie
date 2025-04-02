@@ -71,6 +71,9 @@ public class CollisionSystem extends GameSystem {
      * @param entity the entity to be processed
      */
     private static void processEntity(List<Entity> hitBoxes, Entity entity) {
+        if (entity == null) {
+            return;
+        }
         HitBoxComponent hitBox = entity.getComponent(HitBoxComponent.class);
         VelocityComponent velocity = entity.getComponent(VelocityComponent.class);
         PositionComponent position = entity.getComponent(PositionComponent.class);

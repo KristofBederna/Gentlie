@@ -39,7 +39,7 @@ public class ParticleSystem extends GameSystem {
             }
 
             if (System.currentTimeMillis() >= entity.getComponent(TimeComponent.class).getLastOccurrence() + entity.getComponent(TimeComponent.class).getTimeBetweenOccurrences()) {
-                ((ParticleEmitterEntity) entity).createParticles((ParticleEntity) parent.getChildren().iterator().next(), 10, entity.getComponent(ParentComponent.class));
+                ((ParticleEmitterEntity) entity).createParticles((ParticleEntity) parent.getChildren().iterator().next(), ((ParticleEmitterEntity) entity).getAmount(), entity.getComponent(ParentComponent.class));
                 entity.getComponent(TimeComponent.class).setLastOccurrence();
             }
 
@@ -72,6 +72,7 @@ public class ParticleSystem extends GameSystem {
                             yield maxSpeed * Time.getInstance().getDeltaTime();
                         }
                         case LEFT -> {
+                            angle = random.nextDouble(3 * Math.PI / 4, 5 * Math.PI / 4);
                             dx = minSpeed * Time.getInstance().getDeltaTime();
                             yield random.nextDouble(minSpeed, maxSpeed) * Time.getInstance().getDeltaTime();
                         }

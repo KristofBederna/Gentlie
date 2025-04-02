@@ -51,11 +51,16 @@ public class HomeScene extends GameScene {
         new ResourceStartUp();
         WorldEntity.getInstance("/assets/maps/gentlieHome.txt", "/assets/tileSets/gameTileSet.txt");
 
-        new PlayerEntity(6*Config.scaledTileSize + Config.scaledTileSize /2, 3*Config.scaledTileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 2 * 0.55, Config.scaledTileSize * 2);
+        new PlayerEntity(6*Config.scaledTileSize + Config.scaledTileSize /2, 2*Config.scaledTileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 2 * 0.55, Config.scaledTileSize * 2);
 
         new CampfireEntity(7*Config.scaledTileSize+Config.scaledTileSize*0.2, 5*Config.scaledTileSize, "/assets/images/Campfire/Campfire_1.png", Config.scaledTileSize*0.8, Config.scaledTileSize*0.8);
 
-        new WorldObject(6*Config.scaledTileSize, 1*Config.scaledTileSize-Config.scaledTileSize*0.6, 3*Config.scaledTileSize, 1.5*Config.scaledTileSize, "/assets/images/Bed.png", true, 2);
+        new WorldObject(6*Config.scaledTileSize, 1*Config.scaledTileSize-Config.scaledTileSize*0.2, 3*Config.scaledTileSize, 3*0.27*Config.scaledTileSize, "/assets/images/Bed.png", true, 2);
+
+        new WorldObject(2*Config.scaledTileSize+Config.scaledTileSize*0.3, 3*Config.scaledTileSize-Config.scaledTileSize*0.2, 1.5*0.15*Config.scaledTileSize, 1.5*Config.scaledTileSize, "/assets/images/Fishing_Rod.png", false, 2);
+
+        new WorldObject(10*Config.scaledTileSize-Config.scaledTileSize*0.8, 9*Config.scaledTileSize+Config.scaledTileSize*0.3, 0.75*0.98*Config.scaledTileSize, 0.75*Config.scaledTileSize, "/assets/images/Backpack.png", false, 2);
+
 
         new ExitEntity(6*Config.scaledTileSize, 11*Config.scaledTileSize +Config.scaledTileSize *0.8, 3*Config.scaledTileSize, 0.2*Config.scaledTileSize, new ExitHomeEvent(), new ExitHomeEventListener());
 

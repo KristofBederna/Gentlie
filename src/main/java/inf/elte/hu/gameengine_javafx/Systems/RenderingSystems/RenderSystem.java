@@ -24,6 +24,7 @@ import inf.elte.hu.gameengine_javafx.Entities.*;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.*;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
+import inf.elte.hu.gameengine_javafx.Misc.Time;
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;

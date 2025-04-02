@@ -21,11 +21,10 @@ import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
-import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
-import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
-import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
+import inf.elte.hu.gameengine_javafx.Entities.*;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Direction;
 import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.MouseInputHandler;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
@@ -85,6 +84,9 @@ public class HomeIslandScene extends GameScene {
         new IglooEntity(6*Config.scaledTileSize, Config.scaledTileSize, 2*Config.scaledTileSize, 2*Config.scaledTileSize);
         new ShipEntity(14*Config.scaledTileSize, 1.5*Config.scaledTileSize, 2*Config.scaledTileSize, 2*Config.scaledTileSize);
         new InnEntity(2*Config.scaledTileSize, Config.scaledTileSize, 2*Config.scaledTileSize, 2*Config.scaledTileSize);
+
+        new ParticleEmitterEntity(0, -300, new ParticleEntity(0, 0, 20, 20, "/assets/images/snowflake.png", 3000), Direction.RIGHT, 1, 60);
+        new ParticleEmitterEntity(2400, -300, new ParticleEntity(0, 0, 20, 20, "/assets/images/snowflake.png", 3000), Direction.LEFT, 1, 60);
 
 
         EnterHomeLabel homeLabel = new EnterHomeLabel("Press 'E' to enter your home", 6* Config.scaledTileSize, 3*Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);

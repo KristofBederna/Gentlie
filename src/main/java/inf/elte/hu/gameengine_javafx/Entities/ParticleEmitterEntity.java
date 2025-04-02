@@ -8,11 +8,14 @@ import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Misc.Direction;
 
 public class ParticleEmitterEntity extends Entity {
+    private int amount;
+
     public ParticleEmitterEntity(double x, double y, ParticleEntity particleEntity, Direction direction, int amount, long timeBetweenSpawns) {
         createParticles(particleEntity, amount, this.getComponent(ParentComponent.class));
         addComponent(new DirectionComponent(direction));
         this.getComponent(PositionComponent.class).setLocalPosition(x, y, this);
         addComponent(new TimeComponent(timeBetweenSpawns));
+        this.amount = amount;
 
         addToManager();
     }
@@ -29,5 +32,9 @@ public class ParticleEmitterEntity extends Entity {
             parent.addChild(copy);
             copy.getComponent(PositionComponent.class).setLocalPosition(0, 0, copy);
         }
+    }
+
+    public int getAmount() {
+        return amount;
     }
 }
