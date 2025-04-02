@@ -61,6 +61,9 @@ public class Point {
     }
 
     public boolean compareCoordinates(Point other) {
+        if (other == null) {
+            return false;
+        }
         return Math.abs(this.getX() - other.getX()) < 10 && Math.abs(this.getY() - other.getY()) < 10;
     }
 

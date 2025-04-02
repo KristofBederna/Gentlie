@@ -37,9 +37,8 @@ public class PolarBearEntity extends Entity {
         this.addComponent(new ImageComponent(path, width, height));
         this.addComponent(new InteractiveComponent());
         this.addComponent(new DimensionComponent(width, height));
-        this.addComponent(new HitBoxComponent(new Rectangle(new Point(x+width/2, y+height/2), width/2, height/2).getPoints()));
+        this.addComponent(new HitBoxComponent(new Rectangle(new Point(x, y), width, height).getPoints()));
         this.addComponent(new ZIndexComponent(3));
-        this.addComponent(PlayerComponent.getInstance());
         this.addComponent(new CentralMassComponent(x + width / 2, y + height / 2));
         this.addComponent(new PathfindingComponent(new Point(this.getComponent(CentralMassComponent.class).getCentralX(), this.getComponent(CentralMassComponent.class).getCentralY()), new Point(this.getComponent(CentralMassComponent.class).getCentralX(), this.getComponent(CentralMassComponent.class).getCentralY())));
         this.addComponent(new AnimationStateMachineComponent(new AnimationStateMachine(this) {

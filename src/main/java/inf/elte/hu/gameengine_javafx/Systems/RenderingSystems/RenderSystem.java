@@ -1,5 +1,6 @@
 package inf.elte.hu.gameengine_javafx.Systems.RenderingSystems;
 
+import Game.Entities.BarEntity;
 import Game.Entities.WaterEntity;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.LightHitBoxComponent;

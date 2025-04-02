@@ -7,6 +7,7 @@ import Game.Misc.EventHandling.Events.EnterEnemyIslandEvent;
 import Game.Systems.DungeonGeneratorSystem;
 import Game.Systems.EventTileSystem;
 import Game.Systems.PolarBearMoverSystem;
+import Game.Systems.PolarBearSpawnerSystem;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
@@ -94,6 +95,7 @@ public class DungeonScene extends GameScene {
         systemHub.addSystem(CameraSystem.class, new CameraSystem(), 11);
         systemHub.addSystem(SoundSystem.class, new SoundSystem(), 12);
         systemHub.addSystem(DungeonGeneratorSystem.class, new DungeonGeneratorSystem(2, 2), 13);
+        systemHub.addSystem(PolarBearSpawnerSystem.class, new PolarBearSpawnerSystem(), 14);
     }
 
     private void interactionSetup() {

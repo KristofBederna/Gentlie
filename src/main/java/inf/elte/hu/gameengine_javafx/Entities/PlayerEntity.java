@@ -20,6 +20,7 @@ import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
 import inf.elte.hu.gameengine_javafx.Misc.AnimationFrame;
 import inf.elte.hu.gameengine_javafx.Misc.AnimationStateMachine;
+import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
 
 import java.util.List;

@@ -7,6 +7,7 @@ import inf.elte.hu.gameengine_javafx.Components.PathfindingComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.MapMeshComponent;
+import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
@@ -28,9 +29,26 @@ public class PolarBearMoverSystem extends GameSystem {
     protected void update() {
         Random random = new Random();
         var entities = EntityHub.getInstance().getEntitiesWithType(PolarBearEntity.class);
+        PlayerEntity player = (PlayerEntity) EntityHub.getInstance().getEntitiesWithType(PlayerEntity.class).getFirst();
+        CentralMassComponent playerCentral = player.getComponent(CentralMassComponent.class);
         for (var entity : entities) {
             PathfindingComponent pathfinding = entity.getComponent(PathfindingComponent.class);
-            Point end = WorldEntity.getInstance().getComponent(MapMeshComponent.class).getMapCoordinates().get(random.nextInt(1, 31)).get(random.nextInt(1, 31));
+            CentralMassComponent entityCentral = entity.getComponent(CentralMassComponent.class);
+
+            var mapMesh = WorldEntity.getInstance().getComponent(MapMeshComponent.class).getMapCoordinates();
+
+            Point end = mapMesh.get(random.nextInt(1, 31)).get(random.nextInt(1, 31));
+
+            if (playerCentral.getCentral().distanceTo(entityCentral.getCentral()) < 600) {
+                end = mapMesh.get(Math.floorDiv((int) playerCentral.getCentralY(), (int) Config.scaledTileSize)).get(Math.floorDiv((int) playerCentral.getCentralX(), (int) Config.scaledTileSize));
+                if (!end.compareCoordinates(pathfinding.getEnd())) {
+                    pathfinding.resetPathing(entity);
+                }
+                entity.getComponent(VelocityComponent.class).setMaxVelocity(2);
+            } else {
+                entity.getComponent(VelocityComponent.class).setMaxVelocity(0.5);
+            }
+
             pathfinding.setEnd(end);
         }
     }

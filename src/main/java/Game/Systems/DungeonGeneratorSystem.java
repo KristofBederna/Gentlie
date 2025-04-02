@@ -2,6 +2,7 @@ package Game.Systems;
 
 import Game.Entities.PathfindingEntity;
 import Game.Entities.PolarBearEntity;
+import Game.Entities.PolarBearSpawner;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
@@ -13,6 +14,7 @@ import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDimensionCo
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
+import inf.elte.hu.gameengine_javafx.Core.EntityManager;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
@@ -60,9 +62,7 @@ public class DungeonGeneratorSystem extends GameSystem {
         if (map == null) return;
         double walkablePercent;
         do {
-            for (Entity polarBear : EntityHub.getInstance().getEntitiesWithType(PolarBearEntity.class)) {
-                EntityHub.getInstance().removeEntity(polarBear);
-            }
+            resetPolarBears();
             loadFullWorld();
             runWalkerAlgorithm();
             addWorldMesh();
@@ -80,6 +80,17 @@ public class DungeonGeneratorSystem extends GameSystem {
             walkablePercent = walkable/(Config.chunkWidth*width*Config.chunkHeight*height);
         }
         while (walkablePercent < 0.63);
+    }
+
+    private static void resetPolarBears() {
+        for (Entity entity : EntityHub.getInstance().getEntitiesWithType(PolarBearSpawner.class)) {
+            EntityHub.getInstance().removeEntity(entity);
+        }
+        for (Entity entity : EntityHub.getInstance().getEntitiesWithType(PolarBearEntity.class)) {
+            EntityHub.getInstance().removeEntity(entity);
+        }
+        EntityHub.getInstance().removeEntityManager(PolarBearSpawner.class);
+        EntityHub.getInstance().removeEntityManager(PolarBearEntity.class);
     }
 
     private void removeIsolated() {
@@ -119,9 +130,8 @@ public class DungeonGeneratorSystem extends GameSystem {
                 int count = (left ? 1 : 0) + (right ? 1 : 0) + (up ? 1 : 0) + (down ? 1 : 0);
 
                 if (count >= 3) {
-                    mapData.setElementAt(p, 6);
-                    new PolarBearEntity(p.getX()-Config.scaledTileSize*0.75/2, p.getY()-Config.scaledTileSize*0.75/2, "idle", "/assets/images/PolarBears/Polar_Bear_Down_Idle.png", Config.scaledTileSize*0.75, Config.scaledTileSize*0.75);
-                    spawnFactor = -100000;
+                    new PolarBearSpawner(p.getX(), p.getY());
+                    spawnFactor = -1.5;
                     return spawnFactor;
                 }
 

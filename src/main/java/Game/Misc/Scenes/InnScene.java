@@ -1,6 +1,6 @@
 package Game.Misc.Scenes;
 
-import Game.Entities.ExitEntity;
+import Game.Entities.*;
 import Game.Misc.EventHandling.EventListeners.ExitInnEventListener;
 import Game.Misc.EventHandling.Events.ExitInnEvent;
 import Game.Systems.EventTileSystem;
@@ -53,6 +53,11 @@ public class InnScene extends GameScene {
         WorldEntity.getInstance("/assets/maps/inn.txt", "/assets/tileSets/innTileSet.txt");
 
         new PlayerEntity(5 * Config.scaledTileSize + Config.scaledTileSize / 2, 8 * Config.scaledTileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 2, Config.scaledTileSize * 2);
+
+        new BartenderPenguinEntity(9 * Config.scaledTileSize + Config.scaledTileSize / 2, 2 * Config.scaledTileSize,"/assets/images/Penguins/Penguin_Down_Idle.png", Config.scaledTileSize * 2, Config.scaledTileSize * 2);
+
+        new BarEntity(9*Config.scaledTileSize, 3*Config.scaledTileSize-Config.scaledTileSize*0.5, 3*Config.scaledTileSize, 2*Config.scaledTileSize);
+        new BarShelfEntity(9*Config.scaledTileSize, -Config.scaledTileSize*0.1, 3*Config.scaledTileSize, 2*Config.scaledTileSize);
 
         new ExitEntity(5 * Config.scaledTileSize, 10 * Config.scaledTileSize + Config.scaledTileSize * 0.8, 3 * Config.scaledTileSize, 0.2 * Config.scaledTileSize, new ExitInnEvent(), new ExitInnEventListener());
 
