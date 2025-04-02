@@ -131,7 +131,7 @@ public class DungeonGeneratorSystem extends GameSystem {
 
                 if (count >= 3) {
                     new PolarBearSpawner(p.getX(), p.getY());
-                    spawnFactor = -1.5;
+                    spawnFactor = -1.0;
                     return spawnFactor;
                 }
 

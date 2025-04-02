@@ -1,18 +1,13 @@
 package Game.Misc.EventHandling.EventListeners;
 
-import Game.Entities.EnterHomeLabel;
+import Game.Entities.Labels.EnterHomeLabel;
 import Game.Misc.EventHandling.Events.EnterHomeEvent;
-import Game.Misc.EventHandling.Events.ExitHomeEvent;
-import Game.Misc.Scenes.HomeIslandScene;
 import Game.Misc.Scenes.HomeScene;
-import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListener;
 import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.KeyboardInputHandler;
-import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;

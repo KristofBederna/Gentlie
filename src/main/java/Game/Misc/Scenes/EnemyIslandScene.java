@@ -1,6 +1,8 @@
 package Game.Misc.Scenes;
 
 import Game.Entities.*;
+import Game.Entities.Labels.DungeonLabel;
+import Game.Entities.Labels.GoHomeLabel;
 import Game.Misc.EventHandling.EventListeners.EnterDungeonEventListener;
 import Game.Misc.EventHandling.EventListeners.GoHomeEventListener;
 import Game.Misc.EventHandling.Events.EnterDungeonEvent;
@@ -10,7 +12,6 @@ import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.StateComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
@@ -67,7 +68,7 @@ public class EnemyIslandScene extends GameScene {
         new ResourceStartUp();
         WorldEntity.getInstance("/assets/maps/enemyIsland.txt", "/assets/tileSets/gameTileSet.txt");
 
-        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
+        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 0.75 * 0.55, Config.scaledTileSize * 0.75);
 
         new WaterEntity();
 

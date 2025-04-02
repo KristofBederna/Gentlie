@@ -1,6 +1,6 @@
 package Game.Misc.EventHandling.EventListeners;
 
-import Game.Entities.GoHomeLabel;
+import Game.Entities.Labels.GoHomeLabel;
 import Game.Misc.EventHandling.Events.GoHomeEvent;
 import Game.Misc.Scenes.HomeIslandScene;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;

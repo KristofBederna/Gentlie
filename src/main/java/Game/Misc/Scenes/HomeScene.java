@@ -1,6 +1,8 @@
 package Game.Misc.Scenes;
 
+import Game.Entities.CampfireEntity;
 import Game.Entities.ExitEntity;
+import Game.Entities.WorldObject;
 import Game.Misc.EventHandling.EventListeners.ExitHomeEventListener;
 import Game.Misc.EventHandling.Events.ExitHomeEvent;
 import Game.Systems.EventTileSystem;
@@ -49,7 +51,11 @@ public class HomeScene extends GameScene {
         new ResourceStartUp();
         WorldEntity.getInstance("/assets/maps/gentlieHome.txt", "/assets/tileSets/gameTileSet.txt");
 
-        new PlayerEntity(6*Config.scaledTileSize + (double) Config.scaledTileSize /2, 4*Config.scaledTileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize *2, Config.scaledTileSize *2);
+        new PlayerEntity(6*Config.scaledTileSize + Config.scaledTileSize /2, 3*Config.scaledTileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 2 * 0.55, Config.scaledTileSize * 2);
+
+        new CampfireEntity(7*Config.scaledTileSize+Config.scaledTileSize*0.2, 5*Config.scaledTileSize, "/assets/images/Campfire/Campfire_1.png", Config.scaledTileSize*0.8, Config.scaledTileSize*0.8);
+
+        new WorldObject(6*Config.scaledTileSize, 1*Config.scaledTileSize-Config.scaledTileSize*0.6, 3*Config.scaledTileSize, 1.5*Config.scaledTileSize, "/assets/images/Bed.png", true, 2);
 
         new ExitEntity(6*Config.scaledTileSize, 11*Config.scaledTileSize +Config.scaledTileSize *0.8, 3*Config.scaledTileSize, 0.2*Config.scaledTileSize, new ExitHomeEvent(), new ExitHomeEventListener());
 

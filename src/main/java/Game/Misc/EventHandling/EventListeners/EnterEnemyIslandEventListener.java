@@ -1,6 +1,6 @@
 package Game.Misc.EventHandling.EventListeners;
 
-import Game.Entities.EnterEnemyIslandLabel;
+import Game.Entities.Labels.EnterEnemyIslandLabel;
 import Game.Misc.EventHandling.Events.EnterEnemyIslandEvent;
 import Game.Misc.Scenes.EnemyIslandScene;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;

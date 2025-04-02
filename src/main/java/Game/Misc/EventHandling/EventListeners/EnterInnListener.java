@@ -1,10 +1,7 @@
 package Game.Misc.EventHandling.EventListeners;
 
-import Game.Entities.EnterHomeLabel;
-import Game.Entities.EnterInnLabel;
-import Game.Misc.EventHandling.Events.EnterHomeEvent;
+import Game.Entities.Labels.EnterInnLabel;
 import Game.Misc.EventHandling.Events.EnterInnEvent;
-import Game.Misc.Scenes.HomeScene;
 import Game.Misc.Scenes.InnScene;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;

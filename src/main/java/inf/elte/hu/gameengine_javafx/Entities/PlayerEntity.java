@@ -50,17 +50,17 @@ public class PlayerEntity extends Entity {
 
                 AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
 
-                AnimationFrame downFrame1 = new AnimationFrame("/assets/images/Gentlie/" + "Gentlie_Down_1.png", 15 * Time.getInstance().getFPS() / 60);
-                AnimationFrame downFrame2 = new AnimationFrame("/assets/images/Gentlie/" + "Gentlie_Down_2.png", 15 * Time.getInstance().getFPS() / 60);
+                AnimationFrame downFrame1 = new AnimationFrame("/assets/images/Gentlie/" + "Gentlie_Down_2.png", 15 * Time.getInstance().getFPS() / 60);
+                AnimationFrame downFrame2 = new AnimationFrame("/assets/images/Gentlie/" + "Gentlie_Down_3.png", 15 * Time.getInstance().getFPS() / 60);
 
-                AnimationFrame upFrame1 = new AnimationFrame("/assets/images/Gentlie/" + "Gentlie_Up_1.png", 15 * Time.getInstance().getFPS() / 60);
-                AnimationFrame upFrame2 = new AnimationFrame("/assets/images/Gentlie/" + "Gentlie_Up_2.png", 15 * Time.getInstance().getFPS() / 60);
+                AnimationFrame upFrame1 = new AnimationFrame("/assets/images/Gentlie/" + "Gentlie_Up_2.png", 15 * Time.getInstance().getFPS() / 60);
+                AnimationFrame upFrame2 = new AnimationFrame("/assets/images/Gentlie/" + "Gentlie_Up_3.png", 15 * Time.getInstance().getFPS() / 60);
 
-                AnimationFrame leftFrame1 = new AnimationFrame("/assets/images/Gentlie/" + "Gentlie_Left_1.png", 15 * Time.getInstance().getFPS() / 60);
-                AnimationFrame leftFrame2 = new AnimationFrame("/assets/images/Gentlie/" + "Gentlie_Left_2.png", 15 * Time.getInstance().getFPS() / 60);
+                AnimationFrame leftFrame1 = new AnimationFrame("/assets/images/Gentlie/" + "Gentlie_Left_2.png", 15 * Time.getInstance().getFPS() / 60);
+                AnimationFrame leftFrame2 = new AnimationFrame("/assets/images/Gentlie/" + "Gentlie_Left_3.png", 15 * Time.getInstance().getFPS() / 60);
 
-                AnimationFrame rightFrame1 = new AnimationFrame("/assets/images/Gentlie/" + "Gentlie_Right_1.png", 15 * Time.getInstance().getFPS() / 60);
-                AnimationFrame rightFrame2 = new AnimationFrame("/assets/images/Gentlie/" + "Gentlie_Right_2.png", 15 * Time.getInstance().getFPS() / 60);
+                AnimationFrame rightFrame1 = new AnimationFrame("/assets/images/Gentlie/" + "Gentlie_Right_2.png", 15 * Time.getInstance().getFPS() / 60);
+                AnimationFrame rightFrame2 = new AnimationFrame("/assets/images/Gentlie/" + "Gentlie_Right_3.png", 15 * Time.getInstance().getFPS() / 60);
 
 
                 String currentState = entity.getComponent(StateComponent.class).getCurrentState();
@@ -97,7 +97,7 @@ public class PlayerEntity extends Entity {
                         break;
                     case "idle":
                         entity.removeComponentsByType(AnimationComponent.class);
-                        entity.getComponent(ImageComponent.class).setNextFrame("/assets/images/Gentlie/Gentlie_Down_Idle.png");
+                        entity.getComponent(ImageComponent.class).setNextFrame("/assets/images/Gentlie/Gentlie_Down_1.png");
                         break;
                 }
             }

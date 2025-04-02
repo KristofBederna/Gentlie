@@ -1,6 +1,6 @@
 package Game.Misc.EventHandling.EventListeners;
 
-import Game.Entities.DungeonLabel;
+import Game.Entities.Labels.DungeonLabel;
 import Game.Misc.EventHandling.Events.EnterDungeonEvent;
 import Game.Misc.Scenes.DungeonScene;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;

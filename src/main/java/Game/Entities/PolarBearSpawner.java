@@ -19,7 +19,7 @@ public class PolarBearSpawner extends Entity {
             return;
         }
         Point p = this.getComponent(PositionComponent.class).getGlobal();
-        new PolarBearEntity(p.getX()- Config.scaledTileSize*0.75/2, p.getY()-Config.scaledTileSize*0.75/2, "idle", "/assets/images/PolarBears/Polar_Bear_Down_Idle.png", Config.scaledTileSize*0.75, Config.scaledTileSize*0.75);
+        new PolarBearEntity(p.getX()- Config.scaledTileSize*0.75/2, p.getY()-Config.scaledTileSize*0.75/2, "idle", "/assets/images/PolarBears/Polar_Bear_Down_1.png", Config.scaledTileSize*0.9, Config.scaledTileSize*0.45);
         spawned = true;
     }
 }

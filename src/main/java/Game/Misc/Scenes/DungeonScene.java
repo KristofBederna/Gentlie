@@ -1,6 +1,6 @@
 package Game.Misc.Scenes;
 
-import Game.Entities.EnterEnemyIslandLabel;
+import Game.Entities.Labels.EnterEnemyIslandLabel;
 import Game.Entities.EntryEntity;
 import Game.Misc.EventHandling.EventListeners.EnterEnemyIslandEventListener;
 import Game.Misc.EventHandling.Events.EnterEnemyIslandEvent;
@@ -12,7 +12,6 @@ import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.StateComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
@@ -36,7 +35,6 @@ import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.CollisionSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementDeterminerSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.*;
-import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.DynamicWorldLoaderSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
 import javafx.scene.Parent;
@@ -60,7 +58,7 @@ public class DungeonScene extends GameScene {
 
         WorldEntity.getInstance(32, 32, "/assets/tileSets/gameTileSet.txt");
 
-        new PlayerEntity(Config.scaledTileSize + Config.scaledTileSize /2, Config.scaledTileSize + Config.scaledTileSize /2, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize *0.8, Config.scaledTileSize *0.8);
+        new PlayerEntity(Config.scaledTileSize + Config.scaledTileSize /2, Config.scaledTileSize + Config.scaledTileSize /2, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 0.8 * 0.55, Config.scaledTileSize * 0.8);
 
         new EntryEntity(0, Config.scaledTileSize, Config.scaledTileSize, Config.scaledTileSize*3, new EnterEnemyIslandEvent(new Point(4*150, 2*150 +150 *0.25-1)), new EnterEnemyIslandEventListener());
         EnterEnemyIslandLabel enterEnemyIslandLabel = new EnterEnemyIslandLabel("Press 'E' to leave dungeon", Config.scaledTileSize, 3*Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);

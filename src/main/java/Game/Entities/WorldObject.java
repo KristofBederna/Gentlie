@@ -10,14 +10,17 @@ import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
 
-public class BarEntity extends Entity {
-    public BarEntity(double x, double y, double width, double height) {
+public class WorldObject extends Entity {
+    public WorldObject(double x, double y, double width, double height, String path, boolean hasHitBox, int ZIndex) {
         this.getComponent(PositionComponent.class).setGlobal(new Point(x, y));
         this.addComponent(new DimensionComponent(width, height));
-        this.addComponent(new HitBoxComponent(new Rectangle(new Point(x, y), width, height).getPoints()));
-        this.addComponent(new ImageComponent("/assets/images/Inn_Bar.png", width, height));
-        this.addComponent(new ZIndexComponent(4));
+        this.addComponent(new ImageComponent(path, width, height));
+        this.addComponent(new ZIndexComponent(ZIndex));
         this.addComponent(new CentralMassComponent(x + width / 2, y + height / 2));
+
+        if (hasHitBox) {
+            this.addComponent(new HitBoxComponent(new Rectangle(new Point(x, y), width, height).getPoints()));
+        }
 
         addToManager();
     }

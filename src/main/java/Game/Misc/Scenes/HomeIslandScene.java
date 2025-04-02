@@ -1,6 +1,9 @@
 package Game.Misc.Scenes;
 
 import Game.Entities.*;
+import Game.Entities.Labels.EnterEnemyIslandLabel;
+import Game.Entities.Labels.EnterHomeLabel;
+import Game.Entities.Labels.EnterInnLabel;
 import Game.Misc.EventHandling.EventListeners.EnterEnemyIslandEventListener;
 import Game.Misc.EventHandling.EventListeners.EnterHomeEventListener;
 import Game.Misc.EventHandling.EventListeners.EnterInnListener;
@@ -13,7 +16,6 @@ import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.StateComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
@@ -32,7 +34,6 @@ import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.ResourceStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.SystemStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
 import inf.elte.hu.gameengine_javafx.Systems.InputHandlingSystem;
-import inf.elte.hu.gameengine_javafx.Systems.PathfindingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.CollisionSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementDeterminerSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
@@ -72,13 +73,12 @@ public class HomeIslandScene extends GameScene {
         new ResourceStartUp();
         WorldEntity.getInstance("/assets/maps/homeIsland.txt", "/assets/tileSets/gameTileSet.txt");
 
-        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png",  Config.scaledTileSize * 0.75,  Config.scaledTileSize * 0.75);
+        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_1.png",  Config.scaledTileSize * 0.75 * 0.55,  Config.scaledTileSize * 0.75);
 
         Random random = new Random();
-        new PenguinEntity(spawn.getX()+random.nextInt(2, 5)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_Idle.png",  Config.scaledTileSize,  Config.scaledTileSize);
-        new PenguinEntity(spawn.getX()+random.nextInt(2, 5)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_Idle.png",  Config.scaledTileSize,  Config.scaledTileSize);
-        new PenguinEntity(spawn.getX()+random.nextInt(2, 5)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_Idle.png",  Config.scaledTileSize,  Config.scaledTileSize);
-
+        new PenguinEntity(random.nextInt(2, 10)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_1.png",  Config.scaledTileSize*0.55,  Config.scaledTileSize);
+        new PenguinEntity(random.nextInt(2, 10)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_1.png",  Config.scaledTileSize*0.55,  Config.scaledTileSize);
+        new PenguinEntity(random.nextInt(2, 10)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_1.png",  Config.scaledTileSize*0.55,  Config.scaledTileSize);
 
         new WaterEntity();
 

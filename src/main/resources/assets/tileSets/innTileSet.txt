@@ -1,6 +1,6 @@
 -1 transparent
 0 void
-1 iceBrick
+1 woodWall
 2 woodenFloor
 3 ice
 4 snow

@@ -52,12 +52,15 @@ public class InnScene extends GameScene {
         new ResourceStartUp();
         WorldEntity.getInstance("/assets/maps/inn.txt", "/assets/tileSets/innTileSet.txt");
 
-        new PlayerEntity(5 * Config.scaledTileSize + Config.scaledTileSize / 2, 8 * Config.scaledTileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 2, Config.scaledTileSize * 2);
+        new PlayerEntity(5 * Config.scaledTileSize + Config.scaledTileSize / 2, 8 * Config.scaledTileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_1.png", Config.scaledTileSize * 2 * 0.55, Config.scaledTileSize * 2);
 
-        new BartenderPenguinEntity(9 * Config.scaledTileSize + Config.scaledTileSize / 2, 2 * Config.scaledTileSize,"/assets/images/Penguins/Penguin_Down_Idle.png", Config.scaledTileSize * 2, Config.scaledTileSize * 2);
+        new BartenderPenguinEntity(9 * Config.scaledTileSize + Config.scaledTileSize / 2, 2 * Config.scaledTileSize,"/assets/images/Penguins/Penguin_Down_1.png", Config.scaledTileSize * 2 * 0.55, Config.scaledTileSize * 2);
 
-        new BarEntity(9*Config.scaledTileSize, 3*Config.scaledTileSize-Config.scaledTileSize*0.5, 3*Config.scaledTileSize, 2*Config.scaledTileSize);
-        new BarShelfEntity(9*Config.scaledTileSize, -Config.scaledTileSize*0.1, 3*Config.scaledTileSize, 2*Config.scaledTileSize);
+        new WorldObject(9*Config.scaledTileSize, 3*Config.scaledTileSize-Config.scaledTileSize*0.5, 3*Config.scaledTileSize, 2*Config.scaledTileSize, "/assets/images/Inn_Bar.png", true, 4);
+        new WorldObject(9*Config.scaledTileSize, -Config.scaledTileSize*0.1, 3*Config.scaledTileSize, 2*Config.scaledTileSize, "/assets/images/Inn_Bar_Shelf.png", true, 2);
+
+        new WorldObject(3*Config.scaledTileSize, 2*Config.scaledTileSize, 3*Config.scaledTileSize, 3*0.625*Config.scaledTileSize, "/assets/images/Inn_Table.png", true, 2);
+
 
         new ExitEntity(5 * Config.scaledTileSize, 10 * Config.scaledTileSize + Config.scaledTileSize * 0.8, 3 * Config.scaledTileSize, 0.2 * Config.scaledTileSize, new ExitInnEvent(), new ExitInnEventListener());
 
