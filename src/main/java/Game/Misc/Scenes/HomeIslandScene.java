@@ -10,6 +10,7 @@ import Game.Misc.EventHandling.EventListeners.EnterInnListener;
 import Game.Misc.EventHandling.Events.EnterEnemyIslandEvent;
 import Game.Misc.EventHandling.Events.EnterHomeEvent;
 import Game.Misc.EventHandling.Events.EnterInnEvent;
+import Game.Systems.DayNightCycleSystem;
 import Game.Systems.EventTileSystem;
 import Game.Systems.PenguinMoverSystem;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
@@ -80,6 +81,7 @@ public class HomeIslandScene extends GameScene {
         new PenguinEntity(random.nextInt(2, 10)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_1.png",  Config.scaledTileSize*0.55,  Config.scaledTileSize);
 
         new WaterEntity();
+        new SkyBoxEntity();
 
         new IglooEntity(6*Config.scaledTileSize, Config.scaledTileSize, 2*Config.scaledTileSize, 2*Config.scaledTileSize);
         new ShipEntity(14*Config.scaledTileSize, 1.5*Config.scaledTileSize, 2*Config.scaledTileSize, 2*Config.scaledTileSize);
@@ -122,9 +124,10 @@ public class HomeIslandScene extends GameScene {
         systemHub.addSystem(MovementDeterminerSystem.class, new MovementDeterminerSystem(),0);
         systemHub.addSystem(EventTileSystem.class, new EventTileSystem(),1);
         systemHub.addSystem(AnimationSystem.class, new AnimationSystem(), 2);
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(),3);
-        systemHub.addSystem(PenguinMoverSystem.class, new PenguinMoverSystem(),4);
-        systemHub.addSystem(PlatformerPathfindingSystem.class, new PlatformerPathfindingSystem(),5);
+        systemHub.addSystem(DayNightCycleSystem.class, new DayNightCycleSystem(), 3);
+        systemHub.addSystem(RenderSystem.class, new RenderSystem(),4);
+        systemHub.addSystem(PenguinMoverSystem.class, new PenguinMoverSystem(),5);
+        systemHub.addSystem(PlatformerPathfindingSystem.class, new PlatformerPathfindingSystem(),6);
         systemHub.addSystem(MovementSystem.class, new MovementSystem(),7);
         systemHub.addSystem(ParticleSystem.class, new ParticleSystem(),8);
         systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(),9);

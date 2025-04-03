@@ -6,6 +6,7 @@ import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
+import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusic;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.GameLayer;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
@@ -17,10 +18,7 @@ import inf.elte.hu.gameengine_javafx.Systems.PathfindingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.CollisionSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.*;
-import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
-import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
-import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
-import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.WorldLoaderSystem;
+import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.*;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
@@ -38,6 +36,10 @@ public class MainScene extends GameScene {
         getStylesheets().add(Objects.requireNonNull(getClass().getResource("/assets/styles/mainMenu.css")).toExternalForm());
         new SystemStartUp(this::systemStartUp);
         new ResourceStartUp();
+
+        BackgroundMusic music = new BackgroundMusic("/assets/sound/backgroundMusic/Waddle_Wars.wav", "Waddle_Wars", 1.0f, 0.0f, true);
+        BackgroundMusic music2 = new BackgroundMusic("/assets/sound/backgroundMusic/Waddle_Wars_2.wav", "Waddle_Wars_2", 1.0f, 0.0f, true);
+        BackgroundMusic music3 = new BackgroundMusic("/assets/sound/backgroundMusic/Waddle_Wars_3.wav", "Waddle_Wars_2", 1.0f, 0.0f, true);
 
         LabelEntity label = new LabelEntity("Gentile", (double) 1920 /2-20, (double) 1080 /2-250, 200, 0);
 
@@ -62,7 +64,7 @@ public class MainScene extends GameScene {
         //Define systems to be started up here
         SystemHub systemHub = SystemHub.getInstance();
         systemHub.addSystem(ResourceSystem.class, new ResourceSystem(),1);
-        systemHub.addSystem(SoundSystem.class, new SoundSystem(), 2);
+        systemHub.addSystem(BackgroundMusicSystem.class, new BackgroundMusicSystem(), 2);
         systemHub.addSystem(RenderSystem.class, new RenderSystem(), 3);
     }
 

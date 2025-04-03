@@ -1,6 +1,9 @@
 package inf.elte.hu.gameengine_javafx.Systems.RenderingSystems;
 
+import Game.Components.DaytimeComponent;
+import Game.Entities.SkyBoxEntity;
 import Game.Entities.WaterEntity;
+import Game.Misc.Enums.Daytime;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.LightHitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.LightComponent;
@@ -72,6 +75,13 @@ public class RenderSystem extends GameSystem {
 
         Platform.runLater(() -> {
             gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+            if (!EntityHub.getInstance().getEntitiesWithType(SkyBoxEntity.class).isEmpty()) {
+                if (EntityHub.getInstance().getEntitiesWithType(SkyBoxEntity.class).getFirst().getComponent(DaytimeComponent.class).getDaytime() == Daytime.DAY) {
+                    EntityHub.getInstance().getEntitiesWithType(SkyBoxEntity.class).getFirst().getComponent(ShapeComponent.class).getShape().renderFill(gc, new Color(0.53, 0.81, 0.98, 1.0));
+                } else {
+                    EntityHub.getInstance().getEntitiesWithType(SkyBoxEntity.class).getFirst().getComponent(ShapeComponent.class).getShape().renderFill(gc, new Color(0.05, 0.05, 0.2, 1.0));
+                }
+            }
 
             List<Entity> visibleEntities = EntityHub.getInstance().getEntitiesInsideViewport(CameraEntity.getInstance());
             if (visibleEntities == null) {
@@ -89,8 +99,7 @@ public class RenderSystem extends GameSystem {
                 renderShapes(gc);
             }
             if (!EntityHub.getInstance().getEntitiesWithType(WaterEntity.class).isEmpty()) {
-                EntityHub.getInstance().getEntitiesWithType(WaterEntity.class).getFirst().getComponent(ShapeComponent.class).getShape().renderFill(gc, new Color(0.29, 0.56, 0.89, 0.8) // Water-like blue with transparency
-                );
+                EntityHub.getInstance().getEntitiesWithType(WaterEntity.class).getFirst().getComponent(ShapeComponent.class).getShape().renderFill(gc, new Color(0.29, 0.56, 0.89, 0.8));
             }
             //handleLighting(gc);
 

@@ -7,6 +7,7 @@ import Game.Misc.EventHandling.EventListeners.EnterDungeonEventListener;
 import Game.Misc.EventHandling.EventListeners.GoHomeEventListener;
 import Game.Misc.EventHandling.Events.EnterDungeonEvent;
 import Game.Misc.EventHandling.Events.GoHomeEvent;
+import Game.Systems.DayNightCycleSystem;
 import Game.Systems.EventTileSystem;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
@@ -70,6 +71,7 @@ public class EnemyIslandScene extends GameScene {
         new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 0.75 * 0.55, Config.scaledTileSize * 0.75);
 
         new WaterEntity();
+        new SkyBoxEntity();
 
         new IglooEntity(6*Config.scaledTileSize, Config.scaledTileSize, 2*Config.scaledTileSize, 2*Config.scaledTileSize);
         new ShipEntity(0, 1.5*Config.scaledTileSize, 2*Config.scaledTileSize, 2*Config.scaledTileSize);
@@ -104,8 +106,8 @@ public class EnemyIslandScene extends GameScene {
         systemHub.addSystem(MovementDeterminerSystem.class, new MovementDeterminerSystem(),0);
         systemHub.addSystem(EventTileSystem.class, new EventTileSystem(),1);
         systemHub.addSystem(AnimationSystem.class, new AnimationSystem(), 2);
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(),3);
-        systemHub.addSystem(LightingSystem.class, new LightingSystem(),4);
+        systemHub.addSystem(DayNightCycleSystem.class, new DayNightCycleSystem(),3);
+        systemHub.addSystem(RenderSystem.class, new RenderSystem(),4);
         systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(),5);
         systemHub.addSystem(MovementSystem.class, new MovementSystem(),6);
         systemHub.addSystem(ParticleSystem.class, new ParticleSystem(),7);

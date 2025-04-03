@@ -19,6 +19,7 @@ public class Config {
     public static boolean renderDebugMode = false;
     public static boolean fullScreenMode = false;
     public static List<Integer> wallTiles = new ArrayList<>(List.of(0, 1, 3));
+    public static float backgroundMusicVolume = 1.0f;
 
     public static void setTileScale(double newTileScale) {
         tileScale = newTileScale;
