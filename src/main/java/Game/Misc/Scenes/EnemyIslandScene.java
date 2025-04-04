@@ -90,7 +90,7 @@ public class EnemyIslandScene extends GameScene {
         new EntryEntity(7* Config.scaledTileSize -Config.scaledTileSize *0.25-1, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75, new EnterDungeonEvent(), new EnterDungeonEventListener());
         new EntryEntity(2*Config.scaledTileSize, 2*Config.scaledTileSize+Config.scaledTileSize/2, Config.scaledTileSize/2, Config.scaledTileSize /2, new GoHomeEvent(), new GoHomeEventListener());
 
-        CameraEntity.getInstance(1920, 1080, 16* Config.scaledTileSize, 16*Config.scaledTileSize);
+        CameraEntity.getInstance(Config.resolution.first(), Config.resolution.second(), 16 * Config.scaledTileSize, 16 * Config.scaledTileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
 
         new SystemStartUp(this::SystemStartUp);

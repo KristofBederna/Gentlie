@@ -7,6 +7,8 @@ import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
 import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusic;
+import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusicStore;
+import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.GameLayer;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
@@ -37,15 +39,17 @@ public class MainScene extends GameScene {
         new SystemStartUp(this::systemStartUp);
         new ResourceStartUp();
 
-        BackgroundMusic music = new BackgroundMusic("/assets/sound/backgroundMusic/Waddle_Wars.wav", "Waddle_Wars", 1.0f, 0.0f, true);
-        BackgroundMusic music2 = new BackgroundMusic("/assets/sound/backgroundMusic/Waddle_Wars_2.wav", "Waddle_Wars_2", 1.0f, 0.0f, true);
-        BackgroundMusic music3 = new BackgroundMusic("/assets/sound/backgroundMusic/Waddle_Wars_3.wav", "Waddle_Wars_2", 1.0f, 0.0f, true);
+        if (BackgroundMusicStore.getInstance().getBackgroundMusics().isEmpty()) {
+            new BackgroundMusic("/assets/sound/backgroundMusic/Waddle_Wars.wav", "Waddle_Wars", 1.0f, 0.0f, true);
+            new BackgroundMusic("/assets/sound/backgroundMusic/Waddle_Wars_2.wav", "Waddle_Wars_2", 1.0f, 0.0f, true);
+            new BackgroundMusic("/assets/sound/backgroundMusic/Waddle_Wars_3.wav", "Waddle_Wars_3", 1.0f, 0.0f, true);
+        }
 
-        LabelEntity label = new LabelEntity("Gentile", (double) 1920 /2-20, (double) 1080 /2-250, 200, 0);
+        LabelEntity label = new LabelEntity("Gentile", Config.resolution.first()/2 - 20*Config.relativeWidthRatio, Config.resolution.second()/2 - 250*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0);
 
-        ButtonEntity start = new ButtonEntity("Start Game", (double) 1920 /2-50, (double) 1080 /2-150, 200, 80, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), 1920, 1080)));
-        ButtonEntity settings = new ButtonEntity("Settings", (double) 1920 /2-50, (double) 1080 /2-50, 200, 80, () -> System.out.println("Clicked"));
-        ButtonEntity exit = new ButtonEntity("Exit", (double) 1920 /2-50, (double) 1080 /2+50, 200, 80, () -> System.exit(0));
+        ButtonEntity start = new ButtonEntity("Start Game", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 150*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
+        ButtonEntity settings = new ButtonEntity("Settings", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new SettingsScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
+        ButtonEntity exit = new ButtonEntity("Exit", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 + 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> System.exit(0));
 
         start.addStyleClass("main-menu-button");
         settings.addStyleClass("main-menu-button");
@@ -64,7 +68,9 @@ public class MainScene extends GameScene {
         //Define systems to be started up here
         SystemHub systemHub = SystemHub.getInstance();
         systemHub.addSystem(ResourceSystem.class, new ResourceSystem(),1);
-        systemHub.addSystem(BackgroundMusicSystem.class, new BackgroundMusicSystem(), 2);
+        if (systemHub.getSystem(BackgroundMusicSystem.class) == null) {
+            systemHub.addSystem(BackgroundMusicSystem.class, new BackgroundMusicSystem(), 2);
+        }
         systemHub.addSystem(RenderSystem.class, new RenderSystem(), 3);
     }
 
@@ -77,7 +83,6 @@ public class MainScene extends GameScene {
         GameLoopStartUp.stopGameLoop();
         ResourceHub.getInstance().clearResources();
         ResourceHub.resetInstance();
-        this.getRoot().getStyleClass().clear();
         uiRoot.getInstance().getStylesheets().clear();
         uiRoot.getInstance().unloadAll();
         System.gc();

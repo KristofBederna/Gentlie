@@ -64,7 +64,7 @@ public class InnScene extends GameScene {
 
         new ExitEntity(5 * Config.scaledTileSize, 10 * Config.scaledTileSize + Config.scaledTileSize * 0.8, 3 * Config.scaledTileSize, 0.2 * Config.scaledTileSize, new ExitInnEvent(), new ExitInnEventListener());
 
-        CameraEntity.getInstance(1920, 1080, 16 * Config.scaledTileSize, 16 * Config.scaledTileSize);
+        CameraEntity.getInstance(Config.resolution.first(), Config.resolution.second(), 16 * Config.scaledTileSize, 16 * Config.scaledTileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
 
         new SystemStartUp(this::SystemStartUp);

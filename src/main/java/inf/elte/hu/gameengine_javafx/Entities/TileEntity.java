@@ -62,7 +62,7 @@ public class TileEntity extends Entity {
 
     public void changeValues(int value) {
         this.getComponent(TileValueComponent.class).setTileValue(value);
-        this.getComponent(ImageComponent.class).setImagePath("/assets/tiles/"+WorldEntity.getInstance().getComponent(TileSetComponent.class).getTileLoader().getTilePath(value)+".png");
+        this.getComponent(ImageComponent.class).setImagePath("/assets/tiles/"+ TileLoader.getTilePath(value)+".png");
         if (Config.wallTiles.contains(value)) {
             this.addHitBox(getComponent(PositionComponent.class).getGlobalX(), getComponent(PositionComponent.class).getGlobalY(), getComponent(DimensionComponent.class).getWidth(), getComponent(DimensionComponent.class).getHeight());
         } else {

@@ -63,7 +63,7 @@ public class DungeonScene extends GameScene {
         enterEnemyIslandLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
 
-        CameraEntity.getInstance(1920, 1080, 32*Config.scaledTileSize, 32*Config.scaledTileSize);
+        CameraEntity.getInstance(Config.resolution.first(), Config.resolution.second(), 32 * Config.scaledTileSize, 32 * Config.scaledTileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
 
         new SystemStartUp(this::SystemStartUp);

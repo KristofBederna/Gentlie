@@ -64,7 +64,7 @@ public class HomeScene extends GameScene {
 
         new ExitEntity(6*Config.scaledTileSize, 11*Config.scaledTileSize +Config.scaledTileSize *0.8, 3*Config.scaledTileSize, 0.2*Config.scaledTileSize, new ExitHomeEvent(), new ExitHomeEventListener());
 
-        CameraEntity.getInstance(1920, 1080, 16* Config.scaledTileSize, 16*Config.scaledTileSize);
+        CameraEntity.getInstance(Config.resolution.first(), Config.resolution.second(), 16 * Config.scaledTileSize, 16 * Config.scaledTileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
 
         new SystemStartUp(this::SystemStartUp);

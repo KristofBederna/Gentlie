@@ -129,8 +129,8 @@ public class RenderSystem extends GameSystem {
      * Processes and renders the entities inside the camera's viewport, sorted by their Z-index.
      *
      * @param sortedEntities List of entities that need to be rendered, sorted by Z-index.
-     * @param cameraEntity The camera entity used to adjust the rendering coordinates.
-     * @param gc The graphics context used to render the entities.
+     * @param cameraEntity   The camera entity used to adjust the rendering coordinates.
+     * @param gc             The graphics context used to render the entities.
      */
     private static void processEntities(List<Entity> sortedEntities, CameraEntity cameraEntity, GraphicsContext gc) {
         for (Entity entity : sortedEntities) {
@@ -164,39 +164,35 @@ public class RenderSystem extends GameSystem {
     /**
      * Renders a single entity by drawing its image and hitbox on the screen.
      *
-     * @param entity The entity to render.
-     * @param renderX The X position of the entity relative to the camera.
-     * @param width The width of the entity.
+     * @param entity       The entity to render.
+     * @param renderX      The X position of the entity relative to the camera.
+     * @param width        The width of the entity.
      * @param cameraEntity The camera entity used for positioning.
-     * @param renderY The Y position of the entity relative to the camera.
-     * @param height The height of the entity.
+     * @param renderY      The Y position of the entity relative to the camera.
+     * @param height       The height of the entity.
      * @param imgComponent The image component containing the entity's image data.
-     * @param gc The graphics context used to render the entity.
+     * @param gc           The graphics context used to render the entity.
      */
     private static void renderEntity(Entity entity, double renderX, double width, CameraEntity cameraEntity, double renderY, double height, ImageComponent imgComponent, GraphicsContext gc) {
-        if (renderX + width >= 0 && renderX <= cameraEntity.getComponent(DimensionComponent.class).getWidth() &&
-                renderY + height >= 0 && renderY <= cameraEntity.getComponent(DimensionComponent.class).getHeight()) {
+        ResourceManager<Image> imageManager = ResourceHub.getInstance().getResourceManager(Image.class);
+        if (imageManager == null) return;
+        Image img = imageManager.get(imgComponent.getImagePath());
 
-            ResourceManager<Image> imageManager = ResourceHub.getInstance().getResourceManager(Image.class);
-            if (imageManager == null) return;
-            Image img = imageManager.get(imgComponent.getImagePath());
+        EntityManager<Entity> entityManager = (EntityManager<Entity>) EntityHub.getInstance().getEntityManager(entity.getClass());
 
-            EntityManager<Entity> entityManager = (EntityManager<Entity>) EntityHub.getInstance().getEntityManager(entity.getClass());
+        if (entityManager == null) return;
 
-            if (entityManager == null) return;
+        entityManager.updateLastUsed(entity.getId());
 
-            entityManager.updateLastUsed(entity.getId());
+        if (img == null) {
+            System.err.println("RenderSystem: Missing image for " + imgComponent.getImagePath());
+            return;
+        }
 
-            if (img == null) {
-                System.err.println("RenderSystem: Missing image for " + imgComponent.getImagePath());
-                return;
-            }
+        gc.drawImage(img, renderX, renderY, width, height);
 
-            gc.drawImage(img, renderX, renderY, width, height);
-
-            if (Config.renderDebugMode) {
-                renderHitBox(entity, gc);
-            }
+        if (Config.renderDebugMode) {
+            renderHitBox(entity, gc);
         }
     }
 
@@ -204,7 +200,7 @@ public class RenderSystem extends GameSystem {
      * Renders the hitbox of an entity if it exists.
      *
      * @param entity The entity whose hitbox is to be rendered.
-     * @param gc The graphics context used to render the hitbox.
+     * @param gc     The graphics context used to render the hitbox.
      */
     private static void renderHitBox(Entity entity, GraphicsContext gc) {
         HitBoxComponent hitBox = entity.getComponent(HitBoxComponent.class);

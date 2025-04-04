@@ -17,12 +17,14 @@ public class BackgroundMusicSystem extends GameSystem {
     @Override
     public void start() {
         this.active = true;
-        playRandomMusic(); // Start playing music
     }
 
     @Override
     protected void update() {
-        // No need to check manually, the listener will handle track switching
+        setVolume(currentClip, Config.backgroundMusicVolume);
+        if (currentClip == null || !currentClip.isOpen() || !currentClip.isActive()) {
+            playRandomMusic();
+        }
     }
 
     private void playRandomMusic() {
@@ -56,11 +58,12 @@ public class BackgroundMusicSystem extends GameSystem {
         currentClip = clip;
         setVolume(currentClip, Config.backgroundMusicVolume);
 
-        // Add a listener to detect when the clip finishes playing
+        // Play next track when this one finishes
         currentClip.addLineListener(event -> {
             if (event.getType() == LineEvent.Type.STOP) {
                 currentClip.close();
-                playRandomMusic(); // Play the next song
+                currentClip = null;
+                playRandomMusic();
             }
         });
 
@@ -68,12 +71,22 @@ public class BackgroundMusicSystem extends GameSystem {
     }
 
     private void setVolume(Clip clip, float volume) {
+        if (clip == null || !clip.isOpen()) return;
+
         try {
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            float minGain = gainControl.getMinimum();
-            float maxGain = gainControl.getMaximum();
-            float gain = minGain + (maxGain - minGain) * volume;
-            gainControl.setValue(gain);
+
+            if (Config.linearVolumeControl) {
+                float minGain = gainControl.getMinimum();
+                float maxGain = gainControl.getMaximum();
+                float gain = minGain + (maxGain - minGain) * volume;
+                gainControl.setValue(gain);
+            } else {
+                float dB = (float) (Math.log10(Math.max(volume, 0.0001f)) * 20);
+                gainControl.setValue(dB);
+            }
+
+
         } catch (Exception e) {
             System.err.println("Failed to set volume: " + e.getMessage());
         }
