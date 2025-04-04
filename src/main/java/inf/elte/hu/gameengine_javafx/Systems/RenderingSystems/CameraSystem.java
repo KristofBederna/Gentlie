@@ -53,9 +53,6 @@ public class CameraSystem extends GameSystem {
         if (playerPos == null || playerImg == null) return;
 
         updateCameraPosition(playerPos, playerImg, cameraEntity);
-
-        // Updates the entity manager to mark the camera entity as the last used entity
-        EntityHub.getInstance().getEntityManager(CameraEntity.getInstance().getOwner().getClass()).updateLastUsed(CameraEntity.getInstance().getOwner().getId());
     }
 
     private static void updateWorldBoundary() {

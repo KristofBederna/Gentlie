@@ -17,14 +17,12 @@ import java.util.Map;
  */
 public class EntityManager<T extends Entity> {
     private final Map<Integer, T> entities;
-    private final Map<Integer, Long> lastAccessed;
 
     /**
      * Creates a new {@code EntityManager} to manage entities.
      */
     public EntityManager() {
         this.entities = new HashMap<>();
-        this.lastAccessed = new HashMap<>();
     }
 
     /**
@@ -35,7 +33,6 @@ public class EntityManager<T extends Entity> {
      */
     public T get(Integer id) {
         if (entities.containsKey(id)) {
-            lastAccessed.put(id, System.currentTimeMillis());
             return entities.get(id);
         } else {
             System.err.println("Entity not registered: " + id);
@@ -66,7 +63,6 @@ public class EntityManager<T extends Entity> {
      */
     public void unload(Integer id) {
         entities.remove(id);
-        lastAccessed.remove(id);
         EntityHub.getInstance().refreshEntitiesList();
     }
 
@@ -75,7 +71,6 @@ public class EntityManager<T extends Entity> {
      */
     public void unloadAll() {
         entities.clear();
-        lastAccessed.clear();
         EntityHub.getInstance().refreshEntitiesList();
     }
 
@@ -89,16 +84,6 @@ public class EntityManager<T extends Entity> {
     }
 
     /**
-     * Retrieves the last access timestamp of an entity by its ID.
-     *
-     * @param id the ID of the entity
-     * @return the last access timestamp of the entity, or {@code null} if it was never accessed
-     */
-    public Long getLastAccessed(Integer id) {
-        return lastAccessed.getOrDefault(id, null);
-    }
-
-    /**
      * Registers a list of entities with the {@code EntityManager}.
      *
      * @param list the list of entities to register
@@ -107,14 +92,5 @@ public class EntityManager<T extends Entity> {
         for (T entity : list) {
             register(entity);
         }
-    }
-
-    /**
-     * Updates the last accessed timestamp for a given entity by its ID.
-     *
-     * @param id the ID of the entity
-     */
-    public void updateLastUsed(int id) {
-        lastAccessed.put(id, System.currentTimeMillis());
     }
 }

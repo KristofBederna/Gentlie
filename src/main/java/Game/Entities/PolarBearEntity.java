@@ -1,5 +1,6 @@
 package Game.Entities;
 
+import Game.Components.HealthComponent;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
@@ -29,13 +30,13 @@ import java.util.Objects;
 public class PolarBearEntity extends Entity {
     public PolarBearEntity(double x, double y, String state, String path, double width, double height) {
         this.getComponent(PositionComponent.class).setLocalPosition(x, y, this);
+        this.addComponent(new HealthComponent(1));
         this.addComponent(new VelocityComponent(0.5));
         this.addComponent(new AccelerationComponent());
         this.addComponent(new DragComponent(0.9999));
         this.addComponent(new MassComponent(0.5));
         this.addComponent(new StateComponent(state));
         this.addComponent(new ImageComponent(path, width, height));
-        this.addComponent(new InteractiveComponent());
         this.addComponent(new DimensionComponent(width, height));
         this.addComponent(new HitBoxComponent(new Rectangle(new Point(x, y), width, height).getPoints()));
         this.addComponent(new ZIndexComponent(3));

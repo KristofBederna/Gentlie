@@ -37,7 +37,6 @@ public class AnimationSystem extends GameSystem {
 
             if (position != null && img != null && animation != null) {
                 img.setNextFrame(animation.getNextFrame());
-                EntityHub.getInstance().getEntityManager(entity.getClass()).updateLastUsed(entity.getId());
             }
         }
     }

@@ -36,7 +36,6 @@ public class PenguinEntity extends Entity {
         this.addComponent(new MassComponent(0.5));
         this.addComponent(new StateComponent(state));
         this.addComponent(new ImageComponent(path, width, height));
-        this.addComponent(new InteractiveComponent());
         this.addComponent(new DimensionComponent(width, height));
 //        this.addComponent(new HitBoxComponent(new Rectangle(new Point(x, y), width, height).getPoints()));
         this.addComponent(new ZIndexComponent(3));

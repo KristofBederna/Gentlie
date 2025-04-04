@@ -2,6 +2,7 @@ package inf.elte.hu.gameengine_javafx.Maths.Geometry;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
+import inf.elte.hu.gameengine_javafx.Misc.Config;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -44,9 +45,17 @@ public class Point {
         CameraEntity cameraEntity = CameraEntity.getInstance();
 
         gc.setStroke(color);
+
+        // Calculate camera offset
         double x = this.getX() - cameraEntity.getComponent(PositionComponent.class).getGlobalX();
         double y = this.getY() - cameraEntity.getComponent(PositionComponent.class).getGlobalY();
 
+        // Apply scaling to the position and radius
+        x *= Config.relativeWidthRatio;
+        y *= Config.relativeHeightRatio;
+        radius *= Math.min(Config.relativeWidthRatio, Config.relativeHeightRatio); // Uniform scaling
+
+        // Draw the circle
         gc.strokeOval(x - radius, y - radius, radius * 2, radius * 2);
     }
 
@@ -54,11 +63,24 @@ public class Point {
         CameraEntity cameraEntity = CameraEntity.getInstance();
 
         gc.setFill(color);
+
+        // Calculate camera offset
         double x = this.getX() - cameraEntity.getComponent(PositionComponent.class).getGlobalX();
         double y = this.getY() - cameraEntity.getComponent(PositionComponent.class).getGlobalY();
 
+        // Apply scaling to the position and radius
+        x *= Config.relativeWidthRatio;
+        y *= Config.relativeHeightRatio;
+        radius *= Math.min(Config.relativeWidthRatio, Config.relativeHeightRatio); // Uniform scaling
+
+        // Draw the filled circle
         gc.fillOval(x - radius, y - radius, radius * 2, radius * 2);
+
+        gc.setStroke(color);
+        gc.setLineWidth(2);
+        gc.strokeOval(x - radius, y - radius, radius * 2, radius * 2);
     }
+
 
     public boolean compareCoordinates(Point other) {
         if (other == null) {

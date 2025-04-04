@@ -113,7 +113,7 @@ public class TestScene extends GameScene {
     }
 
     private void cameraSetup() {
-        CameraEntity.getInstance(Config.gameCanvasWidth, Config.gameCanvasHeight, WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldWidth() * Config.scaledTileSize, WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldHeight() * Config.scaledTileSize);
+        CameraEntity.getInstance(Config.resolution.first(), Config.resolution.second(), WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldWidth() * Config.scaledTileSize, WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldHeight() * Config.scaledTileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
     }
 

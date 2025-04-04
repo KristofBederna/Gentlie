@@ -108,7 +108,7 @@ public class HomeIslandScene extends GameScene {
         new EntryEntity(2* Config.scaledTileSize +Config.scaledTileSize *0.25-1, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75, new EnterInnEvent(), new EnterInnListener());
         new EntryEntity(14*Config.scaledTileSize, 2.5*Config.scaledTileSize, 2*Config.scaledTileSize, Config.scaledTileSize /2, new EnterEnemyIslandEvent(new Point(3*Config.scaledTileSize, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1)), new EnterEnemyIslandEventListener());
 
-        CameraEntity.getInstance(Config.resolution.first(), Config.resolution.second(), 16 * Config.scaledTileSize, 16 * Config.scaledTileSize);
+        CameraEntity.getInstance(1920, 1080, 16 * Config.scaledTileSize, 16 * Config.scaledTileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
 
         new SystemStartUp(this::SystemStartUp);
@@ -147,12 +147,12 @@ public class HomeIslandScene extends GameScene {
     }
 
     private void moveLeft(Entity e) {
-        double dx = -4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
+        double dx = -4 * Time.getInstance().getDeltaTime();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
     }
 
     private void moveRight(Entity e) {
-        double dx = 4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
+        double dx = 4 * Time.getInstance().getDeltaTime();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
     }
 

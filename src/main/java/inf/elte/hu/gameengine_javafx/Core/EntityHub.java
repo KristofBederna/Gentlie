@@ -214,5 +214,6 @@ public class EntityHub {
                 componentIds.removeIf(entityId -> entityId == entity.getId());
             }
         }
+        getEntityManager(entity.getClass()).unload(entity.getId());
     }
 }

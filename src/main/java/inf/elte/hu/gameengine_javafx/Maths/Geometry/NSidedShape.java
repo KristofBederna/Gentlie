@@ -3,6 +3,7 @@ package inf.elte.hu.gameengine_javafx.Maths.Geometry;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
+import inf.elte.hu.gameengine_javafx.Misc.Config;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -101,6 +102,12 @@ public class NSidedShape extends Shape {
             double x2 = p.getX() - cameraEntity.getComponent(PositionComponent.class).getGlobalX();
             double y2 = p.getY() - cameraEntity.getComponent(PositionComponent.class).getGlobalY();
 
+            // Apply scaling to the points
+            x1 *= Config.relativeWidthRatio;
+            y1 *= Config.relativeHeightRatio;
+            x2 *= Config.relativeWidthRatio;
+            y2 *= Config.relativeHeightRatio;
+
             gc.strokeLine(x1, y1, x2, y2);
             prev = p;
         }
@@ -123,6 +130,10 @@ public class NSidedShape extends Shape {
         for (int i = 0; i < points.size(); i++) {
             xPoints[i] = points.get(i).getX() - cameraX;
             yPoints[i] = points.get(i).getY() - cameraY;
+
+            // Apply scaling to the points
+            xPoints[i] *= Config.relativeWidthRatio;
+            yPoints[i] *= Config.relativeHeightRatio;
         }
 
         gc.setFill(color);
@@ -138,10 +149,17 @@ public class NSidedShape extends Shape {
             double x2 = p.getX() - cameraX;
             double y2 = p.getY() - cameraY;
 
+            // Apply scaling to the points
+            x1 *= Config.relativeWidthRatio;
+            y1 *= Config.relativeHeightRatio;
+            x2 *= Config.relativeWidthRatio;
+            y2 *= Config.relativeHeightRatio;
+
             gc.strokeLine(x1, y1, x2, y2);
             prev = p;
         }
     }
+
 
 
     public void moveTo(Point newPoint) {

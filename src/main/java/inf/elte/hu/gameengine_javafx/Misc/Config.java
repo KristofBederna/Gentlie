@@ -7,10 +7,6 @@ public class Config {
     private static final int tileSize = 100;
     private static double tileScale = 1.0;
     public static double scaledTileSize = tileSize * tileScale;
-    public static double gameCanvasWidth = 1920;
-    public static double gameCanvasHeight = 1080;
-    public static double relativeWidthRatio = gameCanvasWidth / 1920;
-    public static double relativeHeightRatio = gameCanvasHeight / 1080;
     public static String windowTitle = "Game Engine";
     public static double EPSILON = 1e-9;
     public static int chunkWidth = 16;
@@ -18,9 +14,11 @@ public class Config {
     public static int loadDistance = 2;
     public static double drag = 0.001;
     public static double friction = 0.001;
-    public static boolean renderDebugMode = false;
+    public static boolean renderDebugMode = true;
     public static boolean fullScreenMode = false;
     public static Tuple<Double, Double> resolution = new Tuple<>(1920.0, 1080.0);
+    public static double relativeWidthRatio = resolution.first() / 1920;
+    public static double relativeHeightRatio = resolution.second() / 1080;
     public static List<Integer> wallTiles = new ArrayList<>(List.of(0, 1, 3));
     public static float backgroundMusicVolume = 0.5f;
     public static boolean linearVolumeControl = false;
@@ -31,8 +29,8 @@ public class Config {
     }
 
     public static void setRelativeAspectRatio() {
-        relativeWidthRatio = gameCanvasWidth / 1920;
-        relativeHeightRatio = gameCanvasHeight / 1080;
+        relativeWidthRatio = resolution.first() / 1920;
+        relativeHeightRatio = resolution.second() / 1080;
     }
 
     public static double getTileScale() {

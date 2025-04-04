@@ -26,6 +26,10 @@ public class CentralMassComponent extends Component {
         this.central.setY(centralY);
     }
 
+    public void setCentral(Point central) {
+        this.central = central;
+    }
+
     @Override
     public String getStatus() {
         return "";

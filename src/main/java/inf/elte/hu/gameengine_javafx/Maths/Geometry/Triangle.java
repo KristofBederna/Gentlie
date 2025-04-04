@@ -2,6 +2,7 @@ package inf.elte.hu.gameengine_javafx.Maths.Geometry;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
+import inf.elte.hu.gameengine_javafx.Misc.Config;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -73,47 +74,49 @@ public class Triangle extends Shape {
     }
 
     public void render(GraphicsContext gc, Color color) {
+        double[] x = new double[3];
+        double[] y = new double[3];
+
+        applyCameraOffset(x, y);
+
+        // Apply scaling
+        for (int i = 0; i < 3; i++) {
+            x[i] *= Config.relativeWidthRatio;
+            y[i] *= Config.relativeHeightRatio;
+        }
+
         gc.setStroke(color);
         gc.setLineWidth(2);
-
-        CameraEntity cameraEntity = CameraEntity.getInstance();
-
-        PositionComponent playerPos = cameraEntity.getOwner().getComponent(PositionComponent.class);
-
-        double renderAX = points.get(0).getX() - playerPos.getGlobalX();
-        double renderAY = points.get(0).getY() - playerPos.getGlobalY();
-        double renderBX = points.get(1).getX() - playerPos.getGlobalX();
-        double renderBY = points.get(1).getY() - playerPos.getGlobalY();
-        double renderCX = points.get(2).getX() - playerPos.getGlobalX();
-        double renderCY = points.get(2).getY() - playerPos.getGlobalY();
-
-        gc.strokeLine(renderAX, renderAY, renderBX, renderBY);
-        gc.strokeLine(renderBX, renderBY, renderCX, renderCY);
-        gc.strokeLine(renderCX, renderCY, renderAX, renderAY);
+        gc.strokePolygon(x, y, 3); // Draws all sides of the triangle
     }
 
     public void renderFill(GraphicsContext gc, Color color) {
-        CameraEntity cameraEntity = CameraEntity.getInstance();
-        PositionComponent playerPos = cameraEntity.getOwner().getComponent(PositionComponent.class);
+        double[] x = new double[3];
+        double[] y = new double[3];
 
-        double renderAX = points.get(0).getX() - playerPos.getGlobalX();
-        double renderAY = points.get(0).getY() - playerPos.getGlobalY();
-        double renderBX = points.get(1).getX() - playerPos.getGlobalX();
-        double renderBY = points.get(1).getY() - playerPos.getGlobalY();
-        double renderCX = points.get(2).getX() - playerPos.getGlobalX();
-        double renderCY = points.get(2).getY() - playerPos.getGlobalY();
+        applyCameraOffset(x, y);
+
+        // Apply scaling
+        for (int i = 0; i < 3; i++) {
+            x[i] *= Config.relativeWidthRatio;
+            y[i] *= Config.relativeHeightRatio;
+        }
 
         gc.setFill(color);
-        double[] xPoints = {renderAX, renderBX, renderCX};
-        double[] yPoints = {renderAY, renderBY, renderCY};
-        gc.fillPolygon(xPoints, yPoints, 3);
+        gc.fillPolygon(x, y, 3); // Fills the triangle
 
         gc.setStroke(color);
         gc.setLineWidth(2);
-
-        gc.strokeLine(renderAX, renderAY, renderBX, renderBY);
-        gc.strokeLine(renderBX, renderBY, renderCX, renderCY);
-        gc.strokeLine(renderCX, renderCY, renderAX, renderAY);
+        gc.strokePolygon(x, y, 3); // Draws all sides of the triangle
     }
 
+    private void applyCameraOffset(double[] x, double[] y) {
+        CameraEntity camera = CameraEntity.getInstance();
+        PositionComponent camPos = camera.getComponent(PositionComponent.class);
+
+        for (int i = 0; i < 3; i++) {
+            x[i] = points.get(i).getX() - camPos.getGlobalX();
+            y[i] = points.get(i).getY() - camPos.getGlobalY();
+        }
+    }
 }

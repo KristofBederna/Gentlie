@@ -2,6 +2,7 @@ package inf.elte.hu.gameengine_javafx.Maths.Geometry;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
+import inf.elte.hu.gameengine_javafx.Misc.Config;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -38,14 +39,21 @@ public class Line extends Shape {
             Point start = points.get(0);
             Point end = points.get(1);
 
-            double x1 = start.getX() - cameraEntity.getComponent(PositionComponent.class).getGlobalX();
-            double y1 = start.getY() - cameraEntity.getComponent(PositionComponent.class).getGlobalY();
-            double x2 = end.getX() - cameraEntity.getComponent(PositionComponent.class).getGlobalX();
-            double y2 = end.getY() - cameraEntity.getComponent(PositionComponent.class).getGlobalY();
+            // Get camera position to apply the offset
+            double cameraX = cameraEntity.getComponent(PositionComponent.class).getGlobalX();
+            double cameraY = cameraEntity.getComponent(PositionComponent.class).getGlobalY();
 
+            // Scale the start and end points based on the camera position
+            double x1 = (start.getX() - cameraX) * Config.relativeWidthRatio;
+            double y1 = (start.getY() - cameraY) * Config.relativeHeightRatio;
+            double x2 = (end.getX() - cameraX) * Config.relativeWidthRatio;
+            double y2 = (end.getY() - cameraY) * Config.relativeHeightRatio;
+
+            // Draw the line with scaled coordinates
             gc.strokeLine(x1, y1, x2, y2);
         }
     }
+
 
     public void moveTo(Point newPoint) {
         if (points.size() >= 2) {

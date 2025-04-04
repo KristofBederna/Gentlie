@@ -2,6 +2,7 @@ package inf.elte.hu.gameengine_javafx.Systems.RenderingSystems;
 
 import Game.Components.DaytimeComponent;
 import Game.Entities.SkyBoxEntity;
+import Game.Entities.SnowBallEntity;
 import Game.Entities.WaterEntity;
 import Game.Misc.Enums.Daytime;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
@@ -118,6 +119,9 @@ public class RenderSystem extends GameSystem {
 
     private static void renderPathFindingNeighbours(GraphicsContext gc) {
         for (Entity entity : EntityHub.getInstance().getEntitiesWithComponent(PathfindingComponent.class)) {
+            if (entity == null) {
+                continue;
+            }
             PathfindingComponent pathfindingComponent = entity.getComponent(PathfindingComponent.class);
             for (Point neighbour : pathfindingComponent.getNeighbours(entity.getComponent(CentralMassComponent.class).getCentral())) {
                 neighbour.render(gc, 5, Color.RED);
@@ -145,7 +149,7 @@ public class RenderSystem extends GameSystem {
             double renderX = position.getGlobalX() - cameraEntity.getComponent(PositionComponent.class).getGlobalX();
             double renderY = position.getGlobalY() - cameraEntity.getComponent(PositionComponent.class).getGlobalY();
 
-            renderEntity(entity, renderX, width, cameraEntity, renderY, height, imgComponent, gc);
+            renderEntity(entity, renderX, renderY, width, height, imgComponent, gc);
         }
     }
 
@@ -166,30 +170,23 @@ public class RenderSystem extends GameSystem {
      *
      * @param entity       The entity to render.
      * @param renderX      The X position of the entity relative to the camera.
-     * @param width        The width of the entity.
-     * @param cameraEntity The camera entity used for positioning.
      * @param renderY      The Y position of the entity relative to the camera.
+     * @param width        The width of the entity.
      * @param height       The height of the entity.
      * @param imgComponent The image component containing the entity's image data.
      * @param gc           The graphics context used to render the entity.
      */
-    private static void renderEntity(Entity entity, double renderX, double width, CameraEntity cameraEntity, double renderY, double height, ImageComponent imgComponent, GraphicsContext gc) {
+    private static void renderEntity(Entity entity, double renderX, double renderY, double width, double height, ImageComponent imgComponent, GraphicsContext gc) {
         ResourceManager<Image> imageManager = ResourceHub.getInstance().getResourceManager(Image.class);
         if (imageManager == null) return;
         Image img = imageManager.get(imgComponent.getImagePath());
-
-        EntityManager<Entity> entityManager = (EntityManager<Entity>) EntityHub.getInstance().getEntityManager(entity.getClass());
-
-        if (entityManager == null) return;
-
-        entityManager.updateLastUsed(entity.getId());
 
         if (img == null) {
             System.err.println("RenderSystem: Missing image for " + imgComponent.getImagePath());
             return;
         }
 
-        gc.drawImage(img, renderX, renderY, width, height);
+        gc.drawImage(img, renderX*Config.relativeWidthRatio, renderY*Config.relativeHeightRatio, width*Config.relativeWidthRatio, height*Config.relativeHeightRatio);
 
         if (Config.renderDebugMode) {
             renderHitBox(entity, gc);
@@ -254,6 +251,7 @@ public class RenderSystem extends GameSystem {
      */
     private static void renderPathFindingRoute(GraphicsContext gc) {
         for (Entity entity : EntityHub.getInstance().getEntitiesWithComponent(PathfindingComponent.class)) {
+            if (entity == null) continue;
             PathfindingComponent pathfindingComponent = entity.getComponent(PathfindingComponent.class);
             if (pathfindingComponent.getPath() == null) {
                 continue;

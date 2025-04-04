@@ -35,7 +35,7 @@ public class Main extends Application {
 
         BorderPane root = (BorderPane) sceneManagementSystem.getCurrentScene().getRoot();
 
-        GameCanvas gameCanvas = GameCanvas.createInstance(Config.gameCanvasWidth, Config.gameCanvasHeight);
+        GameCanvas gameCanvas = GameCanvas.createInstance(Config.resolution.first(), Config.resolution.second());
         uiRoot uiRoot = inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot.getInstance();
         GameLayer gameLayer = GameLayer.getInstance();
         gameLayer.getChildren().addAll(gameCanvas, uiRoot);

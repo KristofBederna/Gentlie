@@ -144,6 +144,7 @@ public class MovementSystem extends GameSystem {
             newDy *= dragFactor;
         }
 
+
         velocity.setVelocity(newDx, newDy);
         position.setLocalPosition(
                 position.getLocalX() + velocity.getVelocity().getDx(),

@@ -1,6 +1,9 @@
 package Game.Systems;
 
+import Game.Components.HealthComponent;
 import Game.Entities.PolarBearEntity;
+import Game.Entities.SnowBallEntity;
+import Game.Misc.IgnoreCollisions;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
@@ -34,6 +37,12 @@ public class CustomCollisionSystem extends GameSystem {
     @Override
     public void start() {
         this.active = true;
+        IgnoreCollisions ignore = IgnoreCollisions.getInstance();
+        ignore.getCollisionRules().computeIfAbsent(PlayerEntity.class, k -> new ArrayList<>()).add(SnowBallEntity.class);
+        ignore.getCollisionRules().computeIfAbsent(PlayerEntity.class, k -> new ArrayList<>()).add(PolarBearEntity.class);
+
+        ignore.getCollisionRules().computeIfAbsent(PolarBearEntity.class, k -> new ArrayList<>()).add(PolarBearEntity.class);
+        ignore.getCollisionRules().computeIfAbsent(PolarBearEntity.class, k -> new ArrayList<>()).add(PlayerEntity.class);
     }
 
     /**
@@ -154,10 +163,20 @@ public class CustomCollisionSystem extends GameSystem {
                 if (otherEntity == entity) continue;
 
                 Shape otherHitBox = otherEntity.getComponent(HitBoxComponent.class).getHitBox();
-                if (otherHitBox != null && Shape.intersect(futureHitBox, otherHitBox) && !(entity instanceof PolarBearEntity && (otherEntity instanceof PlayerEntity || otherEntity instanceof PolarBearEntity)) && !(entity instanceof PlayerEntity && otherEntity instanceof PolarBearEntity)) {
+                if (otherHitBox != null
+                        && Shape.intersect(futureHitBox, otherHitBox)
+                        && !IgnoreCollisions.shouldIgnoreCollision(entity, otherEntity)) {
                     velocity.setVelocity(0, velocity.getVelocity().getDy());
                     if (entity.getComponent(AccelerationComponent.class) != null) {
                         entity.getComponent(AccelerationComponent.class).getAcceleration().setDx(0);
+                    }
+                    if (entity instanceof SnowBallEntity && otherEntity instanceof PolarBearEntity) {
+                        entity.getComponent(HealthComponent.class).setHealth(0);
+                        otherEntity.getComponent(HealthComponent.class).decreaseHealth();
+                    }
+                    if (otherEntity instanceof SnowBallEntity && entity instanceof PolarBearEntity) {
+                        entity.getComponent(HealthComponent.class).decreaseHealth();
+                        otherEntity.getComponent(HealthComponent.class).setHealth(0);
                     }
                     break;
                 }
@@ -181,10 +200,20 @@ public class CustomCollisionSystem extends GameSystem {
                 if (otherEntity == entity) continue;
 
                 Shape otherHitBox = otherEntity.getComponent(HitBoxComponent.class).getHitBox();
-                if (otherHitBox != null && Shape.intersect(futureHitBox, otherHitBox) && !(entity instanceof PolarBearEntity && (otherEntity instanceof PlayerEntity || otherEntity instanceof PolarBearEntity)) && !(entity instanceof PlayerEntity && otherEntity instanceof PolarBearEntity)) {
+                if (otherHitBox != null
+                        && Shape.intersect(futureHitBox, otherHitBox)
+                        && !IgnoreCollisions.shouldIgnoreCollision(entity, otherEntity)) {
                     velocity.setVelocity(velocity.getVelocity().getDx(), 0);
                     if (entity.getComponent(AccelerationComponent.class) != null) {
                         entity.getComponent(AccelerationComponent.class).getAcceleration().setDy(0);
+                    }
+                    if (entity instanceof SnowBallEntity && otherEntity instanceof PolarBearEntity) {
+                        entity.getComponent(HealthComponent.class).setHealth(0);
+                        otherEntity.getComponent(HealthComponent.class).decreaseHealth();
+                    }
+                    if (otherEntity instanceof SnowBallEntity && entity instanceof PolarBearEntity) {
+                        entity.getComponent(HealthComponent.class).decreaseHealth();
+                        otherEntity.getComponent(HealthComponent.class).setHealth(0);
                     }
                     break;
                 }

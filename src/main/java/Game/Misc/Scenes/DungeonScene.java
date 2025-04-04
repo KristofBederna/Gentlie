@@ -2,12 +2,14 @@ package Game.Misc.Scenes;
 
 import Game.Entities.Labels.EnterEnemyIslandLabel;
 import Game.Entities.EntryEntity;
+import Game.Entities.SnowBallEntity;
 import Game.Misc.EventHandling.EventListeners.EnterEnemyIslandEventListener;
 import Game.Misc.EventHandling.Events.EnterEnemyIslandEvent;
 import Game.Systems.*;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
+import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
@@ -63,7 +65,7 @@ public class DungeonScene extends GameScene {
         enterEnemyIslandLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
 
-        CameraEntity.getInstance(Config.resolution.first(), Config.resolution.second(), 32 * Config.scaledTileSize, 32 * Config.scaledTileSize);
+        CameraEntity.getInstance(1920, 1080, 32 * Config.scaledTileSize, 32 * Config.scaledTileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
 
         new SystemStartUp(this::SystemStartUp);
@@ -91,6 +93,7 @@ public class DungeonScene extends GameScene {
         systemHub.addSystem(SoundSystem.class, new SoundSystem(), 12);
         systemHub.addSystem(DungeonGeneratorSystem.class, new DungeonGeneratorSystem(2, 2), 13);
         systemHub.addSystem(PolarBearSpawnerSystem.class, new PolarBearSpawnerSystem(), 14);
+        systemHub.addSystem(RemoveDeadObjectSystem.class, new RemoveDeadObjectSystem(), 15);
     }
 
     private void interactionSetup() {
@@ -101,25 +104,26 @@ public class DungeonScene extends GameScene {
         playerInteractiveComponent.mapInput(KeyCode.LEFT, 10, () -> moveLeft(player), () -> counterLeft(player));
         playerInteractiveComponent.mapInput(KeyCode.RIGHT, 10, () -> moveRight(player), () -> counterRight(player));
         playerInteractiveComponent.mapInput(MouseButton.PRIMARY, 100, () -> {player.getComponent(PositionComponent.class).setLocalX(MouseInputHandler.getInstance().getMouseX(), player); player.getComponent(PositionComponent.class).setLocalY(MouseInputHandler.getInstance().getMouseY(), player);});
+        playerInteractiveComponent.mapInput(KeyCode.ENTER, 1000, () -> new SnowBallEntity(player.getComponent(CentralMassComponent.class).getCentralX(), player.getComponent(CentralMassComponent.class).getCentralY(), Config.scaledTileSize/6, Config.scaledTileSize/6));
     }
 
     private void moveUp(Entity e) {
-        double dy = -4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
+        double dy = -4 * Time.getInstance().getDeltaTime();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(dy);
     }
 
     private void moveDown(Entity e) {
-        double dy = 4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
+        double dy = 4 * Time.getInstance().getDeltaTime();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDy(dy);
     }
 
     private void moveLeft(Entity e) {
-        double dx = -4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
+        double dx = -4 * Time.getInstance().getDeltaTime();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
     }
 
     private void moveRight(Entity e) {
-        double dx = 4 * Time.getInstance().getDeltaTime() * Config.getTileScale();
+        double dx = 4 * Time.getInstance().getDeltaTime();
         e.getComponent(AccelerationComponent.class).getAcceleration().setDx(dx);
     }
 

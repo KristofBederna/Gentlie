@@ -2,6 +2,7 @@ package inf.elte.hu.gameengine_javafx.Maths.Geometry;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
+import inf.elte.hu.gameengine_javafx.Misc.Config;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -94,19 +95,12 @@ public class Rectangle extends Shape {
         double cameraX = cameraEntity.getComponent(PositionComponent.class).getGlobalX();
         double cameraY = cameraEntity.getComponent(PositionComponent.class).getGlobalY();
 
-        double renderTopLeftX = points.get(0).getX() - cameraX;
-        double renderTopLeftY = points.get(0).getY() - cameraY;
-        double renderTopRightX = points.get(1).getX() - cameraX;
-        double renderTopRightY = points.get(1).getY() - cameraY;
-        double renderBottomRightX = points.get(2).getX() - cameraX;
-        double renderBottomRightY = points.get(2).getY() - cameraY;
-        double renderBottomLeftX = points.get(3).getX() - cameraX;
-        double renderBottomLeftY = points.get(3).getY() - cameraY;
+        double x = points.get(0).getX() - cameraX;
+        double y = points.get(0).getY() - cameraY;
+        double width = points.get(1).getX() - points.get(0).getX();
+        double height = points.get(3).getY() - points.get(0).getY();
 
-        gc.strokeLine(renderTopLeftX, renderTopLeftY, renderTopRightX, renderTopRightY);
-        gc.strokeLine(renderTopRightX, renderTopRightY, renderBottomRightX, renderBottomRightY);
-        gc.strokeLine(renderBottomRightX, renderBottomRightY, renderBottomLeftX, renderBottomLeftY);
-        gc.strokeLine(renderBottomLeftX, renderBottomLeftY, renderTopLeftX, renderTopLeftY);
+        gc.strokeRect(x* Config.relativeWidthRatio, y*Config.relativeHeightRatio, width* Config.relativeWidthRatio, height*Config.relativeHeightRatio);
     }
 
     public void renderFill(GraphicsContext gc, Color color) {
@@ -114,27 +108,16 @@ public class Rectangle extends Shape {
         double cameraX = cameraEntity.getComponent(PositionComponent.class).getGlobalX();
         double cameraY = cameraEntity.getComponent(PositionComponent.class).getGlobalY();
 
-        double renderTopLeftX = points.get(0).getX() - cameraX;
-        double renderTopLeftY = points.get(0).getY() - cameraY;
-        double renderTopRightX = points.get(1).getX() - cameraX;
-        double renderTopRightY = points.get(1).getY() - cameraY;
-        double renderBottomRightX = points.get(2).getX() - cameraX;
-        double renderBottomRightY = points.get(2).getY() - cameraY;
-        double renderBottomLeftX = points.get(3).getX() - cameraX;
-        double renderBottomLeftY = points.get(3).getY() - cameraY;
+        double x = points.get(0).getX() - cameraX;
+        double y = points.get(0).getY() - cameraY;
+        double width = points.get(1).getX() - points.get(0).getX();
+        double height = points.get(3).getY() - points.get(0).getY();
 
         gc.setFill(color);
-        double[] xPoints = {renderTopLeftX, renderTopRightX, renderBottomRightX, renderBottomLeftX};
-        double[] yPoints = {renderTopLeftY, renderTopRightY, renderBottomRightY, renderBottomLeftY};
-        gc.fillPolygon(xPoints, yPoints, 4);
+        gc.fillRect(x* Config.relativeWidthRatio, y*Config.relativeHeightRatio, width* Config.relativeWidthRatio, height*Config.relativeHeightRatio);
 
         gc.setStroke(color);
         gc.setLineWidth(2);
-
-        gc.strokeLine(renderTopLeftX, renderTopLeftY, renderTopRightX, renderTopRightY);
-        gc.strokeLine(renderTopRightX, renderTopRightY, renderBottomRightX, renderBottomRightY);
-        gc.strokeLine(renderBottomRightX, renderBottomRightY, renderBottomLeftX, renderBottomLeftY);
-        gc.strokeLine(renderBottomLeftX, renderBottomLeftY, renderTopLeftX, renderTopLeftY);
+        gc.strokeRect(x* Config.relativeWidthRatio, y*Config.relativeHeightRatio, width* Config.relativeWidthRatio, height*Config.relativeHeightRatio);
     }
-
 }
