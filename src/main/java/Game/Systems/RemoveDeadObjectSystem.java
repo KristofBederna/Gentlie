@@ -1,6 +1,8 @@
 package Game.Systems;
 
 import Game.Components.HealthComponent;
+import Game.Entities.SnowBallEntity;
+import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
@@ -20,6 +22,11 @@ public class RemoveDeadObjectSystem extends GameSystem {
         for (var entity : entities) {
             if (!entity.getComponent(HealthComponent.class).isAlive()) {
                 dead.add(entity);
+            }
+            if (entity instanceof SnowBallEntity) {
+                if (Math.abs(entity.getComponent(VelocityComponent.class).getVelocity().getDx()) < 0.5 && Math.abs(entity.getComponent(VelocityComponent.class).getVelocity().getDy()) < 0.5) {
+                    dead.add(entity);
+                }
             }
         }
         for (var entity : dead) {

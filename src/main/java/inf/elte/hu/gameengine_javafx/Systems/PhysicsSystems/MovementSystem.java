@@ -1,5 +1,6 @@
 package inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems;
 
+import Game.Entities.SnowBallEntity;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.DragComponent;
@@ -144,13 +145,13 @@ public class MovementSystem extends GameSystem {
             newDy *= dragFactor;
         }
 
-
         velocity.setVelocity(newDx, newDy);
         position.setLocalPosition(
-                position.getLocalX() + velocity.getVelocity().getDx(),
-                position.getLocalY() + velocity.getVelocity().getDy(),
+                position.getLocalX() + newDx,
+                position.getLocalY() + newDy,
                 entity
         );
+
         var dimension = entity.getComponent(DimensionComponent.class);
         var centralMass = entity.getComponent(CentralMassComponent.class);
         if (dimension != null && centralMass != null) {

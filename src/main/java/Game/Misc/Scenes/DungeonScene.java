@@ -20,6 +20,7 @@ import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
+import inf.elte.hu.gameengine_javafx.Maths.Vector;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.MouseInputHandler;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
@@ -104,7 +105,19 @@ public class DungeonScene extends GameScene {
         playerInteractiveComponent.mapInput(KeyCode.LEFT, 10, () -> moveLeft(player), () -> counterLeft(player));
         playerInteractiveComponent.mapInput(KeyCode.RIGHT, 10, () -> moveRight(player), () -> counterRight(player));
         playerInteractiveComponent.mapInput(MouseButton.PRIMARY, 100, () -> {player.getComponent(PositionComponent.class).setLocalX(MouseInputHandler.getInstance().getMouseX(), player); player.getComponent(PositionComponent.class).setLocalY(MouseInputHandler.getInstance().getMouseY(), player);});
-        playerInteractiveComponent.mapInput(KeyCode.ENTER, 1000, () -> new SnowBallEntity(player.getComponent(CentralMassComponent.class).getCentralX(), player.getComponent(CentralMassComponent.class).getCentralY(), Config.scaledTileSize/6, Config.scaledTileSize/6));
+        playerInteractiveComponent.mapInput(MouseButton.SECONDARY, 1000, () -> {
+            double playerX = player.getComponent(CentralMassComponent.class).getCentralX();
+            double playerY = player.getComponent(CentralMassComponent.class).getCentralY();
+
+            double dx = MouseInputHandler.getInstance().getMouseX() - playerX;
+            double dy = MouseInputHandler.getInstance().getMouseY() - playerY;
+
+            double length = Math.sqrt(dx * dx + dy * dy);
+            double speed = 15;
+            Vector direction = new Vector((dx / length) * speed, (dy / length) * speed);
+
+            new SnowBallEntity(playerX, playerY, Config.scaledTileSize / 6, Config.scaledTileSize / 6, direction);
+        });
     }
 
     private void moveUp(Entity e) {
