@@ -22,7 +22,7 @@ public class ResolutionChangeEventListener implements EventListener<ResolutionCh
         canvas.setWidth(event.getWidth());
         canvas.setHeight(event.getHeight());
         Config.setRelativeAspectRatio();
-        SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(SystemHub.getInstance().getSystem(SceneManagementSystem.class).getCurrentScene());
+        //SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(SystemHub.getInstance().getSystem(SceneManagementSystem.class).getCurrentScene());
     }
 
     @Override

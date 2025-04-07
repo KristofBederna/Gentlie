@@ -8,12 +8,14 @@ import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.*;
+import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusic;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners.FullScreenToggleEventListener;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners.ResolutionChangeEventListener;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.FullScreenToggleEvent;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.ResolutionChangeEvent;
+import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
@@ -120,10 +122,6 @@ public class SettingsScene extends GameScene {
             }
         });
 
-        ObservableList<String> options2 = FXCollections.observableArrayList();
-        options2.add("Windowed");
-        options2.add("Fullscreen");
-        options2.add("Borderless fullscreen");
         LabelEntity fullScreenLabel = new LabelEntity("Fullscreen mode: ", Config.resolution.first()/2 - 200*Config.relativeWidthRatio, Config.resolution.second()/2, 200*Config.relativeWidthRatio, 0);
         CheckBoxEntity fullscreen = new CheckBoxEntity("",Config.resolution.first()/2 - 20*Config.relativeWidthRatio, Config.resolution.second()/2, 200*Config.relativeWidthRatio, 0);
 
@@ -169,12 +167,13 @@ public class SettingsScene extends GameScene {
         EntityHub.getInstance().unloadAll();
         EntityHub.resetInstance();
         CameraEntity.resetInstance();
+        WorldEntity.resetInstance();
         SystemHub.getInstance().shutDownSystems();
         GameLoopStartUp.stopGameLoop();
         ResourceHub.getInstance().clearResources();
         ResourceHub.resetInstance();
-        uiRoot.getInstance().getStylesheets().clear();
         uiRoot.getInstance().unloadAll();
+        GameCanvas.getInstance().getGraphicsContext2D().clearRect(0, 0, GameCanvas.getInstance().getWidth(), GameCanvas.getInstance().getHeight());
         System.gc();
     }
 }

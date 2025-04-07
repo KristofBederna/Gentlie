@@ -17,23 +17,32 @@ import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
+import inf.elte.hu.gameengine_javafx.Components.UIComponents.CheckBoxComponent;
+import inf.elte.hu.gameengine_javafx.Components.UIComponents.ComboBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
+import inf.elte.hu.gameengine_javafx.Components.UIComponents.SliderComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.*;
-import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
+import inf.elte.hu.gameengine_javafx.Entities.UIEntities.*;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.Direction;
+import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners.FullScreenToggleEventListener;
+import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners.ResolutionChangeEventListener;
+import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.FullScreenToggleEvent;
+import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.ResolutionChangeEvent;
 import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.MouseInputHandler;
+import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.ResourceStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.SystemStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
+import inf.elte.hu.gameengine_javafx.Misc.Tuple;
 import inf.elte.hu.gameengine_javafx.Systems.InputHandlingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.CollisionSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementDeterminerSystem;
@@ -44,11 +53,18 @@ import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.WorldLoaderSystem;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Parent;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 
 import java.util.List;
 import java.util.Random;
@@ -151,11 +167,108 @@ public class HomeIslandScene extends GameScene {
         playerInteractiveComponent.mapInput(KeyCode.ESCAPE, 100, () -> {
             Time.getInstance().setTimeScale(0.0);
             ButtonEntity start = new ButtonEntity("Back to main menu", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 150*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new MainScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
-            ButtonEntity settings = new ButtonEntity("Settings", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new SettingsScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
+            ButtonEntity settings = new ButtonEntity("Settings", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> showSettings());
             ButtonEntity exit = new ButtonEntity("Back", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 + 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> {
                 uiRoot.getInstance().unloadAll();
                 Time.getInstance().setTimeScale(1.0);
             });
+        });
+    }
+
+    private void showSettings() {
+        uiRoot.getInstance().unloadAll();
+        LabelEntity label = new LabelEntity("Settings", Config.resolution.first()/2 - 20*Config.relativeWidthRatio, Config.resolution.second()/2 - 250*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0);
+
+        ButtonEntity back = new ButtonEntity("Back", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 + 350*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> {
+            uiRoot.getInstance().unloadAll();
+            ButtonEntity start = new ButtonEntity("Back to main menu", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 150*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new MainScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
+            ButtonEntity settings = new ButtonEntity("Settings", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> showSettings());
+            ButtonEntity exit = new ButtonEntity("Back", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 + 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> {
+                uiRoot.getInstance().unloadAll();
+                Time.getInstance().setTimeScale(1.0);
+            });
+        });
+
+        LabelEntity soundLabel = new LabelEntity("Master volume: ", Config.resolution.first()/2 - 200*Config.relativeWidthRatio, Config.resolution.second()/2 - 150*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0);
+        SliderEntity sound = new SliderEntity(Config.resolution.first()/2 - 20*Config.relativeWidthRatio, Config.resolution.second()/2 - 150*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0, 0.0f, 1.0f, Config.masterVolume);
+
+        Slider slider2 = sound.getComponent(SliderComponent.class).getUIElement();
+        slider2.valueProperty().addListener((observable, oldValue, newValue) -> {
+            Config.masterVolume = newValue.floatValue();
+        });
+
+        LabelEntity musicLabel = new LabelEntity("Music volume: ", Config.resolution.first()/2 - 200*Config.relativeWidthRatio, Config.resolution.second()/2 - 100*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0);
+        SliderEntity music = new SliderEntity(Config.resolution.first()/2 - 20*Config.relativeWidthRatio, Config.resolution.second()/2 - 100*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0, 0.0f, 1.0f, Config.backgroundMusicVolume);
+
+        Slider slider = music.getComponent(SliderComponent.class).getUIElement();
+        slider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            Config.backgroundMusicVolume = newValue.floatValue();
+        });
+
+        ObservableList<Tuple<Double, Double>> options = FXCollections.observableArrayList();
+        options.add(new Tuple<>(600.0, 800.0));
+        options.add(new Tuple<>(1024.0, 768.0));
+        options.add(new Tuple<>(1280.0, 720.0));
+        options.add(new Tuple<>(1440.0, 900.0));
+        options.add(new Tuple<>(1920.0, 1080.0));
+        options.add(new Tuple<>(2560.0, 1440.0));
+        LabelEntity resolutionLabel = new LabelEntity("Resolution: ", Config.resolution.first()/2 - 200*Config.relativeWidthRatio, Config.resolution.second()/2 - 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0);
+        ComboBoxEntity<Tuple<Double,Double>> resolution = new ComboBoxEntity<>(new ComboBoxComponent<>(Config.resolution.first()/2 - 20*Config.relativeWidthRatio, Config.resolution.second()/2 - 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0, options));
+
+        ComboBox<Tuple<Double, Double>> comboBox = (ComboBox<Tuple<Double, Double>>) resolution.getComponent(ComboBoxComponent.class).getUIElement();
+
+        comboBox.setValue(Config.resolution);
+
+        comboBox.setCellFactory(cb -> new ListCell<>() {
+            @Override
+            protected void updateItem(Tuple<Double, Double> item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.first().intValue() + "x" + item.second().intValue());
+                }
+            }
+        });
+
+        comboBox.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Tuple<Double, Double> item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.first().intValue() + "x" + item.second().intValue());
+                }
+            }
+        });
+
+        comboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                Config.resolution = new Tuple<>(newVal.first(), newVal.second());
+                new ResolutionChangeEventListener().onEvent(new ResolutionChangeEvent(newVal.first(), newVal.second()));
+            }
+        });
+
+        LabelEntity fullScreenLabel = new LabelEntity("Fullscreen mode: ", Config.resolution.first()/2 - 200*Config.relativeWidthRatio, Config.resolution.second()/2, 200*Config.relativeWidthRatio, 0);
+        CheckBoxEntity fullscreen = new CheckBoxEntity("",Config.resolution.first()/2 - 20*Config.relativeWidthRatio, Config.resolution.second()/2, 200*Config.relativeWidthRatio, 0);
+
+        CheckBox checkBox = fullscreen.getComponent(CheckBoxComponent.class).getUIElement();
+
+        checkBox.setSelected(Config.fullScreenMode);
+
+        checkBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                Config.fullScreenMode = newVal;
+
+                Stage stage = (Stage) checkBox.getScene().getWindow();
+
+                if (stage != null) {
+                    new FullScreenToggleEventListener().onEvent(new FullScreenToggleEvent(stage));
+                } else {
+                    System.err.println("Stage is null");
+                }
+            }
         });
     }
 
@@ -188,6 +301,7 @@ public class HomeIslandScene extends GameScene {
         ResourceHub.getInstance().clearResources();
         ResourceHub.resetInstance();
         uiRoot.getInstance().unloadAll();
+        GameCanvas.getInstance().getGraphicsContext2D().clearRect(0, 0, GameCanvas.getInstance().getWidth(), GameCanvas.getInstance().getHeight());
         System.gc();
     }
 }

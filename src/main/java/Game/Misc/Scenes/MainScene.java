@@ -6,9 +6,11 @@ import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
+import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusic;
 import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusicStore;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.GameLayer;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
@@ -79,12 +81,13 @@ public class MainScene extends GameScene {
         EntityHub.getInstance().unloadAll();
         EntityHub.resetInstance();
         CameraEntity.resetInstance();
+        WorldEntity.resetInstance();
         SystemHub.getInstance().shutDownSystems();
         GameLoopStartUp.stopGameLoop();
         ResourceHub.getInstance().clearResources();
         ResourceHub.resetInstance();
-        uiRoot.getInstance().getStylesheets().clear();
         uiRoot.getInstance().unloadAll();
+        GameCanvas.getInstance().getGraphicsContext2D().clearRect(0, 0, GameCanvas.getInstance().getWidth(), GameCanvas.getInstance().getHeight());
         System.gc();
     }
 }
