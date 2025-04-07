@@ -17,8 +17,10 @@ import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
+import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Misc.*;
+import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.KeyboardInputHandler;
 import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.MouseInputHandler;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
@@ -35,7 +37,9 @@ import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.*;
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.BorderPane;
 
+import java.security.Key;
 import java.util.List;
 
 public class HomeScene extends GameScene {
@@ -80,7 +84,6 @@ public class HomeScene extends GameScene {
         systemHub.addSystem(MovementDeterminerSystem.class, new MovementDeterminerSystem(),0);
         systemHub.addSystem(EventTileSystem.class, new EventTileSystem(),1);
         systemHub.addSystem(AnimationSystem.class, new AnimationSystem(), 2);
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(),3);
         systemHub.addSystem(LightingSystem.class, new LightingSystem(),4);
         systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(),5);
         systemHub.addSystem(MovementSystem.class, new MovementSystem(),6);
@@ -91,6 +94,7 @@ public class HomeScene extends GameScene {
         systemHub.addSystem(CameraSystem.class, new CameraSystem(), 11);
         systemHub.addSystem(SoundSystem.class, new SoundSystem(), 12);
         systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 13);
+        systemHub.addSystem(RenderSystem.class, new RenderSystem(),14);
     }
 
     private void interactionSetup() {
@@ -101,6 +105,15 @@ public class HomeScene extends GameScene {
         playerInteractiveComponent.mapInput(KeyCode.LEFT, 10, () -> moveLeft(player), () -> counterLeft(player));
         playerInteractiveComponent.mapInput(KeyCode.RIGHT, 10, () -> moveRight(player), () -> counterRight(player));
         playerInteractiveComponent.mapInput(MouseButton.PRIMARY, 100, () -> {player.getComponent(PositionComponent.class).setLocalX(MouseInputHandler.getInstance().getMouseX(), player); player.getComponent(PositionComponent.class).setLocalY(MouseInputHandler.getInstance().getMouseY(), player);});
+        playerInteractiveComponent.mapInput(KeyCode.ESCAPE, 100, () -> {
+            Time.getInstance().setTimeScale(0.0);
+            ButtonEntity start = new ButtonEntity("Back to main menu", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 150*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new MainScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
+            ButtonEntity settings = new ButtonEntity("Settings", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new SettingsScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
+            ButtonEntity exit = new ButtonEntity("Back", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 + 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> {
+                uiRoot.getInstance().unloadAll();
+                Time.getInstance().setTimeScale(1.0);
+            });
+        });
     }
 
     private void moveUp(Entity e) {

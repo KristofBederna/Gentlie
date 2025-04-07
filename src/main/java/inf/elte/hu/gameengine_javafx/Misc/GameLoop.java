@@ -19,7 +19,7 @@ public abstract class GameLoop extends Thread {
     public GameLoop() {
         this.running = false;
         this.time = Time.getInstance();
-        time.setFPSCap(144);
+        time.setFPSCap(Config.fpsCap);
     }
 
     /**
@@ -52,6 +52,10 @@ public abstract class GameLoop extends Thread {
         while (running) {
             long frameStartTime = System.nanoTime();
             time.update();
+
+            if (time.getTimeScale() == 0.0) {
+                continue;
+            }
 
             update();
 

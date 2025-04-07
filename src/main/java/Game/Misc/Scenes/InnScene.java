@@ -15,6 +15,7 @@ import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
+import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.MouseInputHandler;
@@ -31,11 +32,13 @@ import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementDeterminerSy
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.*;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
+import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.WorldLoaderSystem;
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.BorderPane;
 
 import java.util.List;
 
@@ -103,6 +106,15 @@ public class InnScene extends GameScene {
         playerInteractiveComponent.mapInput(MouseButton.PRIMARY, 100, () -> {
             player.getComponent(PositionComponent.class).setLocalX(MouseInputHandler.getInstance().getMouseX(), player);
             player.getComponent(PositionComponent.class).setLocalY(MouseInputHandler.getInstance().getMouseY(), player);
+        });
+        playerInteractiveComponent.mapInput(KeyCode.ESCAPE, 100, () -> {
+            Time.getInstance().setTimeScale(0.0);
+            ButtonEntity start = new ButtonEntity("Back to main menu", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 150*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new MainScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
+            ButtonEntity settings = new ButtonEntity("Settings", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new SettingsScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
+            ButtonEntity exit = new ButtonEntity("Back", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 + 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> {
+                uiRoot.getInstance().unloadAll();
+                Time.getInstance().setTimeScale(1.0);
+            });
         });
     }
 

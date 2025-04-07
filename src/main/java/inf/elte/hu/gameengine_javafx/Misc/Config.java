@@ -8,6 +8,7 @@ public class Config {
     private static double tileScale = 1.0;
     public static double scaledTileSize = tileSize * tileScale;
     public static String windowTitle = "Game Engine";
+    public static int fpsCap = 144;
     public static double EPSILON = 1e-9;
     public static int chunkWidth = 16;
     public static int chunkHeight = 16;
