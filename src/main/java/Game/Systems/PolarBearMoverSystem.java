@@ -41,6 +41,9 @@ public class PolarBearMoverSystem extends GameSystem {
 
             if (playerCentral.getCentral().distanceTo(entityCentral.getCentral()) < 600) {
                 end = mapMesh.get(Math.floorDiv((int) playerCentral.getCentralY(), (int) Config.scaledTileSize)).get(Math.floorDiv((int) playerCentral.getCentralX(), (int) Config.scaledTileSize));
+                if (end == null) {
+                    continue;
+                }
                 if (!end.compareCoordinates(pathfinding.getEnd())) {
                     pathfinding.resetPathing(entity);
                 }
