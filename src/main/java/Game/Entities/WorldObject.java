@@ -12,7 +12,7 @@ import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
 
 public class WorldObject extends Entity {
     public WorldObject(double x, double y, double width, double height, String path, boolean hasHitBox, int ZIndex) {
-        this.getComponent(PositionComponent.class).setGlobal(new Point(x, y));
+        this.getComponent(PositionComponent.class).setLocal(new Point(x, y), this);
         this.addComponent(new DimensionComponent(width, height));
         this.addComponent(new ImageComponent(path, width, height));
         this.addComponent(new ZIndexComponent(ZIndex));

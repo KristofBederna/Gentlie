@@ -1,18 +1,18 @@
 package Game.Misc.Scenes;
 
+import inf.elte.hu.gameengine_javafx.Components.UIComponents.CheckBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.ComboBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.SliderComponent;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
-import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
-import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ComboBoxEntity;
-import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
-import inf.elte.hu.gameengine_javafx.Entities.UIEntities.SliderEntity;
+import inf.elte.hu.gameengine_javafx.Entities.UIEntities.*;
 import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusic;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners.FullScreenToggleEventListener;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners.ResolutionChangeEventListener;
+import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.FullScreenToggleEvent;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.ResolutionChangeEvent;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
@@ -27,11 +27,13 @@ import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSyst
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.Slider;
 import javafx.scene.input.DragEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.util.Objects;
 
@@ -110,6 +112,32 @@ public class SettingsScene extends GameScene {
                 new ResolutionChangeEventListener().onEvent(new ResolutionChangeEvent(newVal.first(), newVal.second()));
             }
         });
+
+        ObservableList<String> options2 = FXCollections.observableArrayList();
+        options2.add("Windowed");
+        options2.add("Fullscreen");
+        options2.add("Borderless fullscreen");
+        LabelEntity fullScreenLabel = new LabelEntity("Fullscreen mode: ", Config.resolution.first()/2 - 200*Config.relativeWidthRatio, Config.resolution.second()/2 - 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0);
+        CheckBoxEntity fullscreen = new CheckBoxEntity("",Config.resolution.first()/2 - 20*Config.relativeWidthRatio, Config.resolution.second()/2 - 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0);
+
+        CheckBox checkBox = fullscreen.getComponent(CheckBoxComponent.class).getUIElement();
+
+        checkBox.setSelected(Config.fullScreenMode);
+
+        checkBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                Config.fullScreenMode = newVal;
+
+                Stage stage = (Stage) checkBox.getScene().getWindow();
+
+                if (stage != null) {
+                    new FullScreenToggleEventListener().onEvent(new FullScreenToggleEvent(stage));
+                } else {
+                    System.err.println("Stage is null");
+                }
+            }
+        });
+
 
         exit.addStyleClass("main-menu-button");
         label.addStyleClass("main-menu-label");

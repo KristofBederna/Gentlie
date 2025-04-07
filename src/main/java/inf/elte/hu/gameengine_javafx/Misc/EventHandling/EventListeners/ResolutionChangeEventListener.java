@@ -15,8 +15,10 @@ public class ResolutionChangeEventListener implements EventListener<ResolutionCh
     @Override
     public void onEvent(ResolutionChangeEvent event) {
         GameCanvas canvas = GameCanvas.getInstance();
-        canvas.getScene().getWindow().setWidth(event.getWidth());
-        canvas.getScene().getWindow().setHeight(event.getHeight());
+        if (!Config.fullScreenMode) {
+            canvas.getScene().getWindow().setWidth(event.getWidth());
+            canvas.getScene().getWindow().setHeight(event.getHeight());
+        }
         canvas.setWidth(event.getWidth());
         canvas.setHeight(event.getHeight());
         Config.setRelativeAspectRatio();
