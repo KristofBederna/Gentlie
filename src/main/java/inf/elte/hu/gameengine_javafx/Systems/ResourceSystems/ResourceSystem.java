@@ -33,7 +33,7 @@ public class ResourceSystem extends GameSystem {
     public void update() {
         Map<Class<?>, ResourceManager<?>> resourceManagers = ResourceHub.getInstance().getAllResourceManagers();
 
-        long threshold = System.currentTimeMillis() - 1000; // Define threshold time of 1000ms
+        long threshold = System.currentTimeMillis() - 10000; // Define threshold time of 10000ms
 
         // Iterate over all resource managers and clean up old resources
         for (ResourceManager<?> resourceManager : resourceManagers.values()) {

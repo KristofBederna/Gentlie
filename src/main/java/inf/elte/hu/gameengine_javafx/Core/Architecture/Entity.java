@@ -2,10 +2,14 @@ package inf.elte.hu.gameengine_javafx.Core.Architecture;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.ParentComponent;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
+import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.EntityManager;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -36,7 +40,9 @@ public abstract class Entity {
      */
     public <T extends Component> void addComponent(T component) {
         components.put(component.getClass(), component);
+        EntityHub.getInstance().getComponentCache().computeIfAbsent(component.getClass(), k -> new HashSet<>()).add(this.getId());
     }
+
 
     /**
      * @param componentType

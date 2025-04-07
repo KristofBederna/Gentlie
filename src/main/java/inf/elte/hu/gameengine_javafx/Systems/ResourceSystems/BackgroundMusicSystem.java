@@ -7,6 +7,8 @@ import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusicStore;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 
 import javax.sound.sampled.*;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Random;
 
@@ -21,7 +23,10 @@ public class BackgroundMusicSystem extends GameSystem {
 
     @Override
     protected void update() {
-        setVolume(currentClip, Config.backgroundMusicVolume*Config.masterVolume);
+        if (currentClip != null) {
+            setVolume(currentClip, Config.backgroundMusicVolume * Config.masterVolume);
+        }
+
         if (currentClip == null || !currentClip.isOpen() || !currentClip.isActive()) {
             playRandomMusic();
         }
@@ -43,29 +48,38 @@ public class BackgroundMusicSystem extends GameSystem {
 
         if (!clip.isOpen()) {
             try {
-                clip.open();
+                InputStream resource = getClass().getResourceAsStream(path);
+                if (resource == null) {
+                    System.err.println("Audio file not found at path: " + path);
+                    return;
+                }
+                resource = new BufferedInputStream(resource);
+                AudioInputStream audioStream = AudioSystem.getAudioInputStream(resource);
+
+                clip.open(audioStream);
             } catch (Exception e) {
                 e.printStackTrace();
                 return;
             }
         }
 
-        if (currentClip != null) {
+        if (currentClip != null && currentClip.isRunning()) {
             currentClip.stop();
-            if (currentClip != null) {
-                currentClip.close(); // Free resources
-            }
         }
 
         currentClip = clip;
-        setVolume(currentClip, Config.backgroundMusicVolume*Config.masterVolume);
+        setVolume(currentClip, Config.backgroundMusicVolume * Config.masterVolume);
 
-        // Play next track when this one finishes
         currentClip.addLineListener(event -> {
             if (event.getType() == LineEvent.Type.STOP) {
-                currentClip.close();
-                currentClip = null;
-                playRandomMusic();
+                try {
+                    currentClip.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    currentClip = null;
+                    playRandomMusic();
+                }
             }
         });
 
@@ -87,7 +101,6 @@ public class BackgroundMusicSystem extends GameSystem {
                 float dB = (float) (Math.log10(Math.max(volume, 0.0001f)) * 20);
                 gainControl.setValue(dB);
             }
-
 
         } catch (Exception e) {
             System.err.println("Failed to set volume: " + e.getMessage());

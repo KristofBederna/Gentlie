@@ -108,17 +108,18 @@ public class DungeonScene extends GameScene {
         systemHub.addSystem(MovementDeterminerSystem.class, new MovementDeterminerSystem(), 0);
         systemHub.addSystem(EventTileSystem.class, new EventTileSystem(), 1);
         systemHub.addSystem(AnimationSystem.class, new AnimationSystem(), 2);
-        systemHub.addSystem(PolarBearMoverSystem.class, new PolarBearMoverSystem(), 4);
-        systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(), 5);
-        systemHub.addSystem(MovementSystem.class, new MovementSystem(), 6);
-        systemHub.addSystem(ParticleSystem.class, new ParticleSystem(), 7);
-        systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(), 8);
-        systemHub.addSystem(CustomCollisionSystem.class, new CustomCollisionSystem(), 9);
-        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(), 10);
-        systemHub.addSystem(CameraSystem.class, new CameraSystem(), 11);
-        systemHub.addSystem(SoundSystem.class, new SoundSystem(), 12);
-        systemHub.addSystem(DungeonGeneratorSystem.class, new DungeonGeneratorSystem(2, 2), 13);
-        systemHub.addSystem(PolarBearSpawnerSystem.class, new PolarBearSpawnerSystem(), 14);
+        systemHub.addSystem(PolarBearMoverSystem.class, new PolarBearMoverSystem(), 3);
+        systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(), 4);
+        systemHub.addSystem(MovementSystem.class, new MovementSystem(), 5);
+        systemHub.addSystem(ParticleSystem.class, new ParticleSystem(), 6);
+        systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(), 7);
+        systemHub.addSystem(CustomCollisionSystem.class, new CustomCollisionSystem(), 8);
+        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(), 9);
+        systemHub.addSystem(CameraSystem.class, new CameraSystem(), 10);
+        systemHub.addSystem(SoundSystem.class, new SoundSystem(), 11);
+        systemHub.addSystem(DungeonGeneratorSystem.class, new DungeonGeneratorSystem(2, 2), 12);
+        systemHub.addSystem(PolarBearSpawnerSystem.class, new PolarBearSpawnerSystem(), 13);
+        systemHub.addSystem(AttackSystem.class, new AttackSystem(), 14);
         systemHub.addSystem(RemoveDeadObjectSystem.class, new RemoveDeadObjectSystem(), 15);
         systemHub.addSystem(RenderSystem.class, new RenderSystem(), 16);
     }
@@ -149,7 +150,7 @@ public class DungeonScene extends GameScene {
             player.getComponent(VelocityComponent.class).stopMovement();
             player.getComponent(AccelerationComponent.class).stopMovement();
         });
-        playerInteractiveComponent.mapInput(MouseButton.PRIMARY, 100, () -> {
+        playerInteractiveComponent.mapInput(MouseButton.PRIMARY, 2000, () -> {
             double playerX = player.getComponent(CentralMassComponent.class).getCentralX();
             double playerY = player.getComponent(CentralMassComponent.class).getCentralY();
 
@@ -190,10 +191,12 @@ public class DungeonScene extends GameScene {
             double offsetY = directionY * (height / 2 + height / 2);
             attackBox.translate(offsetX, offsetY);
 
-            player.addComponent(new AttackBoxComponent(attackBox.getPoints()));
-            player.getComponent(VelocityComponent.class).stopMovement();
-            player.getComponent(AccelerationComponent.class).stopMovement();
-        }, () -> player.removeComponentsByType(AttackBoxComponent.class));
+            if (player.getComponent(AttackBoxComponent.class) == null) {
+                player.addComponent(new AttackBoxComponent(attackBox.getPoints(), 100));
+                player.getComponent(VelocityComponent.class).stopMovement();
+                player.getComponent(AccelerationComponent.class).stopMovement();
+            }
+        });
         playerInteractiveComponent.mapInput(KeyCode.ESCAPE, 100, () -> {
             Time.getInstance().setTimeScale(0.0);
             ButtonEntity start = new ButtonEntity("Back to main menu", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 150*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new MainScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));

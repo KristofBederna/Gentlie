@@ -3,10 +3,7 @@ package inf.elte.hu.gameengine_javafx.Core;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Component;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The {@code EntityManager} class is responsible for managing a collection of entities of a specific type.
@@ -49,7 +46,8 @@ public class EntityManager<T extends Entity> {
         this.entities.put(entity.getId(), entity);
         for (Class<? extends Component> componentClass : entity.getAllComponents().keySet()) {
             EntityHub.getInstance().getComponentCache()
-                    .computeIfAbsent(componentClass, k -> new ArrayList<>())
+                    .computeIfAbsent(componentClass, k -> new HashSet<>() {
+                    })
                     .add(entity.getId());
         }
         EntityHub.getInstance().refreshEntitiesList();
