@@ -21,6 +21,7 @@ public class Config {
     public static double relativeHeightRatio = resolution.second() / 1080;
     public static List<Integer> wallTiles = new ArrayList<>(List.of(0, 1, 3));
     public static float backgroundMusicVolume = 0.0f;
+    public static float masterVolume = 1.0f;
     public static boolean linearVolumeControl = false;
 
     public static void setTileScale(double newTileScale) {

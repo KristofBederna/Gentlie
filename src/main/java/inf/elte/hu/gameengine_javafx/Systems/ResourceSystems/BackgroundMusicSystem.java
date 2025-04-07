@@ -21,7 +21,7 @@ public class BackgroundMusicSystem extends GameSystem {
 
     @Override
     protected void update() {
-        setVolume(currentClip, Config.backgroundMusicVolume);
+        setVolume(currentClip, Config.backgroundMusicVolume*Config.masterVolume);
         if (currentClip == null || !currentClip.isOpen() || !currentClip.isActive()) {
             playRandomMusic();
         }
@@ -58,7 +58,7 @@ public class BackgroundMusicSystem extends GameSystem {
         }
 
         currentClip = clip;
-        setVolume(currentClip, Config.backgroundMusicVolume);
+        setVolume(currentClip, Config.backgroundMusicVolume*Config.masterVolume);
 
         // Play next track when this one finishes
         currentClip.addLineListener(event -> {
