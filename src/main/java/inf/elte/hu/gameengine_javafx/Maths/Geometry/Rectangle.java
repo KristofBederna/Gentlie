@@ -115,9 +115,23 @@ public class Rectangle extends Shape {
 
         gc.setFill(color);
         gc.fillRect(x* Config.relativeWidthRatio, y*Config.relativeHeightRatio, width* Config.relativeWidthRatio, height*Config.relativeHeightRatio);
+    }
 
-        gc.setStroke(color);
-        gc.setLineWidth(2);
+    public void renderFillWithStroke(GraphicsContext gc, double radius, Color color, Color strokeColor, double outerStrokeWidth) {
+        CameraEntity cameraEntity = CameraEntity.getInstance();
+        double cameraX = cameraEntity.getComponent(PositionComponent.class).getGlobalX();
+        double cameraY = cameraEntity.getComponent(PositionComponent.class).getGlobalY();
+
+        double x = points.get(0).getX() - cameraX;
+        double y = points.get(0).getY() - cameraY;
+        double width = points.get(1).getX() - points.get(0).getX();
+        double height = points.get(3).getY() - points.get(0).getY();
+
+        gc.setFill(color);
+        gc.fillRect(x* Config.relativeWidthRatio, y*Config.relativeHeightRatio, width* Config.relativeWidthRatio, height*Config.relativeHeightRatio);
+
+        gc.setStroke(strokeColor);
+        gc.setLineWidth(outerStrokeWidth);
         gc.strokeRect(x* Config.relativeWidthRatio, y*Config.relativeHeightRatio, width* Config.relativeWidthRatio, height*Config.relativeHeightRatio);
     }
 }

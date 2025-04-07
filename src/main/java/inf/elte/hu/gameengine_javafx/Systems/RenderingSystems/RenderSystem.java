@@ -1,5 +1,6 @@
 package inf.elte.hu.gameengine_javafx.Systems.RenderingSystems;
 
+import Game.Components.AttackBoxComponent;
 import Game.Components.DaytimeComponent;
 import Game.Entities.SkyBoxEntity;
 import Game.Entities.SnowBallEntity;
@@ -13,6 +14,7 @@ import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassCo
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.RadiusComponent;
+import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ColorComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ImageComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ZIndexComponent;
 import inf.elte.hu.gameengine_javafx.Components.ShapeComponent;
@@ -190,7 +192,16 @@ public class RenderSystem extends GameSystem {
 
         if (Config.renderDebugMode) {
             renderHitBox(entity, gc);
+            renderAttackBox(entity, gc);
         }
+    }
+
+    private static void renderAttackBox(Entity entity, GraphicsContext gc) {
+        if (entity == null)
+            return;
+        if (entity.getComponent(AttackBoxComponent.class) == null)
+            return;
+        entity.getComponent(AttackBoxComponent.class).getAttackBox().render(gc, Color.DARKCYAN);
     }
 
     /**

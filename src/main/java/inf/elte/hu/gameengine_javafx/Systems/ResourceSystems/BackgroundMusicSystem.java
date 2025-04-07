@@ -52,7 +52,9 @@ public class BackgroundMusicSystem extends GameSystem {
 
         if (currentClip != null) {
             currentClip.stop();
-            currentClip.close(); // Free resources
+            if (currentClip != null) {
+                currentClip.close(); // Free resources
+            }
         }
 
         currentClip = clip;

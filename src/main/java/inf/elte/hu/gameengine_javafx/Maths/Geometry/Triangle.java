@@ -79,7 +79,6 @@ public class Triangle extends Shape {
 
         applyCameraOffset(x, y);
 
-        // Apply scaling
         for (int i = 0; i < 3; i++) {
             x[i] *= Config.relativeWidthRatio;
             y[i] *= Config.relativeHeightRatio;
@@ -87,7 +86,7 @@ public class Triangle extends Shape {
 
         gc.setStroke(color);
         gc.setLineWidth(2);
-        gc.strokePolygon(x, y, 3); // Draws all sides of the triangle
+        gc.strokePolygon(x, y, 3);
     }
 
     public void renderFill(GraphicsContext gc, Color color) {
@@ -96,18 +95,33 @@ public class Triangle extends Shape {
 
         applyCameraOffset(x, y);
 
-        // Apply scaling
         for (int i = 0; i < 3; i++) {
             x[i] *= Config.relativeWidthRatio;
             y[i] *= Config.relativeHeightRatio;
         }
 
         gc.setFill(color);
-        gc.fillPolygon(x, y, 3); // Fills the triangle
+        gc.fillPolygon(x, y, 3);
+    }
 
-        gc.setStroke(color);
-        gc.setLineWidth(2);
-        gc.strokePolygon(x, y, 3); // Draws all sides of the triangle
+    @Override
+    public void renderFillWithStroke(GraphicsContext gc, Color color, Color stroke, double outerStrokeWidth) {
+        double[] x = new double[3];
+        double[] y = new double[3];
+
+        applyCameraOffset(x, y);
+
+        for (int i = 0; i < 3; i++) {
+            x[i] *= Config.relativeWidthRatio;
+            y[i] *= Config.relativeHeightRatio;
+        }
+
+        gc.setFill(color);
+        gc.fillPolygon(x, y, 3);
+
+        gc.setStroke(stroke);
+        gc.setLineWidth(outerStrokeWidth);
+        gc.strokePolygon(x, y, 3);
     }
 
     private void applyCameraOffset(double[] x, double[] y) {

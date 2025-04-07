@@ -16,18 +16,16 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class ParticleEntity extends Entity {
-    public ParticleEntity(double x, double y, double width, double height, Shape shape, Color color, double maxDistance) {
+    public ParticleEntity(double x, double y, double width, double height, Shape shape, Color color, Color strokeColor, double maxDistance) {
         this.getComponent(PositionComponent.class).setLocalPosition(x, y, this);
         addComponent(new VelocityComponent(3));
         addComponent(new DimensionComponent(width, height));
         addComponent(new ShapeComponent<>(shape));
-        addComponent(new ColorComponent(color));
+        addComponent(new ColorComponent(color, strokeColor));
         addComponent(new ZIndexComponent(3));
         addComponent(new MaxDistanceFromOriginComponent(maxDistance));
         addComponent(new AccelerationComponent());
         addComponent(new DragComponent(0.05));
-
-        addToManager();
     }
 
     public ParticleEntity(double x, double y, double width, double height, String imagePath, double maxDistance) {
@@ -39,8 +37,6 @@ public class ParticleEntity extends Entity {
         addComponent(new MaxDistanceFromOriginComponent(maxDistance));
         addComponent(new AccelerationComponent());
         addComponent(new DragComponent(0.05));
-
-        addToManager();
     }
 
     public void render(GraphicsContext gc) {
@@ -50,16 +46,10 @@ public class ParticleEntity extends Entity {
         ShapeComponent<?> shapeComponent = getComponent(ShapeComponent.class);
         if (shapeComponent != null) {
             Shape shape = shapeComponent.getShape();
-            if (shape instanceof Rectangle) {
-                shape.renderFill(gc, getComponent(ColorComponent.class).getColor());
-            } else if (shape instanceof ComplexShape) {
-                shape.renderFill(gc, getComponent(ColorComponent.class).getColor());
-            } else if (shape instanceof Line) {
+            if (shape instanceof Line) {
                 ((Line) shape).render(gc, getComponent(ColorComponent.class).getColor(), 5);
-            } else if (shape instanceof NSidedShape) {
-                shape.renderFill(gc, getComponent(ColorComponent.class).getColor());
-            } else if (shape instanceof Triangle) {
-                shape.renderFill(gc, getComponent(ColorComponent.class).getColor());
+            } else {
+                shape.renderFillWithStroke(gc, getComponent(ColorComponent.class).getColor(), getComponent(ColorComponent.class).getStroke(), 1);
             }
         }
     }
@@ -94,7 +84,7 @@ public class ParticleEntity extends Entity {
         ColorComponent col = entity.getComponent(ColorComponent.class);
         MaxDistanceFromOriginComponent maxDistance = entity.getComponent(MaxDistanceFromOriginComponent.class);
         if (shapeComponent != null) {
-            return new ParticleEntity(pos.getGlobalX(), pos.getGlobalY(), dim.getWidth(), dim.getHeight(), shapeComponent.getShape(), col.getColor(), maxDistance.getMaxDistance());
+            return new ParticleEntity(pos.getGlobalX(), pos.getGlobalY(), dim.getWidth(), dim.getHeight(), shapeComponent.getShape(), col.getColor(), col.getStroke(), maxDistance.getMaxDistance());
         }
         if (imageComponent != null) {
             return new ParticleEntity(pos.getGlobalX(), pos.getGlobalY(), dim.getWidth(), dim.getHeight(), imageComponent.getImagePath(), maxDistance.getMaxDistance());

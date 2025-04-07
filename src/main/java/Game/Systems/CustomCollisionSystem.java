@@ -12,11 +12,17 @@ import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassCo
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
+import inf.elte.hu.gameengine_javafx.Entities.ParticleEmitterEntity;
+import inf.elte.hu.gameengine_javafx.Entities.ParticleEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
+import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.ComplexShape;
+import inf.elte.hu.gameengine_javafx.Maths.Geometry.NSidedShape;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Shape;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Direction;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -43,6 +49,10 @@ public class CustomCollisionSystem extends GameSystem {
 
         ignore.getCollisionRules().computeIfAbsent(PolarBearEntity.class, k -> new ArrayList<>()).add(PolarBearEntity.class);
         ignore.getCollisionRules().computeIfAbsent(PolarBearEntity.class, k -> new ArrayList<>()).add(PlayerEntity.class);
+        ignore.getCollisionRules().computeIfAbsent(PolarBearEntity.class, k -> new ArrayList<>()).add(TileEntity.class);
+
+
+        ignore.getCollisionRules().computeIfAbsent(TileEntity.class, k -> new ArrayList<>()).add(PolarBearEntity.class);
     }
 
     /**
@@ -144,8 +154,11 @@ public class CustomCollisionSystem extends GameSystem {
      * @param velocity the velocity component of the entity
      */
     private static void checkCollisionAndMove(List<Entity> hitBoxes, Entity entity, Shape futureHitBox, VelocityComponent velocity) {
-        horizontalCollisionCheck(hitBoxes, entity, futureHitBox, velocity);
-        verticalCollisionCheck(hitBoxes, entity, futureHitBox, velocity);
+        Shape horizontalBox = new ComplexShape(futureHitBox.getPoints());
+        Shape verticalBox = new ComplexShape(futureHitBox.getPoints());
+        horizontalCollisionCheck(hitBoxes, entity, horizontalBox, velocity);
+        verticalCollisionCheck(hitBoxes, entity, verticalBox, velocity);
+
     }
 
     /**
@@ -178,7 +191,11 @@ public class CustomCollisionSystem extends GameSystem {
                         entity.getComponent(HealthComponent.class).decreaseHealth();
                         otherEntity.getComponent(HealthComponent.class).setHealth(0);
                     }
-                    break;
+                    if (entity instanceof SnowBallEntity) {
+                        entity.getComponent(VelocityComponent.class).stopMovement();
+                        CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
+                        new ParticleEmitterEntity(pos.getCentralX(), pos.getCentralY(), new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 10, 10, new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32), Color.SNOW, Color.GREY, 50), Direction.ALL, 3);
+                    }
                 }
             }
         }
@@ -214,6 +231,11 @@ public class CustomCollisionSystem extends GameSystem {
                     if (otherEntity instanceof SnowBallEntity && entity instanceof PolarBearEntity) {
                         entity.getComponent(HealthComponent.class).decreaseHealth();
                         otherEntity.getComponent(HealthComponent.class).setHealth(0);
+                    }
+                    if (entity instanceof SnowBallEntity) {
+                        entity.getComponent(VelocityComponent.class).stopMovement();
+                        CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
+                        new ParticleEmitterEntity(pos.getCentralX(), pos.getCentralY(), new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 10, 10, new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32), Color.SNOW, Color.BLACK, 50), Direction.ALL, 3);
                     }
                     break;
                 }

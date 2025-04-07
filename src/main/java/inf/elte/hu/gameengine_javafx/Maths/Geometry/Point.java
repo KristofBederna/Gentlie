@@ -46,16 +46,13 @@ public class Point {
 
         gc.setStroke(color);
 
-        // Calculate camera offset
         double x = this.getX() - cameraEntity.getComponent(PositionComponent.class).getGlobalX();
         double y = this.getY() - cameraEntity.getComponent(PositionComponent.class).getGlobalY();
 
-        // Apply scaling to the position and radius
         x *= Config.relativeWidthRatio;
         y *= Config.relativeHeightRatio;
-        radius *= Math.min(Config.relativeWidthRatio, Config.relativeHeightRatio); // Uniform scaling
+        radius *= Math.min(Config.relativeWidthRatio, Config.relativeHeightRatio);
 
-        // Draw the circle
         gc.strokeOval(x - radius, y - radius, radius * 2, radius * 2);
     }
 
@@ -63,21 +60,32 @@ public class Point {
         CameraEntity cameraEntity = CameraEntity.getInstance();
 
         gc.setFill(color);
-
-        // Calculate camera offset
         double x = this.getX() - cameraEntity.getComponent(PositionComponent.class).getGlobalX();
         double y = this.getY() - cameraEntity.getComponent(PositionComponent.class).getGlobalY();
 
-        // Apply scaling to the position and radius
         x *= Config.relativeWidthRatio;
         y *= Config.relativeHeightRatio;
-        radius *= Math.min(Config.relativeWidthRatio, Config.relativeHeightRatio); // Uniform scaling
+        radius *= Math.min(Config.relativeWidthRatio, Config.relativeHeightRatio);
 
-        // Draw the filled circle
+        gc.fillOval(x - radius, y - radius, radius * 2, radius * 2);
+    }
+
+    public void renderFillWithStroke(GraphicsContext gc, double radius, Color color, Color strokeColor, double outerStrokeWidth) {
+        CameraEntity cameraEntity = CameraEntity.getInstance();
+
+        gc.setFill(color);
+
+        double x = this.getX() - cameraEntity.getComponent(PositionComponent.class).getGlobalX();
+        double y = this.getY() - cameraEntity.getComponent(PositionComponent.class).getGlobalY();
+
+        x *= Config.relativeWidthRatio;
+        y *= Config.relativeHeightRatio;
+        radius *= Math.min(Config.relativeWidthRatio, Config.relativeHeightRatio);
+
         gc.fillOval(x - radius, y - radius, radius * 2, radius * 2);
 
-        gc.setStroke(color);
-        gc.setLineWidth(2);
+        gc.setStroke(strokeColor);
+        gc.setLineWidth(outerStrokeWidth);
         gc.strokeOval(x - radius, y - radius, radius * 2, radius * 2);
     }
 

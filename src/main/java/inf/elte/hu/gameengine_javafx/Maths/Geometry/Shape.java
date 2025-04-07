@@ -99,7 +99,7 @@ public class Shape {
     public void renderFill(GraphicsContext gc, Color color) {
     }
 
-    public void renderFillWithStroke(GraphicsContext gc, Color color, double outerStrokeWidth) {
+    public void renderFillWithStroke(GraphicsContext gc, Color color, Color stroke, double outerStrokeWidth) {
     }
 
     public void moveTo(Point newPoint) {

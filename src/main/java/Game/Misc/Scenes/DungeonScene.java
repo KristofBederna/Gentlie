@@ -1,5 +1,6 @@
 package Game.Misc.Scenes;
 
+import Game.Components.AttackBoxComponent;
 import Game.Entities.Labels.EnterEnemyIslandLabel;
 import Game.Entities.EntryEntity;
 import Game.Entities.SnowBallEntity;
@@ -7,9 +8,12 @@ import Game.Misc.EventHandling.EventListeners.EnterEnemyIslandEventListener;
 import Game.Misc.EventHandling.Events.EnterEnemyIslandEvent;
 import Game.Systems.*;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
+import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
+import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
+import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
@@ -19,10 +23,13 @@ import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
+import inf.elte.hu.gameengine_javafx.Maths.Geometry.ComplexShape;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
+import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
 import inf.elte.hu.gameengine_javafx.Maths.Vector;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.MouseInputHandler;
+import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
@@ -40,6 +47,7 @@ import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
 import java.util.List;
@@ -58,10 +66,10 @@ public class DungeonScene extends GameScene {
 
         WorldEntity.getInstance(32, 32, "/assets/tileSets/gameTileSet.txt");
 
-        new PlayerEntity(Config.scaledTileSize + Config.scaledTileSize /2, Config.scaledTileSize + Config.scaledTileSize /2, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 0.8 * 0.55, Config.scaledTileSize * 0.8);
+        new PlayerEntity(Config.scaledTileSize + Config.scaledTileSize / 2, Config.scaledTileSize + Config.scaledTileSize / 2, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 0.8 * 0.55, Config.scaledTileSize * 0.8);
 
-        new EntryEntity(0, Config.scaledTileSize, Config.scaledTileSize, Config.scaledTileSize*3, new EnterEnemyIslandEvent(new Point(4*150, 2*150 +150 *0.25-1)), new EnterEnemyIslandEventListener());
-        EnterEnemyIslandLabel enterEnemyIslandLabel = new EnterEnemyIslandLabel("Press 'E' to leave dungeon", Config.scaledTileSize, 3*Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
+        new EntryEntity(0, Config.scaledTileSize, Config.scaledTileSize, Config.scaledTileSize * 3, new EnterEnemyIslandEvent(new Point(4 * 150, 2 * 150 + 150 * 0.25 - 1)), new EnterEnemyIslandEventListener());
+        EnterEnemyIslandLabel enterEnemyIslandLabel = new EnterEnemyIslandLabel("Press 'E' to leave dungeon", Config.scaledTileSize, 3 * Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
         enterEnemyIslandLabel.removeFromUI();
         enterEnemyIslandLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
@@ -79,32 +87,35 @@ public class DungeonScene extends GameScene {
     private void SystemStartUp() {
         //Define systems to be started up here
         SystemHub systemHub = SystemHub.getInstance();
-        systemHub.addSystem(MovementDeterminerSystem.class, new MovementDeterminerSystem(),0);
-        systemHub.addSystem(EventTileSystem.class, new EventTileSystem(),1);
+        systemHub.addSystem(MovementDeterminerSystem.class, new MovementDeterminerSystem(), 0);
+        systemHub.addSystem(EventTileSystem.class, new EventTileSystem(), 1);
         systemHub.addSystem(AnimationSystem.class, new AnimationSystem(), 2);
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(),3);
-        systemHub.addSystem(PolarBearMoverSystem.class, new PolarBearMoverSystem(),4);
-        systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(),5);
-        systemHub.addSystem(MovementSystem.class, new MovementSystem(),6);
-        systemHub.addSystem(ParticleSystem.class, new ParticleSystem(),7);
-        systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(),8);
-        systemHub.addSystem(CustomCollisionSystem.class, new CustomCollisionSystem(),9);
-        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(),10);
+        systemHub.addSystem(PolarBearMoverSystem.class, new PolarBearMoverSystem(), 4);
+        systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(), 5);
+        systemHub.addSystem(MovementSystem.class, new MovementSystem(), 6);
+        systemHub.addSystem(ParticleSystem.class, new ParticleSystem(), 7);
+        systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(), 8);
+        systemHub.addSystem(CustomCollisionSystem.class, new CustomCollisionSystem(), 9);
+        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(), 10);
         systemHub.addSystem(CameraSystem.class, new CameraSystem(), 11);
         systemHub.addSystem(SoundSystem.class, new SoundSystem(), 12);
         systemHub.addSystem(DungeonGeneratorSystem.class, new DungeonGeneratorSystem(2, 2), 13);
         systemHub.addSystem(PolarBearSpawnerSystem.class, new PolarBearSpawnerSystem(), 14);
         systemHub.addSystem(RemoveDeadObjectSystem.class, new RemoveDeadObjectSystem(), 15);
+        systemHub.addSystem(RenderSystem.class, new RenderSystem(), 16);
     }
 
     private void interactionSetup() {
-        PlayerEntity player = (PlayerEntity)EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst();
+        PlayerEntity player = (PlayerEntity) EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst();
         InteractiveComponent playerInteractiveComponent = player.getComponent(InteractiveComponent.class);
         playerInteractiveComponent.mapInput(KeyCode.UP, 10, () -> moveUp(player), () -> counterUp(player));
         playerInteractiveComponent.mapInput(KeyCode.DOWN, 10, () -> moveDown(player), () -> counterDown(player));
         playerInteractiveComponent.mapInput(KeyCode.LEFT, 10, () -> moveLeft(player), () -> counterLeft(player));
         playerInteractiveComponent.mapInput(KeyCode.RIGHT, 10, () -> moveRight(player), () -> counterRight(player));
-        playerInteractiveComponent.mapInput(MouseButton.PRIMARY, 100, () -> {player.getComponent(PositionComponent.class).setLocalX(MouseInputHandler.getInstance().getMouseX(), player); player.getComponent(PositionComponent.class).setLocalY(MouseInputHandler.getInstance().getMouseY(), player);});
+        playerInteractiveComponent.mapInput(KeyCode.ENTER, 100, () -> {
+            player.getComponent(PositionComponent.class).setLocalX(MouseInputHandler.getInstance().getMouseX(), player);
+            player.getComponent(PositionComponent.class).setLocalY(MouseInputHandler.getInstance().getMouseY(), player);
+        });
         playerInteractiveComponent.mapInput(MouseButton.SECONDARY, 1000, () -> {
             double playerX = player.getComponent(CentralMassComponent.class).getCentralX();
             double playerY = player.getComponent(CentralMassComponent.class).getCentralY();
@@ -113,11 +124,58 @@ public class DungeonScene extends GameScene {
             double dy = MouseInputHandler.getInstance().getMouseY() - playerY;
 
             double length = Math.sqrt(dx * dx + dy * dy);
-            double speed = 15;
+            double speed = 1500*Time.getInstance().getDeltaTime();
             Vector direction = new Vector((dx / length) * speed, (dy / length) * speed);
 
-            new SnowBallEntity(playerX, playerY, Config.scaledTileSize / 6, Config.scaledTileSize / 6, direction);
+            new SnowBallEntity(playerX, playerY, Config.scaledTileSize / 5, Config.scaledTileSize / 5, direction);
+            player.getComponent(VelocityComponent.class).stopMovement();
+            player.getComponent(AccelerationComponent.class).stopMovement();
         });
+        playerInteractiveComponent.mapInput(MouseButton.PRIMARY, 100, () -> {
+            double playerX = player.getComponent(CentralMassComponent.class).getCentralX();
+            double playerY = player.getComponent(CentralMassComponent.class).getCentralY();
+
+            double width = player.getComponent(DimensionComponent.class).getWidth();
+            double height = player.getComponent(DimensionComponent.class).getHeight();
+
+            double dx = MouseInputHandler.getInstance().getMouseX() - playerX;
+            double dy = MouseInputHandler.getInstance().getMouseY() - playerY;
+
+            double angle = Math.atan2(-dy, dx);
+            double angleDeg = Math.toDegrees(angle);
+            if (angleDeg < 0) angleDeg += 360;
+
+            int directionX = 0;
+            int directionY = 0;
+
+            if (angleDeg >= 337.5 || angleDeg < 22.5) {
+                directionX = 1; directionY = 0;   // E
+            } else if (angleDeg < 67.5) {
+                directionX = 1; directionY = -1;  // NE
+            } else if (angleDeg < 112.5) {
+                directionX = 0; directionY = -1;  // N
+            } else if (angleDeg < 157.5) {
+                directionX = -1; directionY = -1; // NW
+            } else if (angleDeg < 202.5) {
+                directionX = -1; directionY = 0;  // W
+            } else if (angleDeg < 247.5) {
+                directionX = -1; directionY = 1;  // SW
+            } else if (angleDeg < 292.5) {
+                directionX = 0; directionY = 1;   // S
+            } else {
+                directionX = 1; directionY = 1;   // SE
+            }
+
+            ComplexShape attackBox = new ComplexShape(new Rectangle(new Point(playerX - width / 2, playerY - height / 2), width, height).getPoints());
+
+            double offsetX = directionX * (width / 2 + width / 2);
+            double offsetY = directionY * (height / 2 + height / 2);
+            attackBox.translate(offsetX, offsetY);
+
+            player.addComponent(new AttackBoxComponent(attackBox.getPoints()));
+            player.getComponent(VelocityComponent.class).stopMovement();
+            player.getComponent(AccelerationComponent.class).stopMovement();
+        }, () -> player.removeComponentsByType(AttackBoxComponent.class));
     }
 
     private void moveUp(Entity e) {

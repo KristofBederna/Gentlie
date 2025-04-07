@@ -92,7 +92,7 @@ public class PathfindingComponent extends Component {
         // Define directions
         int[][] directions = {
                 {-1, 0}, {1, 0}, {0, -1}, {0, 1}, // Cardinal (Up, Down, Left, Right)
-                //{-1, -1}, {-1, 1}, {1, -1}, {1, 1} // Diagonal
+                {-1, -1}, {-1, 1}, {1, -1}, {1, 1} // Diagonal
         };
 
         for (int[] dir : directions) {
@@ -116,7 +116,7 @@ public class PathfindingComponent extends Component {
             if (isDiagonal) {
                 // Check if at least one adjacent tile is passable
                 boolean canMoveDiagonally =
-                        (mapMeshComponent.getMapCoordinate(currentX + dir[0], currentY) != null) ||
+                        (mapMeshComponent.getMapCoordinate(currentX + dir[0], currentY) != null) &&
                                 (mapMeshComponent.getMapCoordinate(currentX, currentY + dir[1]) != null);
 
                 if (!canMoveDiagonally) {

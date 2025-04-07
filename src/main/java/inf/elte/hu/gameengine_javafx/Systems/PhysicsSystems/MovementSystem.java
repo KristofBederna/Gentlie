@@ -145,6 +145,17 @@ public class MovementSystem extends GameSystem {
             newDy *= dragFactor;
         }
 
+        double deadZone = 0.01;
+        if (Math.abs(newDx) < deadZone) newDx = 0;
+        if (Math.abs(newDy) < deadZone) newDy = 0;
+
+        double magnitude = Math.sqrt(newDx * newDx + newDy * newDy);
+        if (magnitude > maxSpeed) {
+            double scale = maxSpeed / magnitude;
+            newDx *= scale;
+            newDy *= scale;
+        }
+
         velocity.setVelocity(newDx, newDy);
         position.setLocalPosition(
                 position.getLocalX() + newDx,

@@ -18,8 +18,10 @@ import inf.elte.hu.gameengine_javafx.Misc.Direction;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ParticleSystem extends GameSystem {
     @Override
@@ -29,7 +31,9 @@ public class ParticleSystem extends GameSystem {
 
     @Override
     protected void update() {
-        for (Entity entity : EntityHub.getInstance().getEntitiesWithType(ParticleEmitterEntity.class)) {
+        var emitters = EntityHub.getInstance().getEntitiesWithType(ParticleEmitterEntity.class);
+
+        for (Entity entity : emitters) {
             ParentComponent parent = entity.getComponent(ParentComponent.class);
             DirectionComponent directionComponent = entity.getComponent(DirectionComponent.class);
             Direction direction = directionComponent.getDirection();
@@ -39,7 +43,7 @@ public class ParticleSystem extends GameSystem {
             }
 
             if (System.currentTimeMillis() >= entity.getComponent(TimeComponent.class).getLastOccurrence() + entity.getComponent(TimeComponent.class).getTimeBetweenOccurrences()) {
-                ((ParticleEmitterEntity) entity).createParticles((ParticleEntity) parent.getChildren().iterator().next(), ((ParticleEmitterEntity) entity).getAmount(), entity.getComponent(ParentComponent.class));
+                ((ParticleEmitterEntity) entity).createParticles(((ParticleEmitterEntity) entity).getMockParticle(), ((ParticleEmitterEntity) entity).getAmount(), entity.getComponent(ParentComponent.class));
                 entity.getComponent(TimeComponent.class).setLastOccurrence();
             }
 
@@ -100,8 +104,7 @@ public class ParticleSystem extends GameSystem {
                     dx += Math.cos(angle) * random.nextDouble(0, 20) * Time.getInstance().getDeltaTime();
                     dy += Math.sin(angle) * random.nextDouble(0, 20) * Time.getInstance().getDeltaTime();
 
-                    double drag = particle.getComponent(DragComponent.class).getDrag();
-                    accelerationComponent.setAcceleration(new Vector(dx * drag, dy * drag));
+                    accelerationComponent.setAcceleration(new Vector(dx, dy));
                 }
 
                 if (particleEntity.getComponent(MaxDistanceFromOriginComponent.class).isOverMaxDistance(particleEntity)) {

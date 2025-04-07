@@ -27,7 +27,6 @@ public class ComplexShape extends Shape {
         this.points.addAll(hitBox.points);
     }
 
-
     public void updateEdges() {
         this.edges = new ArrayList<>();
         for (int i = 0; i < points.size(); i++) {
@@ -82,7 +81,7 @@ public class ComplexShape extends Shape {
         gc.fillPolygon(xPoints, yPoints, points.size());
     }
 
-    public void renderFillWithStroke(GraphicsContext gc, Color color, double outerStrokeWidth) {
+    public void renderFillWithStroke(GraphicsContext gc, Color color, Color stroke, double outerStrokeWidth) {
         CameraEntity cameraEntity = CameraEntity.getInstance();
 
         if (points.isEmpty()) {
@@ -99,7 +98,7 @@ public class ComplexShape extends Shape {
             xPoints[i] = (points.get(i).getX() - cameraX)* Config.relativeWidthRatio;
             yPoints[i] = (points.get(i).getY() - cameraY)* Config.relativeHeightRatio;
         }
-        gc.setStroke(Color.BLACK);
+        gc.setStroke(stroke);
         gc.setLineWidth(outerStrokeWidth);
 
         for (int i = 0; i < points.size(); i++) {

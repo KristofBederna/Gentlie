@@ -92,7 +92,7 @@ public abstract class Entity {
      * @param <T>
      */
     @SuppressWarnings("unchecked")
-    protected <T extends Entity> void addToManager() {
+    public <T extends Entity> void addToManager() {
         Class<T> entityClass = (Class<T>) this.getClass();
         EntityManager<T> manager = EntityHub.getInstance().getEntityManager(entityClass);
 
