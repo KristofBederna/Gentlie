@@ -1,5 +1,6 @@
 package Game.Misc.Scenes;
 
+import Game.Misc.UtilityFunctions;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
@@ -38,15 +39,24 @@ public class MainScene extends GameScene {
     @Override
     public void setup() {
         getStylesheets().add(Objects.requireNonNull(getClass().getResource("/assets/styles/mainMenu.css")).toExternalForm());
-        new SystemStartUp(this::systemStartUp);
         new ResourceStartUp();
 
-        if (BackgroundMusicStore.getInstance().getBackgroundMusics().isEmpty()) {
-            new BackgroundMusic("/assets/sound/backgroundMusic/Waddle_Wars.wav", "Waddle_Wars", 1.0f, 0.0f, true);
-            new BackgroundMusic("/assets/sound/backgroundMusic/Waddle_Wars_2.wav", "Waddle_Wars_2", 1.0f, 0.0f, true);
-            new BackgroundMusic("/assets/sound/backgroundMusic/Waddle_Wars_3.wav", "Waddle_Wars_3", 1.0f, 0.0f, true);
-        }
+        loadBackgroundMusic();
 
+        declareEntities();
+
+        new SystemStartUp(this::systemStartUp);
+
+        this.getRoot().getStyleClass().add("main-menu-scene");
+
+        if (GameLoopStartUp.getGameLoop() == null) {
+            new GameLoopStartUp();
+        } else {
+            GameLoopStartUp.getGameLoop().setRunning(true);
+        }
+    }
+
+    private void declareEntities() {
         LabelEntity label = new LabelEntity("Gentile", Config.resolution.first()/2 - 20*Config.relativeWidthRatio, Config.resolution.second()/2 - 250*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0);
 
         ButtonEntity start = new ButtonEntity("Start Game", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 150*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
@@ -57,12 +67,13 @@ public class MainScene extends GameScene {
         settings.addStyleClass("main-menu-button");
         exit.addStyleClass("main-menu-button");
         label.addStyleClass("main-menu-label");
-        this.getRoot().getStyleClass().add("main-menu-scene");
+    }
 
-        if (GameLoopStartUp.getGameLoop() == null) {
-            new GameLoopStartUp();
-        } else {
-            GameLoopStartUp.getGameLoop().setRunning(true);
+    private void loadBackgroundMusic() {
+        if (BackgroundMusicStore.getInstance().getBackgroundMusics().isEmpty()) {
+            new BackgroundMusic("/assets/sound/backgroundMusic/Waddle_Wars.wav", "Waddle_Wars", 1.0f, 0.0f, true);
+            new BackgroundMusic("/assets/sound/backgroundMusic/Waddle_Wars_2.wav", "Waddle_Wars_2", 1.0f, 0.0f, true);
+            new BackgroundMusic("/assets/sound/backgroundMusic/Waddle_Wars_3.wav", "Waddle_Wars_3", 1.0f, 0.0f, true);
         }
     }
 
@@ -78,16 +89,6 @@ public class MainScene extends GameScene {
 
     @Override
     public void breakdown() {
-        EntityHub.getInstance().unloadAll();
-        EntityHub.resetInstance();
-        CameraEntity.resetInstance();
-        WorldEntity.resetInstance();
-        SystemHub.getInstance().shutDownSystems();
-        GameLoopStartUp.stopGameLoop();
-        ResourceHub.getInstance().clearResources();
-        ResourceHub.resetInstance();
-        uiRoot.getInstance().unloadAll();
-        GameCanvas.getInstance().getGraphicsContext2D().clearRect(0, 0, GameCanvas.getInstance().getWidth(), GameCanvas.getInstance().getHeight());
-        System.gc();
+        UtilityFunctions.defaultBreakdownMethod();
     }
 }
