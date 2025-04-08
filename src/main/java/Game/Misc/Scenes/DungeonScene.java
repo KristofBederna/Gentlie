@@ -12,9 +12,7 @@ import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
+import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.*;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.CheckBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.ComboBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
@@ -32,6 +30,7 @@ import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
 import inf.elte.hu.gameengine_javafx.Maths.Vector;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Direction;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners.FullScreenToggleEventListener;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners.ResolutionChangeEventListener;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.FullScreenToggleEvent;
@@ -135,21 +134,6 @@ public class DungeonScene extends GameScene {
             player.getComponent(PositionComponent.class).setLocalX(MouseInputHandler.getInstance().getMouseX(), player);
             player.getComponent(PositionComponent.class).setLocalY(MouseInputHandler.getInstance().getMouseY(), player);
         });
-        playerInteractiveComponent.mapInput(MouseButton.SECONDARY, 1000, () -> {
-            double playerX = player.getComponent(CentralMassComponent.class).getCentralX();
-            double playerY = player.getComponent(CentralMassComponent.class).getCentralY();
-
-            double dx = MouseInputHandler.getInstance().getMouseX() - playerX;
-            double dy = MouseInputHandler.getInstance().getMouseY() - playerY;
-
-            double length = Math.sqrt(dx * dx + dy * dy);
-            double speed = 1500*Time.getInstance().getDeltaTime();
-            Vector direction = new Vector((dx / length) * speed, (dy / length) * speed);
-
-            new SnowBallEntity(playerX, playerY, Config.scaledTileSize / 5, Config.scaledTileSize / 5, direction);
-            player.getComponent(VelocityComponent.class).stopMovement();
-            player.getComponent(AccelerationComponent.class).stopMovement();
-        });
         playerInteractiveComponent.mapInput(MouseButton.PRIMARY, 2000, () -> {
             double playerX = player.getComponent(CentralMassComponent.class).getCentralX();
             double playerY = player.getComponent(CentralMassComponent.class).getCentralY();
@@ -167,22 +151,53 @@ public class DungeonScene extends GameScene {
             int directionX = 0;
             int directionY = 0;
 
+            DirectionComponent directionComponent = player.getComponent(DirectionComponent.class);
+            Direction direction = directionComponent.getDirection();
+
             if (angleDeg >= 337.5 || angleDeg < 22.5) {
                 directionX = 1; directionY = 0;   // E
+                if (direction == Direction.LEFT || direction == Direction.UP || direction == Direction.DOWN) {
+                    return;
+                }
             } else if (angleDeg < 67.5) {
                 directionX = 1; directionY = -1;  // NE
+                if (direction == Direction.LEFT || direction == Direction.DOWN) {
+                    return;
+                }
             } else if (angleDeg < 112.5) {
                 directionX = 0; directionY = -1;  // N
+                if (direction != Direction.UP) {
+                    if (direction != Direction.ALL) {
+                        return;
+                    }
+                }
             } else if (angleDeg < 157.5) {
                 directionX = -1; directionY = -1; // NW
+                if (direction == Direction.RIGHT || direction == Direction.DOWN) {
+                    return;
+                }
             } else if (angleDeg < 202.5) {
                 directionX = -1; directionY = 0;  // W
+                if (direction == Direction.RIGHT) {
+                    return;
+                }
             } else if (angleDeg < 247.5) {
                 directionX = -1; directionY = 1;  // SW
+                if (direction == Direction.RIGHT || direction == Direction.UP) {
+                    return;
+                }
             } else if (angleDeg < 292.5) {
                 directionX = 0; directionY = 1;   // S
+                if (direction != Direction.DOWN) {
+                    if (direction != Direction.ALL) {
+                        return;
+                    }
+                }
             } else {
                 directionX = 1; directionY = 1;   // SE
+                if (direction == Direction.LEFT || direction == Direction.UP) {
+                    return;
+                }
             }
 
             ComplexShape attackBox = new ComplexShape(new Rectangle(new Point(playerX - width / 2, playerY - height / 2), width, height).getPoints());
@@ -196,6 +211,47 @@ public class DungeonScene extends GameScene {
                 player.getComponent(VelocityComponent.class).stopMovement();
                 player.getComponent(AccelerationComponent.class).stopMovement();
             }
+        });
+
+        playerInteractiveComponent.mapInput(MouseButton.SECONDARY, 3000, () -> {
+            double playerX = player.getComponent(CentralMassComponent.class).getCentralX();
+            double playerY = player.getComponent(CentralMassComponent.class).getCentralY();
+
+            double dx = MouseInputHandler.getInstance().getMouseX() - playerX;
+            double dy = MouseInputHandler.getInstance().getMouseY() - playerY;
+
+            double angle = Math.atan2(-dy, dx);
+            double angleDeg = Math.toDegrees(angle);
+            if (angleDeg < 0) angleDeg += 360;
+
+            DirectionComponent directionComponent = player.getComponent(DirectionComponent.class);
+            Direction direction = directionComponent.getDirection();
+
+            if (angleDeg >= 337.5 || angleDeg < 22.5) {
+                if (direction == Direction.LEFT || direction == Direction.UP || direction == Direction.DOWN) return;
+            } else if (angleDeg < 67.5) {
+                if (direction == Direction.LEFT || direction == Direction.DOWN) return;
+            } else if (angleDeg < 112.5) {
+                if (direction != Direction.UP && direction != Direction.ALL) return;
+            } else if (angleDeg < 157.5) {
+                if (direction == Direction.RIGHT || direction == Direction.DOWN) return;
+            } else if (angleDeg < 202.5) {
+                if (direction == Direction.RIGHT) return;
+            } else if (angleDeg < 247.5) {
+                if (direction == Direction.RIGHT || direction == Direction.UP) return;
+            } else if (angleDeg < 292.5) {
+                if (direction != Direction.DOWN && direction != Direction.ALL) return;
+            } else {
+                if (direction == Direction.LEFT || direction == Direction.UP) return;
+            }
+
+            double length = Math.sqrt(dx * dx + dy * dy);
+            double speed = 1500 * Time.getInstance().getDeltaTime();
+            Vector throwDirection = new Vector((dx / length) * speed, (dy / length) * speed);
+
+            new SnowBallEntity(playerX, playerY, Config.scaledTileSize / 5, Config.scaledTileSize / 5, throwDirection);
+            player.getComponent(VelocityComponent.class).stopMovement();
+            player.getComponent(AccelerationComponent.class).stopMovement();
         });
         playerInteractiveComponent.mapInput(KeyCode.ESCAPE, 100, () -> {
             Time.getInstance().setTimeScale(0.0);

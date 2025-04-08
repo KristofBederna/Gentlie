@@ -1,10 +1,12 @@
 package inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems;
 
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
+import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DirectionComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.StateComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Maths.Vector;
+import inf.elte.hu.gameengine_javafx.Misc.Direction;
 
 public class MovementDeterminerSystem extends GameSystem {
     @Override
@@ -20,26 +22,32 @@ public class MovementDeterminerSystem extends GameSystem {
             VelocityComponent velocityComponent = entity.getComponent(VelocityComponent.class);
             Vector velocity = velocityComponent.getVelocity();
             StateComponent stateComponent = entity.getComponent(StateComponent.class);
+            DirectionComponent directionComponent = entity.getComponent(DirectionComponent.class);
             switch ((int) Math.signum(velocity.getDx())) {
                 case -1:
                     stateComponent.setCurrentState("left");
+                    directionComponent.setDirection(Direction.LEFT);
                     break;
                 case 1:
                     stateComponent.setCurrentState("right");
+                    directionComponent.setDirection(Direction.RIGHT);
                     break;
                 case 0:
                     stateComponent.setCurrentState("idle");
+                    directionComponent.setDirection(Direction.ALL);
                     break;
             }
             switch ((int) Math.signum(velocity.getDy())) {
                 case -1:
                     if (Math.abs(velocity.getDx()) < Math.abs(velocity.getDy())) {
                         stateComponent.setCurrentState("up");
+                        directionComponent.setDirection(Direction.UP);
                     }
                     break;
                 case 1:
                     if (Math.abs(velocity.getDx()) < Math.abs(velocity.getDy())) {
                         stateComponent.setCurrentState("down");
+                        directionComponent.setDirection(Direction.DOWN);
                     }
                     break;
                 case 0:
@@ -47,6 +55,7 @@ public class MovementDeterminerSystem extends GameSystem {
                         continue;
                     }
                     stateComponent.setCurrentState("idle");
+                    directionComponent.setDirection(Direction.ALL);
             }
         }
     }

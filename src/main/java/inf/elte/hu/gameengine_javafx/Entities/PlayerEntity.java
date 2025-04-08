@@ -7,10 +7,7 @@ import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationCo
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.DragComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.MassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.StateComponent;
+import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.*;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.AnimationComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.AnimationStateMachineComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ImageComponent;
@@ -18,10 +15,7 @@ import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ZIndexCompon
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
-import inf.elte.hu.gameengine_javafx.Misc.AnimationFrame;
-import inf.elte.hu.gameengine_javafx.Misc.AnimationStateMachine;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
-import inf.elte.hu.gameengine_javafx.Misc.Time;
+import inf.elte.hu.gameengine_javafx.Misc.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +28,7 @@ public class PlayerEntity extends Entity {
         this.addComponent(new DragComponent(0.98));
         this.addComponent(new MassComponent(0.5));
         this.addComponent(new StateComponent(state));
+        this.addComponent(new DirectionComponent(Direction.ALL));
         this.addComponent(new ImageComponent(path, width, height));
         this.addComponent(new InteractiveComponent());
         this.addComponent(new DimensionComponent(width, height));
