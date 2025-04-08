@@ -8,9 +8,6 @@ import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ImageCompone
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
-import inf.elte.hu.gameengine_javafx.Entities.DummyEntity;
-import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
-import inf.elte.hu.gameengine_javafx.Misc.Time;
 
 import java.util.ArrayList;
 

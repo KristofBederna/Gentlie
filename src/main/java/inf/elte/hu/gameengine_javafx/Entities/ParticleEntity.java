@@ -1,11 +1,11 @@
 package inf.elte.hu.gameengine_javafx.Entities;
 
+import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.MaxDistanceFromOriginComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.DragComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
-import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
+import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ColorComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ImageComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ZIndexComponent;

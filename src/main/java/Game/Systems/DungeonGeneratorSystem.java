@@ -14,7 +14,6 @@ import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDimensionCo
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
-import inf.elte.hu.gameengine_javafx.Core.EntityManager;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Entities.TileEntity;

@@ -2,18 +2,10 @@ package Game.Systems;
 
 import Game.Components.HealthComponent;
 import Game.Entities.SnowBallEntity;
-import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
-import inf.elte.hu.gameengine_javafx.Entities.ParticleEmitterEntity;
-import inf.elte.hu.gameengine_javafx.Entities.ParticleEntity;
-import inf.elte.hu.gameengine_javafx.Maths.Geometry.NSidedShape;
-import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
-import inf.elte.hu.gameengine_javafx.Misc.Direction;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 

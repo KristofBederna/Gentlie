@@ -1,8 +1,8 @@
 package inf.elte.hu.gameengine_javafx.Misc.StartUpClasses;
 
 import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
-import inf.elte.hu.gameengine_javafx.Core.ResourceManagers.ImageResourceManager;
 import inf.elte.hu.gameengine_javafx.Core.ResourceManagers.ClipResourceManager;
+import inf.elte.hu.gameengine_javafx.Core.ResourceManagers.ImageResourceManager;
 import javafx.scene.image.Image;
 
 import javax.sound.sampled.Clip;

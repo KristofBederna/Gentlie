@@ -1,7 +1,5 @@
 package inf.elte.hu.gameengine_javafx.Misc;
 
-import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
-
 public class BackgroundMusic {
     private String path;
     private String identifier;

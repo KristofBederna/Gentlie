@@ -1,23 +1,20 @@
 package inf.elte.hu.gameengine_javafx.Systems.ResourceSystems;
 
-import Game.Entities.PathfindingEntity;
+import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
-import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
-import inf.elte.hu.gameengine_javafx.Components.TileValueComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.MapMeshComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDataComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDimensionComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
-import inf.elte.hu.gameengine_javafx.Core.EntityHub;
-import inf.elte.hu.gameengine_javafx.Entities.*;
+import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
+import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
+import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.MapClasses.Chunk;
-import inf.elte.hu.gameengine_javafx.Misc.MapClasses.World;
 import inf.elte.hu.gameengine_javafx.Misc.MapClasses.WorldGenerator;
-import inf.elte.hu.gameengine_javafx.Misc.Pathfinding;
 import inf.elte.hu.gameengine_javafx.Misc.Tuple;
 import inf.elte.hu.gameengine_javafx.Misc.Walker;
 

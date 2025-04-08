@@ -1,13 +1,11 @@
 package inf.elte.hu.gameengine_javafx.Core;
 
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
+import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ImageComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Component;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
-import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

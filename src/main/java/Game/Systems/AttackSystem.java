@@ -7,7 +7,6 @@ import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Shape;
-import inf.elte.hu.gameengine_javafx.Misc.Time;
 
 public class AttackSystem extends GameSystem {
     @Override

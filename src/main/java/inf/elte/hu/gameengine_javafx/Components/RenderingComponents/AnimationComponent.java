@@ -4,8 +4,6 @@ import inf.elte.hu.gameengine_javafx.Core.Architecture.Component;
 import inf.elte.hu.gameengine_javafx.Misc.AnimationFrame;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AnimationComponent extends Component {

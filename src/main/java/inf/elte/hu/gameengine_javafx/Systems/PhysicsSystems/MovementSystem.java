@@ -1,28 +1,20 @@
 package inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems;
 
-import Game.Entities.SnowBallEntity;
+import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
-import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
-import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.DragComponent;
-import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.FrictionComponent;
-import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.MassComponent;
+import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.*;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
-import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
-import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDataComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
-import inf.elte.hu.gameengine_javafx.Core.EntityManager;
-import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.ParticleEntity;
 import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

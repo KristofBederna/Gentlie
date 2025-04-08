@@ -2,7 +2,6 @@ package Game.Entities;
 
 import Game.Components.DaytimeComponent;
 import Game.Misc.Enums.Daytime;
-import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ZIndexComponent;
 import inf.elte.hu.gameengine_javafx.Components.ShapeComponent;
 import inf.elte.hu.gameengine_javafx.Components.TimeComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;

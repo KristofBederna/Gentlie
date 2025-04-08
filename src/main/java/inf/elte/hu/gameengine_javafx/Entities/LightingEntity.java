@@ -1,11 +1,11 @@
 package inf.elte.hu.gameengine_javafx.Entities;
 
+import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.LightHitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.LightComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
-import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
+import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.RadiusComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ColorComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;

@@ -1,12 +1,11 @@
 package inf.elte.hu.gameengine_javafx.Systems.RenderingSystems;
 
-import inf.elte.hu.gameengine_javafx.Components.MaxDistanceFromOriginComponent;
 import inf.elte.hu.gameengine_javafx.Components.Default.ParentComponent;
+import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
+import inf.elte.hu.gameengine_javafx.Components.MaxDistanceFromOriginComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.DragComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DirectionComponent;
-import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
-import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
 import inf.elte.hu.gameengine_javafx.Components.TimeComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
@@ -18,10 +17,8 @@ import inf.elte.hu.gameengine_javafx.Misc.Direction;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ParticleSystem extends GameSystem {
     @Override

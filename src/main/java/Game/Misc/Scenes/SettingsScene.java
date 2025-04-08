@@ -1,43 +1,18 @@
 package Game.Misc.Scenes;
 
 import Game.Misc.UtilityFunctions;
-import inf.elte.hu.gameengine_javafx.Components.UIComponents.CheckBoxComponent;
-import inf.elte.hu.gameengine_javafx.Components.UIComponents.ComboBoxComponent;
-import inf.elte.hu.gameengine_javafx.Components.UIComponents.SliderComponent;
-import inf.elte.hu.gameengine_javafx.Core.EntityHub;
-import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
-import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
-import inf.elte.hu.gameengine_javafx.Entities.UIEntities.*;
-import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
-import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusic;
+import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
-import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners.FullScreenToggleEventListener;
-import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners.ResolutionChangeEventListener;
-import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.FullScreenToggleEvent;
-import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.ResolutionChangeEvent;
-import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
-import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.ResourceStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.SystemStartUp;
-import inf.elte.hu.gameengine_javafx.Misc.Time;
-import inf.elte.hu.gameengine_javafx.Misc.Tuple;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.RenderSystem;
-import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.BackgroundMusicSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.Parent;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.Slider;
-import javafx.scene.input.DragEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
 
 import java.util.Objects;
 

@@ -2,15 +2,8 @@ package Game.Entities;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
-import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
-import inf.elte.hu.gameengine_javafx.Components.PathfindingComponent;
-import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
-import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.DragComponent;
-import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.MassComponent;
-import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.StateComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.AnimationComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.AnimationStateMachineComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ImageComponent;
@@ -23,7 +16,6 @@ import inf.elte.hu.gameengine_javafx.Misc.AnimationStateMachine;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
 
 import java.util.List;
-import java.util.Objects;
 
 public class CampfireEntity extends Entity {
     public CampfireEntity(double x, double y, String path, double width, double height) {

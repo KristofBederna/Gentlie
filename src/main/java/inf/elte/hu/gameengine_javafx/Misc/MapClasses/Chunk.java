@@ -1,9 +1,6 @@
 package inf.elte.hu.gameengine_javafx.Misc.MapClasses;
 
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
-import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
 
 import java.util.ArrayList;
 import java.util.List;

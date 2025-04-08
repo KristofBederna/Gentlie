@@ -1,6 +1,5 @@
 package inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events;
 
-import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Event;
 
 public class ResolutionChangeEvent implements Event {

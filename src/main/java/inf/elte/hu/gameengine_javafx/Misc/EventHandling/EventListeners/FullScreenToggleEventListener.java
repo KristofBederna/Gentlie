@@ -3,7 +3,6 @@ package inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListener;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.FullScreenToggleEvent;
-import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.TestEvent;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 

@@ -7,7 +7,9 @@ import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationCo
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.DragComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.MassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.*;
+import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
+import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
+import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.StateComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.AnimationComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.AnimationStateMachineComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ImageComponent;

@@ -6,8 +6,13 @@ import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusic;
 import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusicStore;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 
-import javax.sound.sampled.*;
-import java.util.*;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class BackgroundMusicSystem extends GameSystem {

@@ -1,8 +1,8 @@
 package inf.elte.hu.gameengine_javafx.Entities;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.ParentComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
+import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDimensionComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 

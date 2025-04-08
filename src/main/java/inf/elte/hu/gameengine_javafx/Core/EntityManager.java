@@ -3,7 +3,10 @@ package inf.elte.hu.gameengine_javafx.Core;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Component;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The {@code EntityManager} class is responsible for managing a collection of entities of a specific type.
