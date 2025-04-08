@@ -7,14 +7,18 @@ import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusicStore;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 
 import javax.sound.sampled.*;
-import java.io.BufferedInputStream;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BackgroundMusicSystem extends GameSystem {
     private Clip currentClip;
+    private LineListener currentListener;
+    private BackgroundMusic lastPlayed;
     private final Random random = new Random();
+    private boolean shuffleMode = true;
+    private boolean preventImmediateRepeats = true;
+    private List<BackgroundMusic> playQueue = new ArrayList<>();
+    private final Object playbackLock = new Object();
 
     @Override
     public void start() {
@@ -23,87 +27,180 @@ public class BackgroundMusicSystem extends GameSystem {
 
     @Override
     protected void update() {
-        if (currentClip != null) {
-            setVolume(currentClip, Config.backgroundMusicVolume * Config.masterVolume);
-        }
+        synchronized (playbackLock) {
+            if (currentClip != null && currentClip.isOpen()) {
+                setVolume(currentClip, Config.backgroundMusicVolume * Config.masterVolume);
+            }
 
-        if (currentClip == null || !currentClip.isOpen() || !currentClip.isActive()) {
-            playRandomMusic();
+            if (shouldPlayNewTrack()) {
+                playNextMusic();
+            }
         }
     }
 
-    private void playRandomMusic() {
-        BackgroundMusicStore store = BackgroundMusicStore.getInstance();
-        if (store == null || store.getBackgroundMusics().isEmpty()) return;
+    private boolean shouldPlayNewTrack() {
+        return currentClip == null || !currentClip.isOpen() || !currentClip.isActive();
+    }
 
-        List<BackgroundMusic> musicList = store.getBackgroundMusics();
-        BackgroundMusic selectedMusic = musicList.get(random.nextInt(musicList.size()));
-        String path = selectedMusic.getPath();
+    private void playNextMusic() {
+        synchronized (playbackLock) {
+            BackgroundMusicStore store = BackgroundMusicStore.getInstance();
+            if (store == null || store.getBackgroundMusics().isEmpty()) return;
 
-        Clip clip = ResourceHub.getInstance().getResourceManager(Clip.class).get(path);
-        if (clip == null) {
-            System.err.println("Background music not found: " + path);
-            return;
+            List<BackgroundMusic> availableMusic = getAvailableMusicList(store);
+            if (availableMusic.isEmpty()) {
+                availableMusic = new ArrayList<>(store.getBackgroundMusics());
+            }
+
+            BackgroundMusic selectedMusic = selectMusic(availableMusic);
+            playMusic(selectedMusic);
         }
+    }
 
-        if (!clip.isOpen()) {
-            try {
-                InputStream resource = getClass().getResourceAsStream(path);
-                if (resource == null) {
-                    System.err.println("Audio file not found at path: " + path);
-                    return;
-                }
-                resource = new BufferedInputStream(resource);
-                AudioInputStream audioStream = AudioSystem.getAudioInputStream(resource);
+    private List<BackgroundMusic> getAvailableMusicList(BackgroundMusicStore store) {
+        List<BackgroundMusic> allMusic = store.getBackgroundMusics();
 
-                clip.open(audioStream);
-            } catch (Exception e) {
-                e.printStackTrace();
+        if (preventImmediateRepeats && lastPlayed != null) {
+            return allMusic.stream()
+                    .filter(music -> !music.equals(lastPlayed))
+                    .collect(Collectors.toList());
+        }
+        return new ArrayList<>(allMusic);
+    }
+
+    private BackgroundMusic selectMusic(List<BackgroundMusic> availableMusic) {
+        if (shuffleMode) {
+            return availableMusic.get(random.nextInt(availableMusic.size()));
+        } else {
+            if (playQueue.isEmpty()) {
+                playQueue.addAll(availableMusic);
+            }
+            return playQueue.remove(0);
+        }
+    }
+
+    private void playMusic(BackgroundMusic music) {
+        synchronized (playbackLock) {
+            // Small delay to ensure any previous clip fully stops
+            try { Thread.sleep(30); }
+            catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+
+            String path = music.getPath();
+            Clip clip = ResourceHub.getInstance().getResourceManager(Clip.class).get(path);
+
+            if (!isValidClip(clip)) {
+                System.err.println("Invalid clip: " + path);
                 return;
             }
+
+            cleanupCurrentClip();
+
+            try {
+                currentClip = clip;
+                lastPlayed = music;
+                setVolume(currentClip, Config.backgroundMusicVolume * Config.masterVolume);
+                currentClip.setFramePosition(0);
+
+                currentListener = event -> {
+                    if (event.getType() == LineEvent.Type.STOP) {
+                        synchronized (playbackLock) {
+                            if (currentClip != null &&
+                                    event.getFramePosition() >= currentClip.getFrameLength() - 1) {
+                                cleanupCurrentClip();
+                                if (this.active) {
+                                    playNextMusic();
+                                }
+                            }
+                        }
+                    }
+                };
+
+                currentClip.addLineListener(currentListener);
+                currentClip.start();
+            } catch (Exception e) {
+                System.err.println("Error playing music: " + e.getMessage());
+                cleanupCurrentClip();
+            }
         }
+    }
 
-        if (currentClip != null && currentClip.isRunning()) {
-            currentClip.stop();
-        }
-
-        currentClip = clip;
-        setVolume(currentClip, Config.backgroundMusicVolume * Config.masterVolume);
-
-        currentClip.addLineListener(event -> {
-            if (event.getType() == LineEvent.Type.STOP) {
+    private void cleanupCurrentClip() {
+        synchronized (playbackLock) {
+            if (currentClip != null) {
                 try {
-                    currentClip.close();
+                    if (currentListener != null) {
+                        currentClip.removeLineListener(currentListener);
+                        currentListener = null;
+                    }
+
+                    if (currentClip.isRunning()) {
+                        currentClip.stop();
+                    }
+                    currentClip.setFramePosition(0);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    System.err.println("Error cleaning up clip: " + e.getMessage());
                 } finally {
                     currentClip = null;
-                    playRandomMusic();
                 }
             }
-        });
+        }
+    }
 
-        currentClip.start();
+    private boolean isValidClip(Clip clip) {
+        return clip != null && clip.isOpen() && clip.getBufferSize() > 0;
     }
 
     private void setVolume(Clip clip, float volume) {
-        if (clip == null || !clip.isOpen()) return;
+        if (!isValidClip(clip)) return;
 
         try {
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-
-            if (Config.linearVolumeControl) {
-                float minGain = gainControl.getMinimum();
-                float maxGain = gainControl.getMaximum();
-                float gain = minGain + (maxGain - minGain) * volume;
-                gainControl.setValue(gain);
-            } else {
-                float dB = (float) (Math.log10(Math.max(volume, 0.0001f)) * 20);
-                gainControl.setValue(dB);
-            }
-
+            float dB = (float) (Math.log10(Math.max(volume, 0.0001f)) * 20);
+            gainControl.setValue(dB);
         } catch (Exception e) {
             System.err.println("Failed to set volume: " + e.getMessage());
+        }
+    }
+
+    // Public control methods
+    public void setShuffleMode(boolean shuffle) {
+        synchronized (playbackLock) {
+            this.shuffleMode = shuffle;
+            if (!shuffle) playQueue.clear();
+        }
+    }
+
+    public void setPreventImmediateRepeats(boolean prevent) {
+        synchronized (playbackLock) {
+            this.preventImmediateRepeats = prevent;
+        }
+    }
+
+    public void stopMusic() {
+        synchronized (playbackLock) {
+            cleanupCurrentClip();
+        }
+    }
+
+    public void pauseMusic() {
+        synchronized (playbackLock) {
+            if (isValidClip(currentClip) && currentClip.isRunning()) {
+                currentClip.stop();
+            }
+        }
+    }
+
+    public void resumeMusic() {
+        synchronized (playbackLock) {
+            if (isValidClip(currentClip) && !currentClip.isRunning()) {
+                currentClip.start();
+            }
+        }
+    }
+
+    public boolean isPlaying() {
+        synchronized (playbackLock) {
+            return isValidClip(currentClip) && currentClip.isRunning();
         }
     }
 }
