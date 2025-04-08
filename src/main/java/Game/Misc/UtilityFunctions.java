@@ -149,6 +149,7 @@ public class UtilityFunctions {
             ButtonEntity settings = new ButtonEntity("Settings", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, ()->{showDetailedSettingsMenu(); backButton();});
             ButtonEntity exit = new ButtonEntity("Back", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 + 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> {
                 uiRoot.getInstance().unloadAll();
+                Time.getInstance().setTimeScale(1.0);
             });
         });
     }

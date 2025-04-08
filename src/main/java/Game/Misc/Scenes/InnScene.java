@@ -2,31 +2,24 @@ package Game.Misc.Scenes;
 
 import Game.Entities.*;
 import Game.Misc.EventHandling.EventListeners.ExitInnEventListener;
+import Game.Misc.EventHandling.EventListeners.OpenShopEventListener;
 import Game.Misc.EventHandling.Events.ExitInnEvent;
+import Game.Misc.EventHandling.Events.OpenShopEvent;
 import Game.Misc.UtilityFunctions;
 import Game.Systems.EventTileSystem;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
-import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
-import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDimensionComponent;
-import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
-import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
-import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
-import inf.elte.hu.gameengine_javafx.Entities.UIEntities.*;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.MouseInputHandler;
-import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
-import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.ResourceStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.SystemStartUp;
-import inf.elte.hu.gameengine_javafx.Misc.Time;
 import inf.elte.hu.gameengine_javafx.Systems.InputHandlingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PathfindingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.CollisionSystem;
@@ -34,13 +27,10 @@ import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementDeterminerSy
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.*;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
-import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.WorldLoaderSystem;
 import javafx.scene.Parent;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.BorderPane;
 
 import java.util.List;
 
@@ -74,7 +64,8 @@ public class InnScene extends GameScene {
         new WorldObject(9*Config.scaledTileSize, 3*Config.scaledTileSize-Config.scaledTileSize*0.5, 3*Config.scaledTileSize, 2*Config.scaledTileSize, "/assets/images/Inn_Bar.png", true, 4);
         new WorldObject(9*Config.scaledTileSize, -Config.scaledTileSize*0.1, 3*Config.scaledTileSize, 2*Config.scaledTileSize, "/assets/images/Inn_Bar_Shelf.png", true, 2);
         new WorldObject(3*Config.scaledTileSize, 2*Config.scaledTileSize, 3*Config.scaledTileSize, 3*0.625*Config.scaledTileSize, "/assets/images/Inn_Table.png", true, 2);
-        new ExitEntity(5 * Config.scaledTileSize, 10 * Config.scaledTileSize + Config.scaledTileSize * 0.8, 3 * Config.scaledTileSize, 0.2 * Config.scaledTileSize, new ExitInnEvent(), new ExitInnEventListener());
+        new EventTriggerEntity(5 * Config.scaledTileSize, 10 * Config.scaledTileSize + Config.scaledTileSize * 0.8, 3 * Config.scaledTileSize, 0.2 * Config.scaledTileSize, new ExitInnEvent(), new ExitInnEventListener());
+        new EventTriggerEntity(10*Config.scaledTileSize, 3*Config.scaledTileSize, Config.scaledTileSize, 2*Config.scaledTileSize, new OpenShopEvent(), new OpenShopEventListener());
     }
 
     private void SystemStartUp() {

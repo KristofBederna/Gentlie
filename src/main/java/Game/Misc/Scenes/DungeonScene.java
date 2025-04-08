@@ -1,8 +1,8 @@
 package Game.Misc.Scenes;
 
 import Game.Components.AttackBoxComponent;
+import Game.Entities.EventTriggerEntity;
 import Game.Entities.Labels.EnterEnemyIslandLabel;
-import Game.Entities.EntryEntity;
 import Game.Entities.SnowBallEntity;
 import Game.Misc.EventHandling.EventListeners.EnterEnemyIslandEventListener;
 import Game.Misc.EventHandling.Events.EnterEnemyIslandEvent;
@@ -79,7 +79,7 @@ public class DungeonScene extends GameScene {
 
     private void declareEntities() {
         new PlayerEntity(Config.scaledTileSize + Config.scaledTileSize / 2, Config.scaledTileSize + Config.scaledTileSize / 2, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 0.8 * 0.55, Config.scaledTileSize * 0.8);
-        new EntryEntity(0, Config.scaledTileSize, Config.scaledTileSize, Config.scaledTileSize * 3, new EnterEnemyIslandEvent(new Point(4 * 150, 2 * 150 + 150 * 0.25 - 1)), new EnterEnemyIslandEventListener());
+        new EventTriggerEntity(0, Config.scaledTileSize, Config.scaledTileSize, Config.scaledTileSize * 3, new EnterEnemyIslandEvent(new Point(4 * 150, 2 * 150 + 150 * 0.25 - 1)), new EnterEnemyIslandEventListener());
         EnterEnemyIslandLabel enterEnemyIslandLabel = new EnterEnemyIslandLabel("Press 'E' to leave dungeon", Config.scaledTileSize, 3 * Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
         enterEnemyIslandLabel.removeFromUI();
         enterEnemyIslandLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);

@@ -104,8 +104,8 @@ public class EnemyIslandScene extends GameScene {
         goHomeLabel.removeFromUI();
         goHomeLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
-        new EntryEntity(7* Config.scaledTileSize -Config.scaledTileSize *0.25-1, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75, new EnterDungeonEvent(), new EnterDungeonEventListener());
-        new EntryEntity(2*Config.scaledTileSize, 2*Config.scaledTileSize+Config.scaledTileSize/2, Config.scaledTileSize/2, Config.scaledTileSize /2, new GoHomeEvent(), new GoHomeEventListener());
+        new EventTriggerEntity(7* Config.scaledTileSize -Config.scaledTileSize *0.25-1, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75, new EnterDungeonEvent(), new EnterDungeonEventListener());
+        new EventTriggerEntity(2*Config.scaledTileSize, 2*Config.scaledTileSize+Config.scaledTileSize/2, Config.scaledTileSize/2, Config.scaledTileSize /2, new GoHomeEvent(), new GoHomeEventListener());
     }
 
     private void SystemStartUp() {

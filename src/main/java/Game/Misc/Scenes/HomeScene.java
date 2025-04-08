@@ -1,7 +1,7 @@
 package Game.Misc.Scenes;
 
 import Game.Entities.CampfireEntity;
-import Game.Entities.ExitEntity;
+import Game.Entities.EventTriggerEntity;
 import Game.Entities.WorldObject;
 import Game.Misc.EventHandling.EventListeners.ExitHomeEventListener;
 import Game.Misc.EventHandling.Events.ExitHomeEvent;
@@ -27,7 +27,6 @@ import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementDeterminerSy
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.*;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.*;
-import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 
@@ -63,7 +62,7 @@ public class HomeScene extends GameScene {
         new WorldObject(6*Config.scaledTileSize, 1*Config.scaledTileSize-Config.scaledTileSize*0.2, 3*Config.scaledTileSize, 3*0.27*Config.scaledTileSize, "/assets/images/Bed.png", true, 2);
         new WorldObject(2*Config.scaledTileSize+Config.scaledTileSize*0.3, 3*Config.scaledTileSize-Config.scaledTileSize*0.2, 1.5*0.15*Config.scaledTileSize, 1.5*Config.scaledTileSize, "/assets/images/Fishing_Rod.png", false, 2);
         new WorldObject(10*Config.scaledTileSize-Config.scaledTileSize*0.8, 9*Config.scaledTileSize+Config.scaledTileSize*0.3, 0.75*0.98*Config.scaledTileSize, 0.75*Config.scaledTileSize, "/assets/images/Backpack.png", false, 2);
-        new ExitEntity(6*Config.scaledTileSize, 11*Config.scaledTileSize +Config.scaledTileSize *0.8, 3*Config.scaledTileSize, 0.2*Config.scaledTileSize, new ExitHomeEvent(), new ExitHomeEventListener());
+        new EventTriggerEntity(6*Config.scaledTileSize, 11*Config.scaledTileSize +Config.scaledTileSize *0.8, 3*Config.scaledTileSize, 0.2*Config.scaledTileSize, new ExitHomeEvent(), new ExitHomeEventListener());
     }
 
     private void SystemStartUp() {
