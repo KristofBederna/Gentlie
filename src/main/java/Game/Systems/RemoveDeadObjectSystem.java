@@ -1,10 +1,12 @@
 package Game.Systems;
 
 import Game.Components.HealthComponent;
+import Game.Entities.Labels.GoldGainedLabel;
 import Game.Entities.PolarBearEntity;
 import Game.Entities.SnowBallEntity;
 import Game.Misc.PlayerStats;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
+import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
@@ -35,6 +37,7 @@ public class RemoveDeadObjectSystem extends GameSystem {
             EntityHub.getInstance().removeEntity(entity);
             if (entity instanceof PolarBearEntity) {
                 PlayerStats.gold += 10;
+                new GoldGainedLabel("10", entity.getComponent(CentralMassComponent.class).getCentralX(), entity.getComponent(CentralMassComponent.class).getCentralY() - 50, 100, 100);
             }
         }
     }

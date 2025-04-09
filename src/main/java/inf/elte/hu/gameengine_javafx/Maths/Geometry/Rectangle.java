@@ -105,6 +105,9 @@ public class Rectangle extends Shape {
 
     public void renderFill(GraphicsContext gc, Color color) {
         CameraEntity cameraEntity = CameraEntity.getInstance();
+        if (cameraEntity == null) {
+            return;
+        }
         double cameraX = cameraEntity.getComponent(PositionComponent.class).getGlobalX();
         double cameraY = cameraEntity.getComponent(PositionComponent.class).getGlobalY();
 

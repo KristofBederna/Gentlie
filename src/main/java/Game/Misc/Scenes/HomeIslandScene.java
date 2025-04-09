@@ -1,19 +1,19 @@
 package Game.Misc.Scenes;
 
 import Game.Entities.*;
-import Game.Entities.Labels.EnterEnemyIslandLabel;
-import Game.Entities.Labels.EnterHomeLabel;
-import Game.Entities.Labels.EnterInnLabel;
+import Game.Entities.Labels.*;
 import Game.Misc.EventHandling.EventListeners.EnterEnemyIslandEventListener;
 import Game.Misc.EventHandling.EventListeners.EnterHomeEventListener;
 import Game.Misc.EventHandling.EventListeners.EnterInnListener;
 import Game.Misc.EventHandling.Events.EnterEnemyIslandEvent;
 import Game.Misc.EventHandling.Events.EnterHomeEvent;
 import Game.Misc.EventHandling.Events.EnterInnEvent;
+import Game.Misc.PlayerStats;
 import Game.Misc.UtilityFunctions;
 import Game.Systems.DayNightCycleSystem;
 import Game.Systems.EventTileSystem;
 import Game.Systems.PenguinMoverSystem;
+import Game.Systems.UserInterfaceSystem;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
@@ -33,10 +33,10 @@ import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.ResourceStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.SystemStartUp;
 import inf.elte.hu.gameengine_javafx.Systems.InputHandlingSystem;
+import inf.elte.hu.gameengine_javafx.Systems.PathfindingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.CollisionSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementDeterminerSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
-import inf.elte.hu.gameengine_javafx.Systems.PlatformerPathfindingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.AnimationSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.CameraSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.ParticleSystem;
@@ -92,7 +92,8 @@ public class HomeIslandScene extends GameScene {
         new PenguinEntity(random.nextInt(2, 10)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_1.png",  Config.scaledTileSize*0.55,  Config.scaledTileSize);
         new PenguinEntity(random.nextInt(2, 10)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_1.png",  Config.scaledTileSize*0.55,  Config.scaledTileSize);
         new PenguinEntity(random.nextInt(2, 10)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_1.png",  Config.scaledTileSize*0.55,  Config.scaledTileSize);
-
+        new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
+        new HealthLabel(String.valueOf(PlayerStats.health), 100, 200, 100, 100);
         new WaterEntity();
         new SkyBoxEntity();
 
@@ -129,17 +130,18 @@ public class HomeIslandScene extends GameScene {
         systemHub.addSystem(EventTileSystem.class, new EventTileSystem(),1);
         systemHub.addSystem(AnimationSystem.class, new AnimationSystem(), 2);
         systemHub.addSystem(DayNightCycleSystem.class, new DayNightCycleSystem(), 3);
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(),4);
+        systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(), 4);
         systemHub.addSystem(PenguinMoverSystem.class, new PenguinMoverSystem(),5);
-        systemHub.addSystem(PlatformerPathfindingSystem.class, new PlatformerPathfindingSystem(),6);
-        systemHub.addSystem(MovementSystem.class, new MovementSystem(),7);
-        systemHub.addSystem(ParticleSystem.class, new ParticleSystem(),8);
-        systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(),9);
-        systemHub.addSystem(CollisionSystem.class, new CollisionSystem(),10);
-        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(),11);
-        systemHub.addSystem(CameraSystem.class, new CameraSystem(), 12);
-        systemHub.addSystem(SoundSystem.class, new SoundSystem(), 13);
-        systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 14);
+        systemHub.addSystem(MovementSystem.class, new MovementSystem(), 6);
+        systemHub.addSystem(ParticleSystem.class, new ParticleSystem(), 7);
+        systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(), 8);
+        systemHub.addSystem(CollisionSystem.class, new CollisionSystem(), 9);
+        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(), 10);
+        systemHub.addSystem(CameraSystem.class, new CameraSystem(), 11);
+        systemHub.addSystem(SoundSystem.class, new SoundSystem(), 12);
+        systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 13);
+        systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 14);
+        systemHub.addSystem(RenderSystem.class, new RenderSystem(), 15);
     }
 
     private void interactionSetup() {

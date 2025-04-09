@@ -3,13 +3,17 @@ package Game.Misc.Scenes;
 import Game.Entities.*;
 import Game.Entities.Labels.DungeonLabel;
 import Game.Entities.Labels.GoHomeLabel;
+import Game.Entities.Labels.GoldLabel;
+import Game.Entities.Labels.HealthLabel;
 import Game.Misc.EventHandling.EventListeners.EnterDungeonEventListener;
 import Game.Misc.EventHandling.EventListeners.GoHomeEventListener;
 import Game.Misc.EventHandling.Events.EnterDungeonEvent;
 import Game.Misc.EventHandling.Events.GoHomeEvent;
+import Game.Misc.PlayerStats;
 import Game.Misc.UtilityFunctions;
 import Game.Systems.DayNightCycleSystem;
 import Game.Systems.EventTileSystem;
+import Game.Systems.UserInterfaceSystem;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
@@ -82,7 +86,8 @@ public class EnemyIslandScene extends GameScene {
         WorldEntity.getInstance("/assets/maps/enemyIsland.txt", "/assets/tileSets/gameTileSet.txt");
 
         new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 0.75 * 0.55, Config.scaledTileSize * 0.75);
-
+        new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
+        new HealthLabel(String.valueOf(PlayerStats.health), 100, 200, 100, 100);
         new WaterEntity();
         new SkyBoxEntity();
 
@@ -111,16 +116,17 @@ public class EnemyIslandScene extends GameScene {
         systemHub.addSystem(EventTileSystem.class, new EventTileSystem(),1);
         systemHub.addSystem(AnimationSystem.class, new AnimationSystem(), 2);
         systemHub.addSystem(DayNightCycleSystem.class, new DayNightCycleSystem(),3);
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(),4);
-        systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(),5);
-        systemHub.addSystem(MovementSystem.class, new MovementSystem(),6);
-        systemHub.addSystem(ParticleSystem.class, new ParticleSystem(),7);
-        systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(),8);
-        systemHub.addSystem(CollisionSystem.class, new CollisionSystem(),9);
-        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(),10);
-        systemHub.addSystem(CameraSystem.class, new CameraSystem(), 11);
-        systemHub.addSystem(SoundSystem.class, new SoundSystem(), 12);
-        systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 13);
+        systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(), 4);
+        systemHub.addSystem(MovementSystem.class, new MovementSystem(), 5);
+        systemHub.addSystem(ParticleSystem.class, new ParticleSystem(), 6);
+        systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(), 7);
+        systemHub.addSystem(CollisionSystem.class, new CollisionSystem(), 8);
+        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(), 9);
+        systemHub.addSystem(CameraSystem.class, new CameraSystem(), 10);
+        systemHub.addSystem(SoundSystem.class, new SoundSystem(), 11);
+        systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 12);
+        systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 13);
+        systemHub.addSystem(RenderSystem.class, new RenderSystem(), 14);
     }
 
     private void interactionSetup() {

@@ -2,9 +2,11 @@ package Game.Systems;
 
 import Game.Components.AttackBoxComponent;
 import Game.Components.HealthComponent;
+import Game.Entities.Labels.DamageLabel;
 import Game.Entities.SnowBallEntity;
 import Game.Misc.PlayerStats;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
+import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
@@ -33,7 +35,7 @@ public class AttackSystem extends GameSystem {
                     if (entity instanceof PlayerEntity) {
                         otherEntity.getComponent(HealthComponent.class).decreaseHealth(PlayerStats.meleeDamage);
                         entity.getComponent(AttackBoxComponent.class).setHasDamaged(true);
-                        System.out.println("Damaged for: " + PlayerStats.meleeDamage + " damage, remaining health: " + otherEntity.getComponent(HealthComponent.class).getHealth());
+                        new DamageLabel(String.valueOf(PlayerStats.meleeDamage), otherEntity.getComponent(CentralMassComponent.class).getCentralX(), otherEntity.getComponent(CentralMassComponent.class).getCentralY(), 100, 0);
                     }
                 }
             }

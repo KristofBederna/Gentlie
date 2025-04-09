@@ -2,11 +2,15 @@ package Game.Misc.Scenes;
 
 import Game.Entities.CampfireEntity;
 import Game.Entities.EventTriggerEntity;
+import Game.Entities.Labels.GoldLabel;
+import Game.Entities.Labels.HealthLabel;
 import Game.Entities.WorldObject;
 import Game.Misc.EventHandling.EventListeners.ExitHomeEventListener;
 import Game.Misc.EventHandling.Events.ExitHomeEvent;
+import Game.Misc.PlayerStats;
 import Game.Misc.UtilityFunctions;
 import Game.Systems.EventTileSystem;
+import Game.Systems.UserInterfaceSystem;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
@@ -26,7 +30,10 @@ import inf.elte.hu.gameengine_javafx.Systems.PathfindingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.CollisionSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementDeterminerSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
-import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.*;
+import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.AnimationSystem;
+import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.CameraSystem;
+import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.ParticleSystem;
+import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.RenderSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.WorldLoaderSystem;
@@ -64,6 +71,8 @@ public class HomeScene extends GameScene {
 
     private void declareEntities() {
         new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 2 * 0.55, Config.scaledTileSize * 2);
+        new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
+        new HealthLabel(String.valueOf(PlayerStats.health), 100, 200, 100, 100);
         new CampfireEntity(7*Config.scaledTileSize+Config.scaledTileSize*0.2, 5*Config.scaledTileSize, "/assets/images/Campfire/Campfire_1.png", Config.scaledTileSize*0.8, Config.scaledTileSize*0.8);
         new WorldObject(6*Config.scaledTileSize, 1*Config.scaledTileSize-Config.scaledTileSize*0.2, 3*Config.scaledTileSize, 3*0.27*Config.scaledTileSize, "/assets/images/Bed.png", true, 2);
         new WorldObject(2*Config.scaledTileSize+Config.scaledTileSize*0.3, 3*Config.scaledTileSize-Config.scaledTileSize*0.2, 1.5*0.15*Config.scaledTileSize, 1.5*Config.scaledTileSize, "/assets/images/Fishing_Rod.png", false, 2);
@@ -77,7 +86,7 @@ public class HomeScene extends GameScene {
         systemHub.addSystem(MovementDeterminerSystem.class, new MovementDeterminerSystem(),0);
         systemHub.addSystem(EventTileSystem.class, new EventTileSystem(),1);
         systemHub.addSystem(AnimationSystem.class, new AnimationSystem(), 2);
-        systemHub.addSystem(LightingSystem.class, new LightingSystem(),4);
+        systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 4);
         systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(),5);
         systemHub.addSystem(MovementSystem.class, new MovementSystem(),6);
         systemHub.addSystem(ParticleSystem.class, new ParticleSystem(),7);
