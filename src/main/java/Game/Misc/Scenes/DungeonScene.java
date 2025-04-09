@@ -42,7 +42,6 @@ import inf.elte.hu.gameengine_javafx.Systems.PathfindingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementDeterminerSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.AnimationSystem;
-import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.CameraSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.ParticleSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.RenderSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
@@ -101,7 +100,7 @@ public class DungeonScene extends GameScene {
         systemHub.addSystem(ParticleSystem.class, new ParticleSystem(), 6);
         systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(), 7);
         systemHub.addSystem(ResourceSystem.class, new ResourceSystem(), 8);
-        systemHub.addSystem(CameraSystem.class, new CameraSystem(), 9);
+        systemHub.addSystem(CustomCameraSystem.class, new CustomCameraSystem(), 9);
         systemHub.addSystem(CustomCollisionSystem.class, new CustomCollisionSystem(), 10);
         systemHub.addSystem(SoundSystem.class, new SoundSystem(), 11);
         systemHub.addSystem(DungeonGeneratorSystem.class, new DungeonGeneratorSystem(2, 2), 12);
@@ -124,7 +123,7 @@ public class DungeonScene extends GameScene {
             player.getComponent(PositionComponent.class).setLocalY(MouseInputHandler.getInstance().getMouseY(), player);
         });
 
-        playerInteractiveComponent.mapInput(MouseButton.PRIMARY, 2000, () -> {
+        playerInteractiveComponent.mapInput(MouseButton.PRIMARY, PlayerStats.meleeCooldown, () -> {
             double playerX = player.getComponent(CentralMassComponent.class).getCentralX();
             double playerY = player.getComponent(CentralMassComponent.class).getCentralY();
 
@@ -188,7 +187,7 @@ public class DungeonScene extends GameScene {
                 );
                 return;
             } else {
-                playerInteractiveComponent.getLastTimeCalled().put(new Tuple<>(null, MouseButton.PRIMARY), new Tuple<>(System.currentTimeMillis(), 2000L));
+                playerInteractiveComponent.getLastTimeCalled().put(new Tuple<>(null, MouseButton.PRIMARY), new Tuple<>(System.currentTimeMillis(), PlayerStats.meleeCooldown));
             }
 
             ComplexShape attackBox = new ComplexShape(new Rectangle(new Point(playerX - width / 2, playerY - height / 2), width, height).getPoints());
@@ -205,7 +204,7 @@ public class DungeonScene extends GameScene {
         });
 
 
-        playerInteractiveComponent.mapInput(MouseButton.SECONDARY, 3000, () -> {
+        playerInteractiveComponent.mapInput(MouseButton.SECONDARY, PlayerStats.rangedCooldown, () -> {
             boolean isInvalidDirection = false;
             double playerX = player.getComponent(CentralMassComponent.class).getCentralX();
             double playerY = player.getComponent(CentralMassComponent.class).getCentralY();
@@ -261,7 +260,7 @@ public class DungeonScene extends GameScene {
                 );
                 return;
             } else {
-                playerInteractiveComponent.getLastTimeCalled().put(new Tuple<>(null, MouseButton.SECONDARY), new Tuple<>(System.currentTimeMillis(), 3000L));
+                playerInteractiveComponent.getLastTimeCalled().put(new Tuple<>(null, MouseButton.SECONDARY), new Tuple<>(System.currentTimeMillis(), PlayerStats.rangedCooldown));
             }
 
             double length = Math.sqrt(dx * dx + dy * dy);

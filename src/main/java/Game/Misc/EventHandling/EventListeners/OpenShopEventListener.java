@@ -31,7 +31,7 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
     @Override
     public void onExit() {
         Platform.runLater(() -> {
-            uiRoot.getInstance().unloadAll();
+            uiRoot.getInstance().getChildren().remove(shopWrapper);
             shopWrapper = null;
         });
     }

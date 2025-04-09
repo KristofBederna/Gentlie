@@ -38,6 +38,15 @@ public class RemoveDeadObjectSystem extends GameSystem {
             if (entity instanceof PolarBearEntity) {
                 PlayerStats.gold += 10;
                 new GoldGainedLabel("10", entity.getComponent(CentralMassComponent.class).getCentralX(), entity.getComponent(CentralMassComponent.class).getCentralY() - 50, 100, 100);
+
+                switch (entity.getComponent(HealthComponent.class).getCauseOfDeath()) {
+                    case RANGED:
+                        PlayerStats.rangedKills++;
+                        break;
+                    case MELEE:
+                        PlayerStats.meleeKills++;
+                        break;
+                }
             }
         }
     }

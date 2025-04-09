@@ -13,6 +13,7 @@ import Game.Misc.PlayerStats;
 import Game.Misc.UtilityFunctions;
 import Game.Systems.DayNightCycleSystem;
 import Game.Systems.EventTileSystem;
+import Game.Systems.PolarBearBufferSystem;
 import Game.Systems.UserInterfaceSystem;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
@@ -127,6 +128,7 @@ public class EnemyIslandScene extends GameScene {
         systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 12);
         systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 13);
         systemHub.addSystem(RenderSystem.class, new RenderSystem(), 14);
+        systemHub.addSystem(PolarBearBufferSystem.class, new PolarBearBufferSystem(), 15);
     }
 
     private void interactionSetup() {

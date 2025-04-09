@@ -56,12 +56,16 @@ public class CameraEntity extends Entity {
         double clampedX = Math.max(0, Math.min(x, this.getComponent(WorldDimensionComponent.class).getWorldWidth() - this.getComponent(DimensionComponent.class).getWidth()));
         double clampedY = Math.max(0, Math.min(y, this.getComponent(WorldDimensionComponent.class).getWorldHeight() - this.getComponent(DimensionComponent.class).getHeight()));
         this.getComponent(PositionComponent.class).setLocalPosition(clampedX, clampedY, this);
+    }
+
+    public void moveUIRootToMatch(double x, double y) {
         Platform.runLater(() -> {
+            double clampedX = Math.max(0, Math.min(x, this.getComponent(WorldDimensionComponent.class).getWorldWidth() - this.getComponent(DimensionComponent.class).getWidth()));
+            double clampedY = Math.max(0, Math.min(y, this.getComponent(WorldDimensionComponent.class).getWorldHeight() - this.getComponent(DimensionComponent.class).getHeight()));
+
             uiRoot.getInstance().setLayoutX(clampedX);
             uiRoot.getInstance().setLayoutY(clampedY);
-            uiRoot.getInstance().requestLayout();
         });
-
     }
 
     public void setWidth(double width) {

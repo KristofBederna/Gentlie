@@ -4,6 +4,8 @@ import Game.Components.HealthComponent;
 import Game.Entities.Labels.DamageLabel;
 import Game.Entities.PolarBearEntity;
 import Game.Entities.SnowBallEntity;
+import Game.Misc.CauseOfDeath;
+import Game.Misc.EnemyStats;
 import Game.Misc.IgnoreCollisions;
 import Game.Misc.PlayerStats;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
@@ -194,23 +196,36 @@ public class CustomCollisionSystem extends GameSystem {
     }
 
     private static void handleRangedCombat(Entity entity, Entity otherEntity) {
-        if (entity instanceof SnowBallEntity && otherEntity instanceof PolarBearEntity) {
-            entity.getComponent(HealthComponent.class).setHealth(0);
-            otherEntity.getComponent(HealthComponent.class).decreaseHealth(PlayerStats.rangedDamage);
-            new DamageLabel(String.valueOf(PlayerStats.rangedDamage), otherEntity.getComponent(CentralMassComponent.class).getCentralX(), otherEntity.getComponent(CentralMassComponent.class).getCentralY(), 100, 0);
-        }
-        if (otherEntity instanceof SnowBallEntity && entity instanceof PolarBearEntity) {
-            entity.getComponent(HealthComponent.class).decreaseHealth(PlayerStats.rangedDamage);
-            otherEntity.getComponent(HealthComponent.class).setHealth(0);
+        if ((entity instanceof SnowBallEntity && otherEntity instanceof PolarBearEntity) ||
+                (otherEntity instanceof SnowBallEntity && entity instanceof PolarBearEntity)) {
 
-            new DamageLabel(String.valueOf(PlayerStats.rangedDamage), entity.getComponent(CentralMassComponent.class).getCentralX(), entity.getComponent(CentralMassComponent.class).getCentralY(), 100, 0);
+            Entity polarBear = (entity instanceof PolarBearEntity) ? entity : otherEntity;
+            Entity snowball = (entity instanceof SnowBallEntity) ? entity : otherEntity;
+
+            snowball.getComponent(HealthComponent.class).setHealth(0, CauseOfDeath.DECAY);
+
+            double effectiveDamage = PlayerStats.rangedDamage * (1 - EnemyStats.rangedResistance);
+            effectiveDamage = Math.max(effectiveDamage, 0);
+
+            polarBear.getComponent(HealthComponent.class).decreaseHealth(effectiveDamage, CauseOfDeath.RANGED);
+
+            CentralMassComponent pos = polarBear.getComponent(CentralMassComponent.class);
+            new DamageLabel(String.format("%.1f", effectiveDamage), pos.getCentralX(), pos.getCentralY(), 100, 0);
         }
+
         if (entity instanceof SnowBallEntity) {
             entity.getComponent(VelocityComponent.class).stopMovement();
             CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
-            new ParticleEmitterEntity(pos.getCentralX(), pos.getCentralY(), new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 10, 10, new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32), Color.SNOW, Color.GREY, 50), Direction.ALL, 3);
+            new ParticleEmitterEntity(
+                    pos.getCentralX(), pos.getCentralY(),
+                    new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 10, 10,
+                            new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
+                            Color.SNOW, Color.GREY, 50),
+                    Direction.ALL, 3
+            );
         }
     }
+
 
     /**
      * Checks for vertical collisions and updates the entity's velocity if necessary.

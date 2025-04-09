@@ -4,6 +4,8 @@ import Game.Components.AttackBoxComponent;
 import Game.Components.HealthComponent;
 import Game.Entities.Labels.DamageLabel;
 import Game.Entities.SnowBallEntity;
+import Game.Misc.CauseOfDeath;
+import Game.Misc.EnemyStats;
 import Game.Misc.PlayerStats;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
@@ -33,11 +35,17 @@ public class AttackSystem extends GameSystem {
 
                 if (Shape.intersect(attackBox.getAttackBox(), hitBox.getHitBox())) {
                     if (entity instanceof PlayerEntity) {
-                        otherEntity.getComponent(HealthComponent.class).decreaseHealth(PlayerStats.meleeDamage);
+                        double effectiveDamage = PlayerStats.meleeDamage * (1 - EnemyStats.meleeResistance);
+                        effectiveDamage = Math.max(effectiveDamage, 0);
+
+                        otherEntity.getComponent(HealthComponent.class).decreaseHealth(effectiveDamage, CauseOfDeath.MELEE);
                         entity.getComponent(AttackBoxComponent.class).setHasDamaged(true);
-                        new DamageLabel(String.valueOf(PlayerStats.meleeDamage), otherEntity.getComponent(CentralMassComponent.class).getCentralX(), otherEntity.getComponent(CentralMassComponent.class).getCentralY(), 100, 0);
+
+                        CentralMassComponent pos = otherEntity.getComponent(CentralMassComponent.class);
+                        new DamageLabel(String.format("%.1f", effectiveDamage), pos.getCentralX(), pos.getCentralY(), 100, 0);
                     }
                 }
+
             }
             if (System.currentTimeMillis() > entity.getComponent(AttackBoxComponent.class).getStartTime() + entity.getComponent(AttackBoxComponent.class).getDuration() || entity.getComponent(AttackBoxComponent.class).hasDamaged()) {
                 entity.removeComponentsByType(AttackBoxComponent.class);
