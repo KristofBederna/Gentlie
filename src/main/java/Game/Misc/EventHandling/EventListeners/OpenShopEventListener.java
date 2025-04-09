@@ -1,6 +1,10 @@
 package Game.Misc.EventHandling.EventListeners;
 
+import Game.Components.ShopItemInfoComponent;
+import Game.Entities.ShopItemEntity;
 import Game.Misc.EventHandling.Events.OpenShopEvent;
+import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
+import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListener;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
@@ -11,6 +15,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+
+import java.util.List;
 
 public class OpenShopEventListener implements EventListener<OpenShopEvent> {
     private Pane shopWrapper = null;
@@ -35,11 +41,16 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
         shopVBox.setPadding(new Insets(20));
         shopVBox.setStyle("-fx-background-color: transparent;");
 
-        for (int i = 1; i <= 8; i++) {
+        List<Entity> items = EntityHub.getInstance().getEntitiesWithType(ShopItemEntity.class);
+
+        for (int i = 0; i < items.size(); i++) {
+            ShopItemEntity item = (ShopItemEntity) items.get(i);
+            ShopItemInfoComponent info = item.getComponent(ShopItemInfoComponent.class);
             VBox itemBox = createShopItem(
-                    "Item " + i,
-                    "This is a detailed description of item " + i + ". It might have cool effects or benefits.",
-                    9.99 + i
+                    info.getItemName(),
+                    info.getItemDescription(),
+                    info.getPrice(),
+                    info.getOnBuy()
             );
             shopVBox.getChildren().add(itemBox);
         }
@@ -64,7 +75,7 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
         });
     }
 
-    private VBox createShopItem(String name, String description, double price) {
+    private VBox createShopItem(String name, String description, double price, Runnable onBuy) {
         VBox box = new VBox(8);
         box.setPadding(new Insets(12));
         box.setStyle("-fx-border-color: #000000; -fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: rgb(240,240,240);");
@@ -82,6 +93,9 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
 
         Button buyButton = new Button("Buy");
         buyButton.setStyle("-fx-background-color: #459b48; -fx-text-fill: white;");
+        buyButton.setOnMouseClicked(event -> {
+            onBuy.run();
+        });
 
         box.getChildren().addAll(nameLabel, priceLabel, descriptionLabel, buyButton);
         return box;

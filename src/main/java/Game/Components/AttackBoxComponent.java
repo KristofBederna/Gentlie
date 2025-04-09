@@ -10,6 +10,7 @@ public class AttackBoxComponent extends Component {
     private ComplexShape attackBox;
     private long startTime;
     private long duration;
+    private boolean hasDamaged = false;
 
     public AttackBoxComponent(List<Point> points, long duration) {
         this.attackBox = new ComplexShape(points);
@@ -41,6 +42,14 @@ public class AttackBoxComponent extends Component {
 
     public long getStartTime() {
         return startTime;
+    }
+
+    public void setHasDamaged(boolean hasDamaged) {
+        this.hasDamaged = hasDamaged;
+    }
+
+    public boolean hasDamaged() {
+        return hasDamaged;
     }
 
     @Override

@@ -33,6 +33,7 @@ import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.ResourceStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.SystemStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
+import inf.elte.hu.gameengine_javafx.Misc.Tuple;
 import inf.elte.hu.gameengine_javafx.Systems.InputHandlingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PathfindingSystem;
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementDeterminerSystem;
@@ -66,7 +67,7 @@ public class DungeonScene extends GameScene {
 
         declareEntities();
 
-        UtilityFunctions.setUpCamera(1920,1080,32,32);
+        UtilityFunctions.setUpCamera(1920, 1080, 32, 32);
 
         new SystemStartUp(this::SystemStartUp);
 
@@ -106,13 +107,16 @@ public class DungeonScene extends GameScene {
     }
 
     private void interactionSetup() {
-        PlayerEntity player = (PlayerEntity)EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst();
+        PlayerEntity player = (PlayerEntity) EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst();
         InteractiveComponent playerInteractiveComponent = player.getComponent(InteractiveComponent.class);
 
         UtilityFunctions.setUpMovement(playerInteractiveComponent, player);
         UtilityFunctions.showSettingsMenu(playerInteractiveComponent);
 
-        playerInteractiveComponent.mapInput(KeyCode.ENTER, 100, () -> {player.getComponent(PositionComponent.class).setLocalX(MouseInputHandler.getInstance().getMouseX(), player); player.getComponent(PositionComponent.class).setLocalY(MouseInputHandler.getInstance().getMouseY(), player);});
+        playerInteractiveComponent.mapInput(KeyCode.ENTER, 100, () -> {
+            player.getComponent(PositionComponent.class).setLocalX(MouseInputHandler.getInstance().getMouseX(), player);
+            player.getComponent(PositionComponent.class).setLocalY(MouseInputHandler.getInstance().getMouseY(), player);
+        });
 
         playerInteractiveComponent.mapInput(MouseButton.PRIMARY, 2000, () -> {
             double playerX = player.getComponent(CentralMassComponent.class).getCentralX();
@@ -134,50 +138,51 @@ public class DungeonScene extends GameScene {
             DirectionComponent directionComponent = player.getComponent(DirectionComponent.class);
             Direction direction = directionComponent.getDirection();
 
+            boolean isInvalidDirection = false;
+
             if (angleDeg >= 337.5 || angleDeg < 22.5) {
-                directionX = 1; directionY = 0;   // E
-                if (direction == Direction.LEFT || direction == Direction.UP || direction == Direction.DOWN) {
-                    return;
-                }
+                directionX = 1;
+                directionY = 0;   // E
+                if (direction == Direction.LEFT || direction == Direction.UP || direction == Direction.DOWN)
+                    isInvalidDirection = true;
             } else if (angleDeg < 67.5) {
-                directionX = 1; directionY = -1;  // NE
-                if (direction == Direction.LEFT || direction == Direction.DOWN) {
-                    return;
-                }
+                directionX = 1;
+                directionY = -1;  // NE
+                if (direction == Direction.LEFT || direction == Direction.DOWN) isInvalidDirection = true;
             } else if (angleDeg < 112.5) {
-                directionX = 0; directionY = -1;  // N
-                if (direction != Direction.UP) {
-                    if (direction != Direction.ALL) {
-                        return;
-                    }
-                }
+                directionX = 0;
+                directionY = -1;  // N
+                if (direction != Direction.UP && direction != Direction.ALL) isInvalidDirection = true;
             } else if (angleDeg < 157.5) {
-                directionX = -1; directionY = -1; // NW
-                if (direction == Direction.RIGHT || direction == Direction.DOWN) {
-                    return;
-                }
+                directionX = -1;
+                directionY = -1; // NW
+                if (direction == Direction.RIGHT || direction == Direction.DOWN) isInvalidDirection = true;
             } else if (angleDeg < 202.5) {
-                directionX = -1; directionY = 0;  // W
-                if (direction == Direction.RIGHT) {
-                    return;
-                }
+                directionX = -1;
+                directionY = 0;  // W
+                if (direction == Direction.RIGHT) isInvalidDirection = true;
             } else if (angleDeg < 247.5) {
-                directionX = -1; directionY = 1;  // SW
-                if (direction == Direction.RIGHT || direction == Direction.UP) {
-                    return;
-                }
+                directionX = -1;
+                directionY = 1;  // SW
+                if (direction == Direction.RIGHT || direction == Direction.UP) isInvalidDirection = true;
             } else if (angleDeg < 292.5) {
-                directionX = 0; directionY = 1;   // S
-                if (direction != Direction.DOWN) {
-                    if (direction != Direction.ALL) {
-                        return;
-                    }
-                }
+                directionX = 0;
+                directionY = 1;   // S
+                if (direction != Direction.DOWN && direction != Direction.ALL) isInvalidDirection = true;
             } else {
-                directionX = 1; directionY = 1;   // SE
-                if (direction == Direction.LEFT || direction == Direction.UP) {
-                    return;
-                }
+                directionX = 1;
+                directionY = 1;   // SE
+                if (direction == Direction.LEFT || direction == Direction.UP) isInvalidDirection = true;
+            }
+
+            if (isInvalidDirection) {
+                playerInteractiveComponent.getLastTimeCalled().put(
+                        new Tuple<>(null, MouseButton.PRIMARY),
+                        new Tuple<>(System.currentTimeMillis(), 20L)
+                );
+                return;
+            } else {
+                playerInteractiveComponent.getLastTimeCalled().put(new Tuple<>(null, MouseButton.PRIMARY), new Tuple<>(System.currentTimeMillis(), 2000L));
             }
 
             ComplexShape attackBox = new ComplexShape(new Rectangle(new Point(playerX - width / 2, playerY - height / 2), width, height).getPoints());
@@ -193,7 +198,9 @@ public class DungeonScene extends GameScene {
             }
         });
 
-        playerInteractiveComponent.mapInput(MouseButton.SECONDARY, 3000, () -> {
+
+        playerInteractiveComponent.mapInput(MouseButton.SECONDARY, 100, () -> {
+            boolean isInvalidDirection = false;
             double playerX = player.getComponent(CentralMassComponent.class).getCentralX();
             double playerY = player.getComponent(CentralMassComponent.class).getCentralY();
 
@@ -208,21 +215,47 @@ public class DungeonScene extends GameScene {
             Direction direction = directionComponent.getDirection();
 
             if (angleDeg >= 337.5 || angleDeg < 22.5) {
-                if (direction == Direction.LEFT || direction == Direction.UP || direction == Direction.DOWN) return;
+                if (direction == Direction.LEFT || direction == Direction.UP || direction == Direction.DOWN) {
+                    isInvalidDirection = true;
+                }
             } else if (angleDeg < 67.5) {
-                if (direction == Direction.LEFT || direction == Direction.DOWN) return;
+                if (direction == Direction.LEFT || direction == Direction.DOWN) {
+                    isInvalidDirection = true;
+                }
             } else if (angleDeg < 112.5) {
-                if (direction != Direction.UP && direction != Direction.ALL) return;
+                if (direction != Direction.UP && direction != Direction.ALL) {
+                    isInvalidDirection = true;
+                }
             } else if (angleDeg < 157.5) {
-                if (direction == Direction.RIGHT || direction == Direction.DOWN) return;
+                if (direction == Direction.RIGHT || direction == Direction.DOWN) {
+                    isInvalidDirection = true;
+                }
             } else if (angleDeg < 202.5) {
-                if (direction == Direction.RIGHT) return;
+                if (direction == Direction.RIGHT) {
+                    isInvalidDirection = true;
+                }
             } else if (angleDeg < 247.5) {
-                if (direction == Direction.RIGHT || direction == Direction.UP) return;
+                if (direction == Direction.RIGHT || direction == Direction.UP) {
+                    isInvalidDirection = true;
+                }
             } else if (angleDeg < 292.5) {
-                if (direction != Direction.DOWN && direction != Direction.ALL) return;
+                if (direction != Direction.DOWN && direction != Direction.ALL) {
+                    isInvalidDirection = true;
+                }
             } else {
-                if (direction == Direction.LEFT || direction == Direction.UP) return;
+                if (direction == Direction.LEFT || direction == Direction.UP) {
+                    isInvalidDirection = true;
+                }
+            }
+
+            if (isInvalidDirection) {
+                playerInteractiveComponent.getLastTimeCalled().put(
+                        new Tuple<>(null, MouseButton.SECONDARY),
+                        new Tuple<>(System.currentTimeMillis(), 20L)
+                );
+                return;
+            } else {
+                playerInteractiveComponent.getLastTimeCalled().put(new Tuple<>(null, MouseButton.SECONDARY), new Tuple<>(System.currentTimeMillis(), 100L));
             }
 
             double length = Math.sqrt(dx * dx + dy * dy);

@@ -29,6 +29,7 @@ public class ParticleSystem extends GameSystem {
     @Override
     protected void update() {
         var emitters = EntityHub.getInstance().getEntitiesWithType(ParticleEmitterEntity.class);
+        var emittersToRemove = new HashSet<ParticleEmitterEntity>();
 
         for (Entity entity : emitters) {
             ParentComponent parent = entity.getComponent(ParentComponent.class);
@@ -106,6 +107,14 @@ public class ParticleSystem extends GameSystem {
 
                 if (particleEntity.getComponent(MaxDistanceFromOriginComponent.class).isOverMaxDistance(particleEntity)) {
                     toBeRemoved.add(particleEntity);
+                } else if (particleEntity.getComponent(AccelerationComponent.class).getAcceleration().getDx() == 0 && particleEntity.getComponent(AccelerationComponent.class).getAcceleration().getDy() == 0) {
+                    toBeRemoved.add(particleEntity);
+                }
+
+                if (entity.getComponent(TimeComponent.class).getTimeBetweenOccurrences() == Integer.MAX_VALUE) {
+                    if (entity.getComponent(TimeComponent.class).getLastOccurrence() <= System.currentTimeMillis() - 1000) {
+                        emittersToRemove.add((ParticleEmitterEntity) entity);
+                    }
                 }
             }
 
@@ -114,6 +123,9 @@ public class ParticleSystem extends GameSystem {
                 particle.getComponent(ParentComponent.class).setParent(null);
                 EntityHub.getInstance().getEntityManager(ParticleEntity.class).unload(particle.getId());
             }
+        }
+        for (Entity entity : emitters) {
+            EntityHub.getInstance().getEntityManager(ParticleEntity.class).unload(entity.getId());
         }
     }
 }

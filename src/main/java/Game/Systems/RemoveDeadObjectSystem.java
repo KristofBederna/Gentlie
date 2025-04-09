@@ -1,7 +1,9 @@
 package Game.Systems;
 
 import Game.Components.HealthComponent;
+import Game.Entities.PolarBearEntity;
 import Game.Entities.SnowBallEntity;
+import Game.Misc.PlayerStats;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
@@ -31,6 +33,9 @@ public class RemoveDeadObjectSystem extends GameSystem {
         }
         for (var entity : dead) {
             EntityHub.getInstance().removeEntity(entity);
+            if (entity instanceof PolarBearEntity) {
+                PlayerStats.gold += 10;
+            }
         }
     }
 }
