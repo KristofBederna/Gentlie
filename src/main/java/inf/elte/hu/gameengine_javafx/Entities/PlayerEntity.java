@@ -1,5 +1,7 @@
 package inf.elte.hu.gameengine_javafx.Entities;
 
+import Game.Components.HealthComponent;
+import Game.Misc.PlayerStats;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
@@ -25,6 +27,7 @@ import java.util.Objects;
 
 public class PlayerEntity extends Entity {
     public PlayerEntity(double x, double y, String state, String path, double width, double height) {
+        this.addComponent(new HealthComponent(PlayerStats.health));
         this.getComponent(PositionComponent.class).setLocalPosition(x, y, this);
         this.addComponent(new VelocityComponent(2));
         this.addComponent(new AccelerationComponent());

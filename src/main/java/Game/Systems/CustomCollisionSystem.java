@@ -1,6 +1,7 @@
 package Game.Systems;
 
 import Game.Components.HealthComponent;
+import Game.Entities.BigSnowBallEntity;
 import Game.Entities.Labels.DamageLabel;
 import Game.Entities.PolarBearEntity;
 import Game.Entities.SnowBallEntity;
@@ -54,6 +55,7 @@ public class CustomCollisionSystem extends GameSystem {
         ignore.getCollisionRules().computeIfAbsent(PolarBearEntity.class, k -> new ArrayList<>()).add(PolarBearEntity.class);
         ignore.getCollisionRules().computeIfAbsent(PolarBearEntity.class, k -> new ArrayList<>()).add(PlayerEntity.class);
         ignore.getCollisionRules().computeIfAbsent(PolarBearEntity.class, k -> new ArrayList<>()).add(TileEntity.class);
+        ignore.getCollisionRules().computeIfAbsent(PolarBearEntity.class, k -> new ArrayList<>()).add(BigSnowBallEntity.class);
 
         ignore.getCollisionRules().computeIfAbsent(SnowBallEntity.class, k -> new ArrayList<>()).add(SnowBallEntity.class);
 
@@ -202,15 +204,37 @@ public class CustomCollisionSystem extends GameSystem {
             Entity polarBear = (entity instanceof PolarBearEntity) ? entity : otherEntity;
             Entity snowball = (entity instanceof SnowBallEntity) ? entity : otherEntity;
 
-            snowball.getComponent(HealthComponent.class).setHealth(0, CauseOfDeath.DECAY);
+            if (snowball.getComponent(HealthComponent.class).getHealth() > 0) {
+                snowball.getComponent(HealthComponent.class).setHealth(0, CauseOfDeath.DECAY);
 
-            double effectiveDamage = PlayerStats.rangedDamage * (1 - EnemyStats.rangedResistance);
-            effectiveDamage = Math.max(effectiveDamage, 0);
+                double effectiveDamage = PlayerStats.rangedDamage * (1 - EnemyStats.rangedResistance);
+                effectiveDamage = Math.max(effectiveDamage, 0);
 
-            polarBear.getComponent(HealthComponent.class).decreaseHealth(effectiveDamage, CauseOfDeath.RANGED);
+                polarBear.getComponent(HealthComponent.class).decreaseHealth(effectiveDamage, CauseOfDeath.RANGED);
 
-            CentralMassComponent pos = polarBear.getComponent(CentralMassComponent.class);
-            new DamageLabel(String.format("%.1f", effectiveDamage), pos.getCentralX(), pos.getCentralY(), 100, 0);
+                CentralMassComponent pos = polarBear.getComponent(CentralMassComponent.class);
+                new DamageLabel(String.format("%.1f", effectiveDamage), pos.getCentralX(), pos.getCentralY(), 100, 0);
+            }
+        }
+
+        if ((entity instanceof BigSnowBallEntity && otherEntity instanceof PlayerEntity) ||
+                (otherEntity instanceof BigSnowBallEntity && entity instanceof PlayerEntity)) {
+
+            Entity player = (entity instanceof PlayerEntity) ? entity : otherEntity;
+            Entity snowball = (entity instanceof BigSnowBallEntity) ? entity : otherEntity;
+
+            if (snowball.getComponent(HealthComponent.class).getHealth() > 0) {
+                snowball.getComponent(HealthComponent.class).setHealth(0, CauseOfDeath.DECAY);
+
+                double effectiveDamage = EnemyStats.rangedDamage * (1 - PlayerStats.rangedResistance);
+                effectiveDamage = Math.max(effectiveDamage, 0);
+
+                player.getComponent(HealthComponent.class).decreaseHealth(effectiveDamage, CauseOfDeath.RANGED);
+                PlayerStats.health -= effectiveDamage;
+
+                CentralMassComponent pos = player.getComponent(CentralMassComponent.class);
+                new DamageLabel(String.format("%.1f", effectiveDamage), pos.getCentralX(), pos.getCentralY(), 100, 0);
+            }
         }
 
         if (entity instanceof SnowBallEntity) {
@@ -222,6 +246,17 @@ public class CustomCollisionSystem extends GameSystem {
                             new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
                             Color.SNOW, Color.GREY, 50),
                     Direction.ALL, 3
+            );
+        }
+        if (entity instanceof BigSnowBallEntity) {
+            entity.getComponent(VelocityComponent.class).stopMovement();
+            CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
+            new ParticleEmitterEntity(
+                    pos.getCentralX(), pos.getCentralY(),
+                    new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 15, 15,
+                            new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
+                            Color.SNOW, Color.GREY, 75),
+                    Direction.ALL, 5
             );
         }
     }

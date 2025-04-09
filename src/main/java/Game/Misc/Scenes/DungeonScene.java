@@ -95,20 +95,21 @@ public class DungeonScene extends GameScene {
         systemHub.addSystem(EventTileSystem.class, new EventTileSystem(), 1);
         systemHub.addSystem(AnimationSystem.class, new AnimationSystem(), 2);
         systemHub.addSystem(PolarBearMoverSystem.class, new PolarBearMoverSystem(), 3);
-        systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(), 4);
-        systemHub.addSystem(MovementSystem.class, new MovementSystem(), 5);
-        systemHub.addSystem(ParticleSystem.class, new ParticleSystem(), 6);
-        systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(), 7);
-        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(), 8);
-        systemHub.addSystem(CustomCameraSystem.class, new CustomCameraSystem(), 9);
-        systemHub.addSystem(CustomCollisionSystem.class, new CustomCollisionSystem(), 10);
-        systemHub.addSystem(SoundSystem.class, new SoundSystem(), 11);
-        systemHub.addSystem(DungeonGeneratorSystem.class, new DungeonGeneratorSystem(2, 2), 12);
-        systemHub.addSystem(PolarBearSpawnerSystem.class, new PolarBearSpawnerSystem(), 13);
-        systemHub.addSystem(AttackSystem.class, new AttackSystem(), 14);
-        systemHub.addSystem(RemoveDeadObjectSystem.class, new RemoveDeadObjectSystem(), 15);
-        systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 16);
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(), 17);
+        systemHub.addSystem(PolarBearAttackSystem.class, new PolarBearAttackSystem(), 4);
+        systemHub.addSystem(PathfindingSystem.class, new PathfindingSystem(), 5);
+        systemHub.addSystem(MovementSystem.class, new MovementSystem(), 6);
+        systemHub.addSystem(ParticleSystem.class, new ParticleSystem(), 7);
+        systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(), 8);
+        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(), 9);
+        systemHub.addSystem(CustomCameraSystem.class, new CustomCameraSystem(), 10);
+        systemHub.addSystem(CustomCollisionSystem.class, new CustomCollisionSystem(), 11);
+        systemHub.addSystem(SoundSystem.class, new SoundSystem(), 12);
+        systemHub.addSystem(DungeonGeneratorSystem.class, new DungeonGeneratorSystem(2, 2), 13);
+        systemHub.addSystem(PolarBearSpawnerSystem.class, new PolarBearSpawnerSystem(), 14);
+        systemHub.addSystem(AttackSystem.class, new AttackSystem(), 15);
+        systemHub.addSystem(RemoveDeadObjectSystem.class, new RemoveDeadObjectSystem(), 16);
+        systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 17);
+        systemHub.addSystem(RenderSystem.class, new RenderSystem(), 18);
     }
 
     private void interactionSetup() {

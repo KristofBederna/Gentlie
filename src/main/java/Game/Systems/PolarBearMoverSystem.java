@@ -1,5 +1,7 @@
 package Game.Systems;
 
+import Game.Components.AttackBoxComponent;
+import Game.Components.AttackTimeOutComponent;
 import Game.Entities.PolarBearEntity;
 import inf.elte.hu.gameengine_javafx.Components.PathfindingComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
@@ -34,7 +36,7 @@ public class PolarBearMoverSystem extends GameSystem {
 
             Point end = mapMesh.get(random.nextInt(1, 31)).get(random.nextInt(1, 31));
 
-            if (playerCentral.getCentral().distanceTo(entityCentral.getCentral()) < 600) {
+            if (playerCentral.getCentral().distanceTo(entityCentral.getCentral()) < 800) {
                 end = mapMesh.get(Math.floorDiv((int) playerCentral.getCentralY(), (int) Config.scaledTileSize)).get(Math.floorDiv((int) playerCentral.getCentralX(), (int) Config.scaledTileSize));
                 if (end == null) {
                     continue;
@@ -42,9 +44,11 @@ public class PolarBearMoverSystem extends GameSystem {
                 if (!end.compareCoordinates(pathfinding.getEnd())) {
                     pathfinding.resetPathing(entity);
                 }
-                entity.getComponent(VelocityComponent.class).setMaxVelocity(2);
+                entity.getComponent(VelocityComponent.class).setMaxVelocity(1.8);
             } else {
                 entity.getComponent(VelocityComponent.class).setMaxVelocity(0.5);
+                entity.removeComponentsByType(AttackTimeOutComponent.class);
+                entity.removeComponentsByType(AttackBoxComponent.class);
             }
 
             pathfinding.setEnd(end);

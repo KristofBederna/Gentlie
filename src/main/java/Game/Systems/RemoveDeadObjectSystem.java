@@ -1,6 +1,7 @@
 package Game.Systems;
 
 import Game.Components.HealthComponent;
+import Game.Entities.BigSnowBallEntity;
 import Game.Entities.Labels.GoldGainedLabel;
 import Game.Entities.PolarBearEntity;
 import Game.Entities.SnowBallEntity;
@@ -27,7 +28,7 @@ public class RemoveDeadObjectSystem extends GameSystem {
             if (!entity.getComponent(HealthComponent.class).isAlive()) {
                 dead.add(entity);
             }
-            if (entity instanceof SnowBallEntity) {
+            if (entity instanceof SnowBallEntity || entity instanceof BigSnowBallEntity) {
                 if (Math.abs(entity.getComponent(VelocityComponent.class).getVelocity().getDx()) < 0.5 && Math.abs(entity.getComponent(VelocityComponent.class).getVelocity().getDy()) < 0.5) {
                     dead.add(entity);
                 }

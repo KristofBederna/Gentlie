@@ -58,13 +58,13 @@ public class UserInterfaceSystem extends GameSystem {
         var goldLabel = EntityHub.getInstance().getEntitiesWithType(GoldLabel.class).getFirst();
         var healthLabel = EntityHub.getInstance().getEntitiesWithType(HealthLabel.class).getFirst();
         if (goldLabel != null && healthLabel != null) {
-            if (PlayerStats.gold > lastGold) {
+            if (PlayerStats.gold != lastGold) {
                 Platform.runLater(() -> {
                     goldLabel.getComponent(LabelComponent.class).getUIElement().setText(String.valueOf(PlayerStats.gold));
                     lastGold = PlayerStats.gold;
                 });
             }
-            if (PlayerStats.health > lastHealth) {
+            if (PlayerStats.health != lastHealth) {
                 Platform.runLater(() -> {
                     healthLabel.getComponent(LabelComponent.class).getUIElement().setText(String.valueOf(PlayerStats.health));
                     lastHealth = PlayerStats.health;

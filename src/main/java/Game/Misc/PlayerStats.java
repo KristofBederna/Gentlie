@@ -5,6 +5,9 @@ public class PlayerStats {
     public static double meleeDamage = 53;
     public static double rangedDamage = 34;
 
+    public static double meleeResistance = 0;
+    public static double rangedResistance = 0;
+
     public static int gold = 1000;
 
     public static int meleeKills = 0;
