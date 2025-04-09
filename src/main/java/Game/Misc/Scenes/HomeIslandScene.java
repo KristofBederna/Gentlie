@@ -117,7 +117,7 @@ public class HomeIslandScene extends GameScene {
         enterEnemyIslandLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
 
-        new EventTriggerEntity(7* Config.scaledTileSize -Config.scaledTileSize *0.25-1, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75, new EnterHomeEvent(), new EnterHomeEventListener());
+        new EventTriggerEntity(7 * Config.scaledTileSize - Config.scaledTileSize * 0.25 - 1, 2 * Config.scaledTileSize + Config.scaledTileSize * 0.25 - 1, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75, new EnterHomeEvent(new Point(6 * Config.scaledTileSize + Config.scaledTileSize * 0.33, 8 * Config.scaledTileSize)), new EnterHomeEventListener());
         new EventTriggerEntity(2* Config.scaledTileSize +Config.scaledTileSize *0.25-1, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75, new EnterInnEvent(), new EnterInnListener());
         new EventTriggerEntity(14*Config.scaledTileSize, 2.5*Config.scaledTileSize, 2*Config.scaledTileSize, Config.scaledTileSize /2, new EnterEnemyIslandEvent(new Point(3*Config.scaledTileSize, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1)), new EnterEnemyIslandEventListener());
     }

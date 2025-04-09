@@ -17,7 +17,7 @@ public class EnterHomeEventListener implements EventListener<EnterHomeEvent> {
     public void onEvent(EnterHomeEvent event) {
         ((EnterHomeLabel)EntityHub.getInstance().getEntitiesWithType(EnterHomeLabel.class).getFirst()).addToUI();
         if (KeyboardInputHandler.getInstance().isKeyPressed(KeyCode.E))
-            SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), 1920, 1080));
+            SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), 1920, 1080, event.getSpawn()));
     }
 
     @Override

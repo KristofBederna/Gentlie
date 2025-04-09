@@ -1,8 +1,16 @@
 package Game.Misc.EventHandling.Events;
 
+import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Event;
 
 public class EnterHomeEvent implements Event {
-    public EnterHomeEvent() {
+    Point spawn;
+
+    public EnterHomeEvent(Point spawn) {
+        this.spawn = spawn;
+    }
+
+    public Point getSpawn() {
+        return spawn;
     }
 }
