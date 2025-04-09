@@ -1,6 +1,7 @@
 package Game.Systems;
 
 import Game.Components.HealthComponent;
+import Game.Entities.Labels.DamageLabel;
 import Game.Entities.PolarBearEntity;
 import Game.Entities.SnowBallEntity;
 import Game.Misc.IgnoreCollisions;
@@ -52,6 +53,7 @@ public class CustomCollisionSystem extends GameSystem {
         ignore.getCollisionRules().computeIfAbsent(PolarBearEntity.class, k -> new ArrayList<>()).add(PlayerEntity.class);
         ignore.getCollisionRules().computeIfAbsent(PolarBearEntity.class, k -> new ArrayList<>()).add(TileEntity.class);
 
+        ignore.getCollisionRules().computeIfAbsent(SnowBallEntity.class, k -> new ArrayList<>()).add(SnowBallEntity.class);
 
         ignore.getCollisionRules().computeIfAbsent(TileEntity.class, k -> new ArrayList<>()).add(PolarBearEntity.class);
     }
@@ -184,26 +186,29 @@ public class CustomCollisionSystem extends GameSystem {
                     if (entity.getComponent(AccelerationComponent.class) != null) {
                         entity.getComponent(AccelerationComponent.class).getAcceleration().setDx(0);
                     }
-                    if (entity instanceof SnowBallEntity && otherEntity instanceof PolarBearEntity) {
-                        entity.getComponent(HealthComponent.class).setHealth(0);
-                        otherEntity.getComponent(HealthComponent.class).decreaseHealth(PlayerStats.rangedDamage);
-
-                        System.out.println("Damaged for: " + PlayerStats.rangedDamage + " damage, remaining health: " + otherEntity.getComponent(HealthComponent.class).getHealth());
-                    }
-                    if (otherEntity instanceof SnowBallEntity && entity instanceof PolarBearEntity) {
-                        entity.getComponent(HealthComponent.class).decreaseHealth(PlayerStats.rangedDamage);
-                        otherEntity.getComponent(HealthComponent.class).setHealth(0);
-
-
-                        System.out.println("Damaged for: " + PlayerStats.rangedDamage + " damage, remaining health: " + entity.getComponent(HealthComponent.class).getHealth());
-                    }
-                    if (entity instanceof SnowBallEntity) {
-                        entity.getComponent(VelocityComponent.class).stopMovement();
-                        CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
-                        new ParticleEmitterEntity(pos.getCentralX(), pos.getCentralY(), new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 10, 10, new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32), Color.SNOW, Color.GREY, 50), Direction.ALL, 3);
-                    }
+                    handleRangedCombat(entity, otherEntity);
+                    break;
                 }
             }
+        }
+    }
+
+    private static void handleRangedCombat(Entity entity, Entity otherEntity) {
+        if (entity instanceof SnowBallEntity && otherEntity instanceof PolarBearEntity) {
+            entity.getComponent(HealthComponent.class).setHealth(0);
+            otherEntity.getComponent(HealthComponent.class).decreaseHealth(PlayerStats.rangedDamage);
+            new DamageLabel(String.valueOf(PlayerStats.rangedDamage), otherEntity.getComponent(CentralMassComponent.class).getCentralX(), otherEntity.getComponent(CentralMassComponent.class).getCentralY(), 100, 0);
+        }
+        if (otherEntity instanceof SnowBallEntity && entity instanceof PolarBearEntity) {
+            entity.getComponent(HealthComponent.class).decreaseHealth(PlayerStats.rangedDamage);
+            otherEntity.getComponent(HealthComponent.class).setHealth(0);
+
+            new DamageLabel(String.valueOf(PlayerStats.rangedDamage), entity.getComponent(CentralMassComponent.class).getCentralX(), entity.getComponent(CentralMassComponent.class).getCentralY(), 100, 0);
+        }
+        if (entity instanceof SnowBallEntity) {
+            entity.getComponent(VelocityComponent.class).stopMovement();
+            CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
+            new ParticleEmitterEntity(pos.getCentralX(), pos.getCentralY(), new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 10, 10, new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32), Color.SNOW, Color.GREY, 50), Direction.ALL, 3);
         }
     }
 
@@ -230,23 +235,7 @@ public class CustomCollisionSystem extends GameSystem {
                     if (entity.getComponent(AccelerationComponent.class) != null) {
                         entity.getComponent(AccelerationComponent.class).getAcceleration().setDy(0);
                     }
-                    if (entity instanceof SnowBallEntity && otherEntity instanceof PolarBearEntity) {
-                        entity.getComponent(HealthComponent.class).setHealth(0);
-                        otherEntity.getComponent(HealthComponent.class).decreaseHealth(PlayerStats.rangedDamage);
-
-                        System.out.println("Damaged for: " + PlayerStats.rangedDamage + " damage, remaining health: " + otherEntity.getComponent(HealthComponent.class).getHealth());
-                    }
-                    if (otherEntity instanceof SnowBallEntity && entity instanceof PolarBearEntity) {
-                        entity.getComponent(HealthComponent.class).decreaseHealth(PlayerStats.rangedDamage);
-                        otherEntity.getComponent(HealthComponent.class).setHealth(0);
-
-                        System.out.println("Damaged for: " + PlayerStats.rangedDamage + " damage, remaining health: " + entity.getComponent(HealthComponent.class).getHealth());
-                    }
-                    if (entity instanceof SnowBallEntity) {
-                        entity.getComponent(VelocityComponent.class).stopMovement();
-                        CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
-                        new ParticleEmitterEntity(pos.getCentralX(), pos.getCentralY(), new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 10, 10, new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32), Color.SNOW, Color.BLACK, 50), Direction.ALL, 3);
-                    }
+                    handleRangedCombat(entity, otherEntity);
                     break;
                 }
             }

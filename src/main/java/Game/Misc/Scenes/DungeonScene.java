@@ -95,15 +95,16 @@ public class DungeonScene extends GameScene {
         systemHub.addSystem(MovementSystem.class, new MovementSystem(), 5);
         systemHub.addSystem(ParticleSystem.class, new ParticleSystem(), 6);
         systemHub.addSystem(InputHandlingSystem.class, new InputHandlingSystem(), 7);
-        systemHub.addSystem(CustomCollisionSystem.class, new CustomCollisionSystem(), 8);
-        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(), 9);
-        systemHub.addSystem(CameraSystem.class, new CameraSystem(), 10);
+        systemHub.addSystem(ResourceSystem.class, new ResourceSystem(), 8);
+        systemHub.addSystem(CameraSystem.class, new CameraSystem(), 9);
+        systemHub.addSystem(CustomCollisionSystem.class, new CustomCollisionSystem(), 10);
         systemHub.addSystem(SoundSystem.class, new SoundSystem(), 11);
         systemHub.addSystem(DungeonGeneratorSystem.class, new DungeonGeneratorSystem(2, 2), 12);
         systemHub.addSystem(PolarBearSpawnerSystem.class, new PolarBearSpawnerSystem(), 13);
         systemHub.addSystem(AttackSystem.class, new AttackSystem(), 14);
         systemHub.addSystem(RemoveDeadObjectSystem.class, new RemoveDeadObjectSystem(), 15);
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(), 16);
+        systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 16);
+        systemHub.addSystem(RenderSystem.class, new RenderSystem(), 17);
     }
 
     private void interactionSetup() {
@@ -199,7 +200,7 @@ public class DungeonScene extends GameScene {
         });
 
 
-        playerInteractiveComponent.mapInput(MouseButton.SECONDARY, 100, () -> {
+        playerInteractiveComponent.mapInput(MouseButton.SECONDARY, 3000, () -> {
             boolean isInvalidDirection = false;
             double playerX = player.getComponent(CentralMassComponent.class).getCentralX();
             double playerY = player.getComponent(CentralMassComponent.class).getCentralY();
@@ -255,7 +256,7 @@ public class DungeonScene extends GameScene {
                 );
                 return;
             } else {
-                playerInteractiveComponent.getLastTimeCalled().put(new Tuple<>(null, MouseButton.SECONDARY), new Tuple<>(System.currentTimeMillis(), 100L));
+                playerInteractiveComponent.getLastTimeCalled().put(new Tuple<>(null, MouseButton.SECONDARY), new Tuple<>(System.currentTimeMillis(), 3000L));
             }
 
             double length = Math.sqrt(dx * dx + dy * dy);

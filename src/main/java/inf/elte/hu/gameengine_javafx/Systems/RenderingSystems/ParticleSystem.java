@@ -124,7 +124,7 @@ public class ParticleSystem extends GameSystem {
                 EntityHub.getInstance().getEntityManager(ParticleEntity.class).unload(particle.getId());
             }
         }
-        for (Entity entity : emitters) {
+        for (Entity entity : emittersToRemove) {
             EntityHub.getInstance().getEntityManager(ParticleEntity.class).unload(entity.getId());
         }
     }

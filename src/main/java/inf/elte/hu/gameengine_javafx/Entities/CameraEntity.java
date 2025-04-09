@@ -5,6 +5,8 @@ import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDimensionComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
+import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
+import javafx.application.Platform;
 
 public class CameraEntity extends Entity {
     private static CameraEntity instance;
@@ -51,7 +53,15 @@ public class CameraEntity extends Entity {
     }
 
     public void setClampedPosition(double x, double y) {
-        this.getComponent(PositionComponent.class).setLocalPosition((Math.max(0, Math.min(x, this.getComponent(WorldDimensionComponent.class).getWorldWidth() - this.getComponent(DimensionComponent.class).getWidth()))), (Math.max(0, Math.min(y, this.getComponent(WorldDimensionComponent.class).getWorldHeight() - this.getComponent(DimensionComponent.class).getHeight()))), this);
+        double clampedX = Math.max(0, Math.min(x, this.getComponent(WorldDimensionComponent.class).getWorldWidth() - this.getComponent(DimensionComponent.class).getWidth()));
+        double clampedY = Math.max(0, Math.min(y, this.getComponent(WorldDimensionComponent.class).getWorldHeight() - this.getComponent(DimensionComponent.class).getHeight()));
+        this.getComponent(PositionComponent.class).setLocalPosition(clampedX, clampedY, this);
+        Platform.runLater(() -> {
+            uiRoot.getInstance().setLayoutX(clampedX);
+            uiRoot.getInstance().setLayoutY(clampedY);
+            uiRoot.getInstance().requestLayout();
+        });
+
     }
 
     public void setWidth(double width) {
