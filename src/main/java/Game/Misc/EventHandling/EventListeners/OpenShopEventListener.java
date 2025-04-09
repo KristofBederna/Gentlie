@@ -3,6 +3,7 @@ package Game.Misc.EventHandling.EventListeners;
 import Game.Components.ShopItemInfoComponent;
 import Game.Entities.ShopItemEntity;
 import Game.Misc.EventHandling.Events.OpenShopEvent;
+import Game.Misc.PlayerStats;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
@@ -96,6 +97,11 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
         buyButton.setOnMouseClicked(event -> {
             onBuy.run();
         });
+        buyButton.setDisable(PlayerStats.gold < price);
+
+        buyButton.setOnMouseEntered(event -> buyButton.setStyle("-fx-background-color: #388e3c; -fx-text-fill: white; -fx-cursor: hand;"));
+        buyButton.setOnMouseExited(event -> buyButton.setStyle("-fx-background-color: #459b48; -fx-text-fill: white;"));
+
 
         box.getChildren().addAll(nameLabel, priceLabel, descriptionLabel, buyButton);
         return box;

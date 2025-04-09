@@ -60,28 +60,24 @@ public class UserInterfaceSystem extends GameSystem {
         if (goldLabel != null && healthLabel != null) {
             if (PlayerStats.gold > lastGold) {
                 Platform.runLater(() -> {
-                    // Update the gold label without removing it
                     goldLabel.getComponent(LabelComponent.class).getUIElement().setText(String.valueOf(PlayerStats.gold));
                     lastGold = PlayerStats.gold;
                 });
             }
             if (PlayerStats.health > lastHealth) {
                 Platform.runLater(() -> {
-                    // Update the health label without removing it
                     healthLabel.getComponent(LabelComponent.class).getUIElement().setText(String.valueOf(PlayerStats.health));
                     lastHealth = PlayerStats.health;
                 });
             }
         }
 
-        // If goldLabel is missing, create a new one
         if (goldLabel == null) {
             Platform.runLater(() -> {
                 new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
             });
         }
 
-        // If healthLabel is missing, create a new one
         if (healthLabel == null) {
             Platform.runLater(() -> {
                 new HealthLabel(String.valueOf(PlayerStats.health), 100, 200, 100, 100);
