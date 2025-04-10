@@ -4,7 +4,6 @@ import Game.Misc.UtilityFunctions;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
-import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusic;
 import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusicStore;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
@@ -50,7 +49,7 @@ public class MainScene extends GameScene {
     private void declareEntities() {
         LabelEntity label = new LabelEntity("Gentile", Config.resolution.first()/2 - 20*Config.relativeWidthRatio, Config.resolution.second()/2 - 250*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0);
 
-        ButtonEntity start = new ButtonEntity("Start Game", Config.resolution.first() / 2 - 50 * Config.relativeWidthRatio, Config.resolution.second() / 2 - 150 * Config.relativeHeightRatio, 200 * Config.relativeWidthRatio, 80 * Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), Config.resolution.first(), Config.resolution.second(), new Point(10 * 100 + 100 / 2, 3 * 100))));
+        ButtonEntity start = new ButtonEntity("Start Game", Config.resolution.first() / 2 - 50 * Config.relativeWidthRatio, Config.resolution.second() / 2 - 150 * Config.relativeHeightRatio, 200 * Config.relativeWidthRatio, 80 * Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new SaveCreatorScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
         ButtonEntity continueGame = new ButtonEntity("Continue Game", Config.resolution.first() / 2 - 50 * Config.relativeWidthRatio, Config.resolution.second() / 2 - 50 * Config.relativeHeightRatio, 200 * Config.relativeWidthRatio, 80 * Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new LoadSelectorScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
         ButtonEntity settings = new ButtonEntity("Settings", Config.resolution.first() / 2 - 50 * Config.relativeWidthRatio, Config.resolution.second() / 2 + 50 * Config.relativeHeightRatio, 200 * Config.relativeWidthRatio, 80 * Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new SettingsScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
         ButtonEntity exit = new ButtonEntity("Exit", Config.resolution.first() / 2 - 50 * Config.relativeWidthRatio, Config.resolution.second() / 2 + 150 * Config.relativeHeightRatio, 200 * Config.relativeWidthRatio, 80 * Config.relativeHeightRatio, () -> System.exit(0));

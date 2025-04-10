@@ -3,6 +3,8 @@ package Game.Misc.Scenes;
 import Game.Misc.UtilityFunctions;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
+import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
+import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
@@ -17,9 +19,9 @@ import javafx.scene.layout.BorderPane;
 import java.io.File;
 import java.util.Objects;
 
-public class LoadSelectorScene extends GameScene {
+public class SaveCreatorScene extends GameScene {
 
-    public LoadSelectorScene(Parent parent, double width, double height) {
+    public SaveCreatorScene(Parent parent, double width, double height) {
         super(parent, width, height);
     }
 
@@ -109,6 +111,30 @@ public class LoadSelectorScene extends GameScene {
     }
 
     private void startLoad(File saveFolder) {
+        LabelEntity label = new LabelEntity("Are you sure you want to overwrite the save file at " + saveFolder.getName() + "?",
+                Config.resolution.first() / 2 - 350 * Config.relativeWidthRatio,
+                Config.resolution.second() / 2 + 175 * Config.relativeHeightRatio,
+                200 * Config.relativeWidthRatio,
+                80 * Config.relativeHeightRatio);
+        ButtonEntity yes = new ButtonEntity("Yes",
+                Config.resolution.first() / 2 - 175 * Config.relativeWidthRatio,
+                Config.resolution.second() / 2 + 265 * Config.relativeHeightRatio,
+                200 * Config.relativeWidthRatio,
+                80 * Config.relativeHeightRatio,
+                () -> {
+                    SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), Config.resolution.first(), Config.resolution.second(), new Point(10 * 100 + 100 / 2, 3 * 100)));
+                });
+        ButtonEntity no = new ButtonEntity("No",
+                Config.resolution.first() / 2 + 75 * Config.relativeWidthRatio,
+                Config.resolution.second() / 2 + 265 * Config.relativeHeightRatio,
+                200 * Config.relativeWidthRatio,
+                80 * Config.relativeHeightRatio,
+                () -> {
+                    SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new SaveCreatorScene(new BorderPane(), Config.resolution.first(), Config.resolution.second()));
+                });
+        label.addStyleClass("main-menu-label");
+        yes.addStyleClass("main-menu-button");
+        no.addStyleClass("main-menu-button");
         // SaveManager.loadSaveFromFolder(saveFolder);
     }
 
