@@ -1,6 +1,7 @@
 package Game.Misc.Scenes;
 
 import Game.Components.AttackBoxComponent;
+import Game.Components.HealthComponent;
 import Game.Entities.EventTriggerEntity;
 import Game.Entities.Labels.EnterEnemyIslandLabel;
 import Game.Entities.Labels.GoldLabel;
@@ -79,7 +80,8 @@ public class DungeonScene extends GameScene {
     }
 
     private void declareEntities() {
-        new PlayerEntity(Config.scaledTileSize + Config.scaledTileSize / 2, Config.scaledTileSize + Config.scaledTileSize / 2, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 0.8 * 0.55, Config.scaledTileSize * 0.8);
+        PlayerEntity player = new PlayerEntity(Config.scaledTileSize + Config.scaledTileSize / 2, Config.scaledTileSize + Config.scaledTileSize / 2, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 0.8 * 0.55, Config.scaledTileSize * 0.8);
+        player.addComponent(new HealthComponent(PlayerStats.health));
         new EventTriggerEntity(0, Config.scaledTileSize, Config.scaledTileSize, Config.scaledTileSize * 3, new EnterEnemyIslandEvent(new Point(4 * 150, 2 * 150 + 150 * 0.25 - 1)), new EnterEnemyIslandEventListener());
         new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
         new HealthLabel(String.valueOf(PlayerStats.health), 100, 200, 100, 100);
