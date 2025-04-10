@@ -125,11 +125,11 @@ public class PolarBearAttackSystem extends GameSystem {
                         }
 
                         if (Shape.intersect(bear.getComponent(AttackBoxComponent.class).getAttackBox(), player.getComponent(HitBoxComponent.class).getHitBox())) {
-                            player.getComponent(HealthComponent.class).decreaseHealth(EnemyStats.meleeDamage * (1 - EnemyStats.meleeResistance), CauseOfDeath.MELEE);
+                            player.getComponent(HealthComponent.class).decreaseHealth(EnemyStats.meleeDamage * (1 - PlayerStats.meleeResistance), CauseOfDeath.MELEE);
                             PlayerStats.health = player.getComponent(HealthComponent.class).getHealth();
 
                             CentralMassComponent pos = player.getComponent(CentralMassComponent.class);
-                            new DamageLabel(String.format("%.1f", EnemyStats.meleeDamage * (1 - EnemyStats.meleeResistance)), pos.getCentralX(), pos.getCentralY(), 100, 0);
+                            new DamageLabel(String.format("%.1f", EnemyStats.meleeDamage * (1 - PlayerStats.meleeResistance)), pos.getCentralX(), pos.getCentralY(), 100, 0);
 
                             bear.removeComponentsByType(AttackBoxComponent.class);
                             bear.addComponent(new AttackTimeOutComponent(4000));
