@@ -7,12 +7,9 @@ import Game.Entities.WaterEntity;
 import Game.Misc.Enums.Daytime;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
-import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.LightHitBoxComponent;
-import inf.elte.hu.gameengine_javafx.Components.LightComponent;
 import inf.elte.hu.gameengine_javafx.Components.PathfindingComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
-import inf.elte.hu.gameengine_javafx.Components.RadiusComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ImageComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ZIndexComponent;
 import inf.elte.hu.gameengine_javafx.Components.ShapeComponent;
@@ -24,7 +21,9 @@ import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.ResourceManager;
 import inf.elte.hu.gameengine_javafx.Entities.*;
-import inf.elte.hu.gameengine_javafx.Maths.Geometry.*;
+import inf.elte.hu.gameengine_javafx.Maths.Geometry.Line;
+import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
+import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
 import javafx.application.Platform;
@@ -32,7 +31,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -100,7 +98,6 @@ public class RenderSystem extends GameSystem {
             if (!EntityHub.getInstance().getEntitiesWithType(WaterEntity.class).isEmpty()) {
                 EntityHub.getInstance().getEntitiesWithType(WaterEntity.class).getFirst().getComponent(ShapeComponent.class).getShape().renderFill(gc, new Color(0.29, 0.56, 0.89, 0.8));
             }
-            //handleLighting(gc);
 
             setFocused();
         });
@@ -297,73 +294,5 @@ public class RenderSystem extends GameSystem {
                 }
             }
         }
-    }
-
-    /**
-     * Handles the rendering of the lighting system, including the rendering of rays and light effects.
-     *
-     * @param gc The graphics context used to render the lighting.
-     */
-    private void handleLighting(GraphicsContext gc) {
-        List<Point> points = new ArrayList<>();
-        points.add(new Point(0, 0));
-        points.add(new Point(0, 1500));
-        points.add(new Point(3000, 1500));
-        points.add(new Point(3000, 0));
-        ComplexShape darkness = new ComplexShape(points);
-        for (Entity entity : EntityHub.getInstance().getEntitiesWithComponent(LightComponent.class)) {
-            if (entity.getId() == EntityHub.getInstance().getEntitiesWithComponent(LightComponent.class).getFirst().getId()) {
-                ((LightingEntity) entity).matchPositionToEntity(EntityHub.getInstance().getEntitiesWithType(PlayerEntity.class).getFirst());
-            }
-
-            ((LightingEntity) entity).calculateCollisions();
-            //((LightingEntity)entity).renderRays(gc);
-
-            ComplexShape complexShape = ((LightingEntity) entity).createShapeFromRays();
-            double firstPos = complexShape.getPoints().getFirst().getX();
-            darkness.getPoints().add(new Point(firstPos, 0));
-            darkness.updateEdges();
-            darkness.addShape(complexShape);
-            darkness.getPoints().add(new Point(firstPos, complexShape.getPoints().getFirst().getY()));
-            darkness.updateEdges();
-            darkness.getPoints().add(new Point(firstPos, 0));
-            darkness.updateEdges();
-            complexShape.renderFill(gc, new Color(1, 1, 1, 0.2));
-        }
-        for (Edge edge : darkness.getEdges()) {
-            new Line(edge.getBeginning(), edge.getEnd()).render(gc, Color.YELLOW, 3);
-        }
-        for (Entity entity : EntityHub.getInstance().getEntitiesWithType(LightingEntity.class)) {
-            new Point(entity.getComponent(PositionComponent.class).getGlobalX(), entity.getComponent(PositionComponent.class).getGlobalY()).render(gc, 3, Color.CYAN);
-        }
-        List<Point> toRemove = new ArrayList<>();
-        for (Point point : darkness.getPoints()) {
-            boolean isLit = false;
-
-            for (Entity entity : EntityHub.getInstance().getEntitiesWithType(LightingEntity.class)) {
-                double entityX = entity.getComponent(PositionComponent.class).getGlobalX();
-                double entityY = entity.getComponent(PositionComponent.class).getGlobalY();
-                double radius = entity.getComponent(RadiusComponent.class).getRadius();
-                LightHitBoxComponent hitBox = entity.getComponent(LightHitBoxComponent.class);
-
-                if (point.distanceTo(new Point(entityX, entityY)) <= radius - 1) {
-                    if (!hitBox.getHitBox().getPoints().contains(point)) {
-                        isLit = true;
-                        toRemove.add(point);
-                        break;
-                    }
-                }
-            }
-
-            if (!isLit) {
-                point.renderFill(gc, 3, Color.ORANGE);
-            }
-        }
-
-        for (Point point : toRemove) {
-            darkness.getPoints().remove(point);
-        }
-        darkness.updateEdges();
-        darkness.renderFill(gc, new Color(0, 0, 0, 0.7));
     }
 }
