@@ -4,7 +4,6 @@ import Game.Entities.BartenderPenguinEntity;
 import Game.Entities.EventTriggerEntity;
 import Game.Entities.Labels.GoldLabel;
 import Game.Entities.Labels.HealthLabel;
-import Game.Entities.ShopItemEntity;
 import Game.Entities.WorldObject;
 import Game.Misc.EventHandling.EventListeners.ExitInnEventListener;
 import Game.Misc.EventHandling.EventListeners.OpenShopEventListener;
@@ -75,45 +74,6 @@ public class InnScene extends GameScene {
         new WorldObject(3 * Config.scaledTileSize, 2 * Config.scaledTileSize, 3 * Config.scaledTileSize, 3 * 0.625 * Config.scaledTileSize, "/assets/images/Inn_Table.png", true, 2);
         new WorldObject(3 * Config.scaledTileSize, 5 * Config.scaledTileSize, 3 * Config.scaledTileSize, 3 * 0.625 * Config.scaledTileSize, "/assets/images/Inn_Table.png", true, 2);
         new EventTriggerEntity(5 * Config.scaledTileSize, 10 * Config.scaledTileSize + Config.scaledTileSize * 0.8, 3 * Config.scaledTileSize, 0.2 * Config.scaledTileSize, new ExitInnEvent(), new ExitInnEventListener());
-
-        new ShopItemEntity("Health", "Increase your health by 10 points.", 100, () -> {
-            if (PlayerStats.gold < 100) {
-                System.out.println("not enough gold");
-                return;
-            }
-            PlayerStats.health = PlayerStats.health + 10;
-            PlayerStats.gold -= 100;
-        });
-        new ShopItemEntity("Melee damage", "Increase your melee damage by 10 points.", 100, () -> {
-            if (PlayerStats.gold < 100) {
-                System.out.println("not enough gold");
-                return;
-            }
-            PlayerStats.meleeDamage = PlayerStats.meleeDamage + 10;
-            PlayerStats.gold -= 100;
-        });
-        new ShopItemEntity("Ranged damage", "Increase your ranged damage by 10 points.", 100, () -> {
-            if (PlayerStats.gold < 100) {
-                System.out.println("not enough gold");
-                return;
-            }
-            PlayerStats.rangedDamage = PlayerStats.rangedDamage + 10;
-            PlayerStats.gold -= 100;
-        });
-        new ShopItemEntity("Melee speed", "Increase your melee speed by 100 milliseconds.", 100, () -> {
-            if (PlayerStats.gold < 100) {
-                System.out.println("not enough gold");
-            }
-            PlayerStats.meleeCooldown = PlayerStats.meleeCooldown - 100;
-            PlayerStats.gold -= 100;
-        });
-        new ShopItemEntity("Ranged speed", "Increase your ranged speed by 100 milliseconds.", 100, () -> {
-            if (PlayerStats.gold < 100) {
-                System.out.println("not enough gold");
-            }
-            PlayerStats.rangedCooldown = PlayerStats.rangedCooldown - 100;
-            PlayerStats.gold -= 100;
-        });
         new EventTriggerEntity(10 * Config.scaledTileSize, 3 * Config.scaledTileSize, Config.scaledTileSize, 2 * Config.scaledTileSize, new OpenShopEvent(), new OpenShopEventListener());
     }
 

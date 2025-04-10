@@ -1,5 +1,6 @@
 package Game.Systems;
 
+import Game.Entities.ChestEntity;
 import Game.Entities.PathfindingEntity;
 import Game.Entities.PolarBearEntity;
 import Game.Entities.PolarBearSpawner;
@@ -61,7 +62,7 @@ public class DungeonGeneratorSystem extends GameSystem {
         if (map == null) return;
         double walkablePercent;
         do {
-            resetPolarBears();
+            resetEntities();
             loadFullWorld();
             runWalkerAlgorithm();
             addWorldMesh();
@@ -81,15 +82,19 @@ public class DungeonGeneratorSystem extends GameSystem {
         while (walkablePercent < 0.63);
     }
 
-    private static void resetPolarBears() {
+    private void resetEntities() {
         for (Entity entity : EntityHub.getInstance().getEntitiesWithType(PolarBearSpawner.class)) {
             EntityHub.getInstance().removeEntity(entity);
         }
         for (Entity entity : EntityHub.getInstance().getEntitiesWithType(PolarBearEntity.class)) {
             EntityHub.getInstance().removeEntity(entity);
         }
+        for (Entity entity : EntityHub.getInstance().getEntitiesWithType(ChestEntity.class)) {
+            EntityHub.getInstance().removeEntity(entity);
+        }
         EntityHub.getInstance().removeEntityManager(PolarBearSpawner.class);
         EntityHub.getInstance().removeEntityManager(PolarBearEntity.class);
+        EntityHub.getInstance().removeEntityManager(ChestEntity.class);
     }
 
     private void removeIsolated() {
@@ -163,7 +168,7 @@ public class DungeonGeneratorSystem extends GameSystem {
                 boolean isOpposingBlocked = (up && down && !left && !right) || (left && right && !up && !down);
 
                 if (count >= 2 && !isOpposingBlocked) {
-                    mapData.setElementAt(p, 0);
+                    new ChestEntity(p.getX(), p.getY(), Config.scaledTileSize * 0.7, Config.scaledTileSize * 0.7);
                     luckFactor = -1;
                     return luckFactor;
                 }

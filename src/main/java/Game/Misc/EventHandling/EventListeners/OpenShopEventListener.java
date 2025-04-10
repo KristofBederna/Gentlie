@@ -4,6 +4,7 @@ import Game.Components.ShopItemInfoComponent;
 import Game.Entities.ShopItemEntity;
 import Game.Misc.EventHandling.Events.OpenShopEvent;
 import Game.Misc.PlayerStats;
+import Game.Misc.ShopItemPrices;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
@@ -18,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
+import java.util.Random;
 
 public class OpenShopEventListener implements EventListener<OpenShopEvent> {
     private Pane shopWrapper = null;
@@ -25,8 +27,73 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
     @Override
     public void onEvent(OpenShopEvent event) {
         if (shopWrapper == null) {
+            addShopItems();
             createBuy();
         }
+    }
+
+    private void addShopItems() {
+        Random rand = new Random();
+        EntityHub.getInstance().removeEntityManager(ShopItemEntity.class);
+        new ShopItemEntity("Health", "Increase your health by 30 points.", ShopItemPrices.Health, () -> {
+            if (PlayerStats.gold < ShopItemPrices.Health) {
+                System.out.println("not enough gold");
+                return;
+            }
+            PlayerStats.health = PlayerStats.health + 30;
+            PlayerStats.gold -= ShopItemPrices.Health;
+            ShopItemPrices.Health = (int) (ShopItemPrices.Health * rand.nextDouble(1.0, 1.2));
+        });
+        new ShopItemEntity("Melee damage", "Increase your melee damage by 10 points.(currently: " + PlayerStats.meleeDamage + ")", ShopItemPrices.MeleeDamage, () -> {
+            if (PlayerStats.gold < ShopItemPrices.MeleeDamage) {
+                System.out.println("not enough gold");
+                return;
+            }
+            PlayerStats.meleeDamage = PlayerStats.meleeDamage + 10;
+            PlayerStats.gold -= ShopItemPrices.MeleeDamage;
+            ShopItemPrices.MeleeDamage = (int) (ShopItemPrices.MeleeDamage * rand.nextDouble(1.0, 1.2));
+        });
+        new ShopItemEntity("Ranged damage", "Increase your ranged damage by 10 points.(currently: " + PlayerStats.rangedDamage + ")", ShopItemPrices.RangedDamage, () -> {
+            if (PlayerStats.gold < ShopItemPrices.RangedDamage) {
+                System.out.println("not enough gold");
+                return;
+            }
+            PlayerStats.rangedDamage = PlayerStats.rangedDamage + 10;
+            PlayerStats.gold -= ShopItemPrices.RangedDamage;
+            ShopItemPrices.RangedDamage = (int) (ShopItemPrices.RangedDamage * rand.nextDouble(1.0, 1.2));
+        });
+        new ShopItemEntity("Melee speed", "Decrease your melee cooldown by 5%(Up to 75% of base, currently: " + PlayerStats.meleeCooldown + ")", ShopItemPrices.MeleeSpeed, () -> {
+            if (PlayerStats.gold < ShopItemPrices.MeleeSpeed) {
+                System.out.println("not enough gold");
+            }
+            PlayerStats.meleeCooldown = Math.max(500L, (long) (PlayerStats.meleeCooldown * 0.95));
+            PlayerStats.gold -= ShopItemPrices.MeleeSpeed;
+            ShopItemPrices.MeleeSpeed = (int) (ShopItemPrices.MeleeSpeed * rand.nextDouble(1.0, 1.2));
+        });
+        new ShopItemEntity("Ranged speed", "Decrease your ranged cooldown by 5%(Up to 75% of base, currently: " + PlayerStats.rangedCooldown + ")", ShopItemPrices.RangedSpeed, () -> {
+            if (PlayerStats.gold < ShopItemPrices.RangedSpeed) {
+                System.out.println("not enough gold");
+            }
+            PlayerStats.rangedCooldown = Math.max(750L, (long) (PlayerStats.rangedCooldown * 0.95));
+            PlayerStats.gold -= ShopItemPrices.RangedSpeed;
+            ShopItemPrices.RangedSpeed = (int) (ShopItemPrices.RangedSpeed * rand.nextDouble(1.0, 1.2));
+        });
+        new ShopItemEntity("Melee resistance", "Increase your resistance to melee attacks by 5%(Up to 75% of base, currently: " + PlayerStats.meleeResistance * 100 + "%)", ShopItemPrices.MeleeResistance, () -> {
+            if (PlayerStats.gold < ShopItemPrices.MeleeResistance) {
+                System.out.println("not enough gold");
+            }
+            PlayerStats.meleeResistance = Math.min(PlayerStats.meleeResistance + 0.05, 0.75);
+            PlayerStats.gold -= ShopItemPrices.MeleeResistance;
+            ShopItemPrices.MeleeResistance = (int) (ShopItemPrices.MeleeResistance * rand.nextDouble(1.0, 1.2));
+        });
+        new ShopItemEntity("Ranged resistance", "Increase your resistance to ranged attacks by 5%(Up to 75% of base, currently: " + PlayerStats.rangedResistance * 100 + "%)", ShopItemPrices.RangedResistance, () -> {
+            if (PlayerStats.gold < ShopItemPrices.RangedResistance) {
+                System.out.println("not enough gold");
+            }
+            PlayerStats.rangedResistance = Math.min(PlayerStats.rangedResistance + 0.05, 0.75);
+            PlayerStats.gold -= ShopItemPrices.RangedResistance;
+            ShopItemPrices.RangedResistance = (int) (ShopItemPrices.RangedResistance * rand.nextDouble(1.0, 1.2));
+        });
     }
 
     @Override
@@ -96,6 +163,10 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
         buyButton.setStyle("-fx-background-color: #459b48; -fx-text-fill: white;");
         buyButton.setOnMouseClicked(event -> {
             onBuy.run();
+            uiRoot.getInstance().getChildren().remove(shopWrapper);
+            shopWrapper = null;
+            addShopItems();
+            createBuy();
         });
         buyButton.setDisable(PlayerStats.gold < price);
 

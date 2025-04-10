@@ -2,6 +2,7 @@ package Game.Systems;
 
 import Game.Components.HealthComponent;
 import Game.Entities.BigSnowBallEntity;
+import Game.Entities.ChestEntity;
 import Game.Entities.Labels.DamageLabel;
 import Game.Entities.PolarBearEntity;
 import Game.Entities.SnowBallEntity;
@@ -17,17 +18,12 @@ import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassCo
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
-import inf.elte.hu.gameengine_javafx.Entities.ParticleEmitterEntity;
-import inf.elte.hu.gameengine_javafx.Entities.ParticleEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.ComplexShape;
-import inf.elte.hu.gameengine_javafx.Maths.Geometry.NSidedShape;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Shape;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
-import inf.elte.hu.gameengine_javafx.Misc.Direction;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -56,6 +52,14 @@ public class CustomCollisionSystem extends GameSystem {
         ignore.getCollisionRules().computeIfAbsent(PolarBearEntity.class, k -> new ArrayList<>()).add(PlayerEntity.class);
         ignore.getCollisionRules().computeIfAbsent(PolarBearEntity.class, k -> new ArrayList<>()).add(TileEntity.class);
         ignore.getCollisionRules().computeIfAbsent(PolarBearEntity.class, k -> new ArrayList<>()).add(BigSnowBallEntity.class);
+        ignore.getCollisionRules().computeIfAbsent(PolarBearEntity.class, k -> new ArrayList<>()).add(ChestEntity.class);
+
+        ignore.getCollisionRules().computeIfAbsent(ChestEntity.class, k -> new ArrayList<>()).add(PolarBearEntity.class);
+        ignore.getCollisionRules().computeIfAbsent(ChestEntity.class, k -> new ArrayList<>()).add(SnowBallEntity.class);
+        ignore.getCollisionRules().computeIfAbsent(ChestEntity.class, k -> new ArrayList<>()).add(BigSnowBallEntity.class);
+
+        ignore.getCollisionRules().computeIfAbsent(BigSnowBallEntity.class, k -> new ArrayList<>()).add(ChestEntity.class);
+        ignore.getCollisionRules().computeIfAbsent(SnowBallEntity.class, k -> new ArrayList<>()).add(ChestEntity.class);
 
         ignore.getCollisionRules().computeIfAbsent(SnowBallEntity.class, k -> new ArrayList<>()).add(SnowBallEntity.class);
 
@@ -237,27 +241,8 @@ public class CustomCollisionSystem extends GameSystem {
             }
         }
 
-        if (entity instanceof SnowBallEntity) {
+        if (entity instanceof SnowBallEntity || entity instanceof BigSnowBallEntity) {
             entity.getComponent(VelocityComponent.class).stopMovement();
-            CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
-            new ParticleEmitterEntity(
-                    pos.getCentralX(), pos.getCentralY(),
-                    new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 10, 10,
-                            new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
-                            Color.SNOW, Color.GREY, 50),
-                    Direction.ALL, 3
-            );
-        }
-        if (entity instanceof BigSnowBallEntity) {
-            entity.getComponent(VelocityComponent.class).stopMovement();
-            CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
-            new ParticleEmitterEntity(
-                    pos.getCentralX(), pos.getCentralY(),
-                    new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 15, 15,
-                            new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
-                            Color.SNOW, Color.GREY, 75),
-                    Direction.ALL, 5
-            );
         }
     }
 

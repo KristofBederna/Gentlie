@@ -2,17 +2,31 @@ package Game.Systems;
 
 import Game.Components.HealthComponent;
 import Game.Entities.BigSnowBallEntity;
+import Game.Entities.ChestEntity;
 import Game.Entities.Labels.GoldGainedLabel;
 import Game.Entities.PolarBearEntity;
 import Game.Entities.SnowBallEntity;
 import Game.Misc.PlayerStats;
+import Game.Misc.Scenes.HomeScene;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
+import inf.elte.hu.gameengine_javafx.Core.SystemHub;
+import inf.elte.hu.gameengine_javafx.Entities.ParticleEmitterEntity;
+import inf.elte.hu.gameengine_javafx.Entities.ParticleEntity;
+import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
+import inf.elte.hu.gameengine_javafx.Maths.Geometry.NSidedShape;
+import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
+import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Direction;
+import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class RemoveDeadObjectSystem extends GameSystem {
     @Override
@@ -35,10 +49,19 @@ public class RemoveDeadObjectSystem extends GameSystem {
             }
         }
         for (var entity : dead) {
+            if (entity instanceof PlayerEntity) {
+                Random rand = new Random();
+                SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), Config.resolution.first(), Config.resolution.second(), new Point(10 * 100 + 100 / 2, 3 * 100)));
+                PlayerStats.gold = (int) (PlayerStats.gold * rand.nextDouble(0.5, 0.75));
+                PlayerStats.health = rand.nextInt(25, 100);
+                continue;
+            }
             EntityHub.getInstance().removeEntity(entity);
             if (entity instanceof PolarBearEntity) {
-                PlayerStats.gold += 10;
-                new GoldGainedLabel("10", entity.getComponent(CentralMassComponent.class).getCentralX(), entity.getComponent(CentralMassComponent.class).getCentralY() - 50, 100, 100);
+                Random rand = new Random();
+                int gold = rand.nextInt(10, 25);
+                PlayerStats.gold += gold;
+                new GoldGainedLabel(String.valueOf(gold), entity.getComponent(CentralMassComponent.class).getCentralX(), entity.getComponent(CentralMassComponent.class).getCentralY() - 50, 100, 100);
 
                 switch (entity.getComponent(HealthComponent.class).getCauseOfDeath()) {
                     case RANGED:
@@ -48,6 +71,40 @@ public class RemoveDeadObjectSystem extends GameSystem {
                         PlayerStats.meleeKills++;
                         break;
                 }
+            }
+            if (entity instanceof ChestEntity) {
+                Random rand = new Random();
+                int gold = rand.nextInt(25, 50);
+                PlayerStats.gold += gold;
+                new GoldGainedLabel(String.valueOf(gold), entity.getComponent(CentralMassComponent.class).getCentralX(), entity.getComponent(CentralMassComponent.class).getCentralY() - 50, 100, 100);
+                CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
+                new ParticleEmitterEntity(
+                        pos.getCentralX(), pos.getCentralY(),
+                        new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 15, 15,
+                                new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
+                                Color.BROWN, Color.SADDLEBROWN, 75),
+                        Direction.ALL, 10
+                );
+            }
+            if (entity instanceof BigSnowBallEntity) {
+                CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
+                new ParticleEmitterEntity(
+                        pos.getCentralX(), pos.getCentralY(),
+                        new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 15, 15,
+                                new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
+                                Color.SNOW, Color.GREY, 75),
+                        Direction.ALL, 5
+                );
+            }
+            if (entity instanceof SnowBallEntity) {
+                CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
+                new ParticleEmitterEntity(
+                        pos.getCentralX(), pos.getCentralY(),
+                        new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 10, 10,
+                                new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
+                                Color.SNOW, Color.GREY, 50),
+                        Direction.ALL, 3
+                );
             }
         }
     }
