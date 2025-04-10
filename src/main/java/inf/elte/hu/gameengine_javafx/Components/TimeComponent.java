@@ -27,6 +27,10 @@ public class TimeComponent extends Component {
         this.lastOccurrence = System.currentTimeMillis();
     }
 
+    public void setLastOccurrence(long lastOccurrence) {
+        this.lastOccurrence = lastOccurrence;
+    }
+
     @Override
     public String getStatus() {
         return "";
