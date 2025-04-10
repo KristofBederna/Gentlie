@@ -12,6 +12,7 @@ import Game.Misc.EventHandling.Events.OpenShopEvent;
 import Game.Misc.PlayerStats;
 import Game.Misc.UtilityFunctions;
 import Game.Systems.EventTileSystem;
+import Game.Systems.ShopPriceUpdateSystem;
 import Game.Systems.UserInterfaceSystem;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
@@ -80,6 +81,7 @@ public class InnScene extends GameScene {
     private void SystemStartUp() {
         //Define systems to be started up here
         SystemHub systemHub = SystemHub.getInstance();
+        systemHub.addSystem(ShopPriceUpdateSystem.class, new ShopPriceUpdateSystem(), -1);
         systemHub.addSystem(MovementDeterminerSystem.class, new MovementDeterminerSystem(), 0);
         systemHub.addSystem(EventTileSystem.class, new EventTileSystem(), 1);
         systemHub.addSystem(AnimationSystem.class, new AnimationSystem(), 2);

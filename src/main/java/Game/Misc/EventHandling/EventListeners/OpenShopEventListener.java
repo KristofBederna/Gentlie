@@ -42,7 +42,7 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
             }
             PlayerStats.health = PlayerStats.health + 30;
             PlayerStats.gold -= ShopItemPrices.Health;
-            ShopItemPrices.Health = (int) (ShopItemPrices.Health * rand.nextDouble(1.0, 1.2));
+            ShopItemPrices.Health = (int) (ShopItemPrices.Health * rand.nextDouble(1.0, 1.05));
         });
         new ShopItemEntity("Melee damage", "Increase your melee damage by 10 points.(currently: " + PlayerStats.meleeDamage + ")", ShopItemPrices.MeleeDamage, () -> {
             if (PlayerStats.gold < ShopItemPrices.MeleeDamage) {
@@ -51,7 +51,7 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
             }
             PlayerStats.meleeDamage = PlayerStats.meleeDamage + 10;
             PlayerStats.gold -= ShopItemPrices.MeleeDamage;
-            ShopItemPrices.MeleeDamage = (int) (ShopItemPrices.MeleeDamage * rand.nextDouble(1.0, 1.2));
+            ShopItemPrices.MeleeDamage = (int) (ShopItemPrices.MeleeDamage * rand.nextDouble(1.0, 1.05));
         });
         new ShopItemEntity("Ranged damage", "Increase your ranged damage by 10 points.(currently: " + PlayerStats.rangedDamage + ")", ShopItemPrices.RangedDamage, () -> {
             if (PlayerStats.gold < ShopItemPrices.RangedDamage) {
@@ -60,7 +60,7 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
             }
             PlayerStats.rangedDamage = PlayerStats.rangedDamage + 10;
             PlayerStats.gold -= ShopItemPrices.RangedDamage;
-            ShopItemPrices.RangedDamage = (int) (ShopItemPrices.RangedDamage * rand.nextDouble(1.0, 1.2));
+            ShopItemPrices.RangedDamage = (int) (ShopItemPrices.RangedDamage * rand.nextDouble(1.0, 1.05));
         });
         new ShopItemEntity("Melee speed", "Decrease your melee cooldown by 5%(Up to 75% of base, currently: " + PlayerStats.meleeCooldown + ")", ShopItemPrices.MeleeSpeed, () -> {
             if (PlayerStats.gold < ShopItemPrices.MeleeSpeed) {
@@ -68,7 +68,7 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
             }
             PlayerStats.meleeCooldown = Math.max(500L, (long) (PlayerStats.meleeCooldown * 0.95));
             PlayerStats.gold -= ShopItemPrices.MeleeSpeed;
-            ShopItemPrices.MeleeSpeed = (int) (ShopItemPrices.MeleeSpeed * rand.nextDouble(1.0, 1.2));
+            ShopItemPrices.MeleeSpeed = (int) (ShopItemPrices.MeleeSpeed * rand.nextDouble(1.0, 1.05));
         });
         new ShopItemEntity("Ranged speed", "Decrease your ranged cooldown by 5%(Up to 75% of base, currently: " + PlayerStats.rangedCooldown + ")", ShopItemPrices.RangedSpeed, () -> {
             if (PlayerStats.gold < ShopItemPrices.RangedSpeed) {
@@ -76,7 +76,7 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
             }
             PlayerStats.rangedCooldown = Math.max(750L, (long) (PlayerStats.rangedCooldown * 0.95));
             PlayerStats.gold -= ShopItemPrices.RangedSpeed;
-            ShopItemPrices.RangedSpeed = (int) (ShopItemPrices.RangedSpeed * rand.nextDouble(1.0, 1.2));
+            ShopItemPrices.RangedSpeed = (int) (ShopItemPrices.RangedSpeed * rand.nextDouble(1.0, 1.05));
         });
         new ShopItemEntity("Melee resistance", "Increase your resistance to melee attacks by 5%(Up to 75% of base, currently: " + PlayerStats.meleeResistance * 100 + "%)", ShopItemPrices.MeleeResistance, () -> {
             if (PlayerStats.gold < ShopItemPrices.MeleeResistance) {
@@ -84,7 +84,7 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
             }
             PlayerStats.meleeResistance = Math.min(PlayerStats.meleeResistance + 0.05, 0.75);
             PlayerStats.gold -= ShopItemPrices.MeleeResistance;
-            ShopItemPrices.MeleeResistance = (int) (ShopItemPrices.MeleeResistance * rand.nextDouble(1.0, 1.2));
+            ShopItemPrices.MeleeResistance = (int) (ShopItemPrices.MeleeResistance * rand.nextDouble(1.0, 1.05));
         });
         new ShopItemEntity("Ranged resistance", "Increase your resistance to ranged attacks by 5%(Up to 75% of base, currently: " + PlayerStats.rangedResistance * 100 + "%)", ShopItemPrices.RangedResistance, () -> {
             if (PlayerStats.gold < ShopItemPrices.RangedResistance) {
@@ -92,7 +92,7 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
             }
             PlayerStats.rangedResistance = Math.min(PlayerStats.rangedResistance + 0.05, 0.75);
             PlayerStats.gold -= ShopItemPrices.RangedResistance;
-            ShopItemPrices.RangedResistance = (int) (ShopItemPrices.RangedResistance * rand.nextDouble(1.0, 1.2));
+            ShopItemPrices.RangedResistance = (int) (ShopItemPrices.RangedResistance * rand.nextDouble(1.0, 1.05));
         });
     }
 

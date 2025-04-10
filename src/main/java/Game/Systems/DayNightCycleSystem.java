@@ -57,6 +57,7 @@ public class DayNightCycleSystem extends GameSystem {
                     DayTimeData.lastDayTime = Daytime.NIGHT;
                     break;
             }
+            DayTimeData.periodsPassed++;
             time.setLastOccurrence();
         }
         DayTimeData.lastUpdate = System.currentTimeMillis();
