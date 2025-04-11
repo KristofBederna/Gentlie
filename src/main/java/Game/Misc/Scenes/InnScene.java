@@ -68,7 +68,7 @@ public class InnScene extends GameScene {
     private void declareEntities() {
         new PlayerEntity(5 * Config.scaledTileSize + Config.scaledTileSize / 2, 8 * Config.scaledTileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_1.png", Config.scaledTileSize * 2 * 0.55, Config.scaledTileSize * 2);
         new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
-        new HealthLabel(String.valueOf(PlayerStats.health), 100, 200, 100, 100);
+        new HealthLabel(String.format("%.0f", PlayerStats.health), 100, 200, 100, 100);
         new BartenderPenguinEntity(9 * Config.scaledTileSize + Config.scaledTileSize / 2, 2 * Config.scaledTileSize, "/assets/images/Penguins/Penguin_Down_1.png", Config.scaledTileSize * 2 * 0.55, Config.scaledTileSize * 2);
         new WorldObject(9 * Config.scaledTileSize, 3 * Config.scaledTileSize - Config.scaledTileSize * 0.5, 3 * Config.scaledTileSize, 2 * Config.scaledTileSize, "/assets/images/Inn_Bar.png", true, 4);
         new WorldObject(9 * Config.scaledTileSize, -Config.scaledTileSize * 0.1, 3 * Config.scaledTileSize, 2 * Config.scaledTileSize, "/assets/images/Inn_Bar_Shelf.png", true, 2);

@@ -1,14 +1,14 @@
 package Game.Entities.Labels;
 
-import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
-import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
-import javafx.application.Platform;
+import inf.elte.hu.gameengine_javafx.Entities.UIEntities.TextEntity;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
-public class GoldLabel extends LabelEntity {
+public class GoldLabel extends TextEntity {
     public GoldLabel(String text, double x, double y, double width, double height) {
-        super(text, x, y, width, height);
-        Platform.runLater(() -> {
-            this.getComponent(LabelComponent.class).getUIElement().setStyle("-fx-font-size: 36px; -fx-text-fill: gold;");
-        });
+        super(x, y, width, height, text);
+        Text textNode = this.getTextNode();
+        textNode.setStyle("-fx-font-weight: bold; -fx-font-size: 36px;");
+        textNode.setFill(Color.GOLD);
     }
 }

@@ -7,6 +7,7 @@ import inf.elte.hu.gameengine_javafx.Components.TimeComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
+import inf.elte.hu.gameengine_javafx.Entities.UIEntities.TextEntity;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -62,7 +63,7 @@ public class UserInterfaceSystem extends GameSystem {
             int size = enemies.size();
             if (size != lastEnemies) {
                 Platform.runLater(() -> {
-                    enemiesLabel.getComponent(LabelComponent.class).getUIElement().setText(String.valueOf(size));
+                    ((TextEntity) enemiesLabel).getTextNode().setText(String.valueOf(size));
                     lastEnemies = size;
                 });
             }
@@ -70,13 +71,13 @@ public class UserInterfaceSystem extends GameSystem {
         if (goldLabel != null && healthLabel != null) {
             if (PlayerStats.gold != lastGold) {
                 Platform.runLater(() -> {
-                    goldLabel.getComponent(LabelComponent.class).getUIElement().setText(String.valueOf(PlayerStats.gold));
+                    ((TextEntity) goldLabel).getTextNode().setText(String.valueOf(PlayerStats.gold));
                     lastGold = PlayerStats.gold;
                 });
             }
             if (PlayerStats.health != lastHealth) {
                 Platform.runLater(() -> {
-                    healthLabel.getComponent(LabelComponent.class).getUIElement().setText(String.valueOf(PlayerStats.health));
+                    ((TextEntity) healthLabel).getTextNode().setText(String.format("%.0f", PlayerStats.health));
                     lastHealth = PlayerStats.health;
                 });
             }

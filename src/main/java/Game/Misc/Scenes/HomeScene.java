@@ -72,7 +72,7 @@ public class HomeScene extends GameScene {
     private void declareEntities() {
         new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 2 * 0.55, Config.scaledTileSize * 2);
         new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
-        new HealthLabel(String.valueOf(PlayerStats.health), 100, 200, 100, 100);
+        new HealthLabel(String.format("%.0f", PlayerStats.health), 100, 200, 100, 100);
         new CampfireEntity(7*Config.scaledTileSize+Config.scaledTileSize*0.2, 5*Config.scaledTileSize, "/assets/images/Campfire/Campfire_1.png", Config.scaledTileSize*0.8, Config.scaledTileSize*0.8);
         new WorldObject(6*Config.scaledTileSize, 1*Config.scaledTileSize-Config.scaledTileSize*0.2, 3*Config.scaledTileSize, 3*0.27*Config.scaledTileSize, "/assets/images/Bed.png", true, 2);
         new WorldObject(2*Config.scaledTileSize+Config.scaledTileSize*0.3, 3*Config.scaledTileSize-Config.scaledTileSize*0.2, 1.5*0.15*Config.scaledTileSize, 1.5*Config.scaledTileSize, "/assets/images/Fishing_Rod.png", false, 2);

@@ -93,7 +93,7 @@ public class HomeIslandScene extends GameScene {
         new PenguinEntity(random.nextInt(2, 10)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_1.png",  Config.scaledTileSize*0.55,  Config.scaledTileSize);
         new PenguinEntity(random.nextInt(2, 10)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_1.png",  Config.scaledTileSize*0.55,  Config.scaledTileSize);
         new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
-        new HealthLabel(String.valueOf(PlayerStats.health), 100, 200, 100, 100);
+        new HealthLabel(String.format("%.0f", PlayerStats.health), 100, 200, 100, 100);
         new WaterEntity();
         new SkyBoxEntity();
 

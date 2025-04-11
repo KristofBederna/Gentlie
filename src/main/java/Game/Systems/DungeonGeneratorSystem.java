@@ -28,7 +28,9 @@ import inf.elte.hu.gameengine_javafx.Misc.Pathfinding;
 import inf.elte.hu.gameengine_javafx.Misc.Tuple;
 import inf.elte.hu.gameengine_javafx.Misc.Walker;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
@@ -63,10 +65,35 @@ public class DungeonGeneratorSystem extends GameSystem {
         WorldEntity map = WorldEntity.getInstance();
         if (map == null) return;
         String saveDir = PlayerStats.currentSave;
-        File saveFile = new File(saveDir, "lastMapGenerated.txt");
-        if (saveFile.exists()) {
+        File lastMap = new File(saveDir, "lastMapGenerated.txt");
+        if (lastMap.exists()) {
             map.getComponent(WorldDataComponent.class).clear();
-            map.addComponent(new FilePathComponent(saveFile.getPath()));
+            map.addComponent(new FilePathComponent(lastMap.getPath()));
+            File dungeonEntityPositions = new File(saveDir, "dungeonEntities.txt");
+            if (dungeonEntityPositions.exists()) {
+                try (BufferedReader br = new BufferedReader(new FileReader(dungeonEntityPositions.getPath()))) {
+                    String line;
+
+                    // First read
+                    br.readLine();
+                    while ((line = br.readLine()) != null && !Objects.equals(line, "Chests")) {
+                        String[] split = line.split(" ");
+                        new PolarBearSpawner(Double.parseDouble(split[0]) + Config.scaledTileSize * 0.75 / 2, Double.parseDouble(split[1]) + Config.scaledTileSize * 0.75 / 2);
+                    }
+
+                    // Skip the "Chests" line
+                    if (line != null && Objects.equals(line, "Chests")) {
+                        // Now process chests
+                        for (String chestLine = br.readLine(); chestLine != null; chestLine = br.readLine()) {
+                            String[] split = chestLine.split(" ");
+                            new ChestEntity(Double.parseDouble(split[0]), Double.parseDouble(split[1]), Config.scaledTileSize * 0.7, Config.scaledTileSize * 0.7);
+                        }
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
             MapLoader.loadMap();
             return;
         }

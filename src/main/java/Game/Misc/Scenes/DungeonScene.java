@@ -87,7 +87,7 @@ public class DungeonScene extends GameScene {
         new EventTriggerEntity(0, Config.scaledTileSize, Config.scaledTileSize, Config.scaledTileSize * 3, new ExitDungeonEvent(new Point(4 * 150, 2 * 150 + 150 * 0.25 - 1)), new ExitDungeonEventListener());
         new EnemyLabel(String.valueOf(EntityHub.getInstance().getEntitiesWithType(PolarBearEntity.class).size()), 100, 300, 100, 100);
         new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
-        new HealthLabel(String.valueOf(PlayerStats.health), 100, 200, 100, 100);
+        new HealthLabel(String.format("%.0f", PlayerStats.health), 100, 200, 100, 100);
         EnterEnemyIslandLabel enterEnemyIslandLabel = new EnterEnemyIslandLabel("Press 'E' to leave dungeon", Config.scaledTileSize, 3 * Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
         enterEnemyIslandLabel.removeFromUI();
         enterEnemyIslandLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);

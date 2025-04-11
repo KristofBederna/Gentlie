@@ -88,7 +88,7 @@ public class EnemyIslandScene extends GameScene {
 
         new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 0.75 * 0.55, Config.scaledTileSize * 0.75);
         new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
-        new HealthLabel(String.valueOf(PlayerStats.health), 100, 200, 100, 100);
+        new HealthLabel(String.format("%.0f", PlayerStats.health), 100, 200, 100, 100);
         new WaterEntity();
         new SkyBoxEntity();
 
