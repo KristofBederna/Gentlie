@@ -4,7 +4,7 @@ import Game.Entities.Labels.*;
 import Game.Entities.PolarBearEntity;
 import Game.Misc.PlayerStats;
 import inf.elte.hu.gameengine_javafx.Components.TimeComponent;
-import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
+import inf.elte.hu.gameengine_javafx.Components.UIComponents.TextComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.TextEntity;
@@ -33,7 +33,7 @@ public class UserInterfaceSystem extends GameSystem {
 
             if (currentTime - lastOccurrence > timeBetweenOccurrences) {
                 Platform.runLater(() -> {
-                    Node uiElement = entity.getComponent(LabelComponent.class).getNode();
+                    Node uiElement = entity.getComponent(TextComponent.class).getNode();
                     if (uiElement != null) {
                         uiRoot.getInstance().getChildren().remove(uiElement);
                     }
@@ -47,7 +47,7 @@ public class UserInterfaceSystem extends GameSystem {
 
             if (currentTime - lastOccurrence > timeBetweenOccurrences) {
                 Platform.runLater(() -> {
-                    Node uiElement = entity.getComponent(LabelComponent.class).getNode();
+                    Node uiElement = entity.getComponent(TextComponent.class).getNode();
                     if (uiElement != null) {
                         uiRoot.getInstance().getChildren().remove(uiElement);
                     }
