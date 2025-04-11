@@ -50,11 +50,11 @@ public class DayNightCycleSystem extends GameSystem {
             switch (daytime.getDaytime()) {
                 case DAY:
                     daytime.setDaytime(Daytime.NIGHT);
-                    DayTimeData.lastDayTime = Daytime.DAY;
+                    DayTimeData.lastDayTime = Daytime.NIGHT;
                     break;
                 case NIGHT:
                     daytime.setDaytime(Daytime.DAY);
-                    DayTimeData.lastDayTime = Daytime.NIGHT;
+                    DayTimeData.lastDayTime = Daytime.DAY;
                     break;
             }
             DayTimeData.periodsPassed++;
