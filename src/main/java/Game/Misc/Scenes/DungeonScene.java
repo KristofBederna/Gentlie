@@ -3,12 +3,14 @@ package Game.Misc.Scenes;
 import Game.Components.AttackBoxComponent;
 import Game.Components.HealthComponent;
 import Game.Entities.EventTriggerEntity;
+import Game.Entities.Labels.EnemyLabel;
 import Game.Entities.Labels.EnterEnemyIslandLabel;
 import Game.Entities.Labels.GoldLabel;
 import Game.Entities.Labels.HealthLabel;
+import Game.Entities.PolarBearEntity;
 import Game.Entities.SnowBallEntity;
-import Game.Misc.EventHandling.EventListeners.EnterEnemyIslandEventListener;
-import Game.Misc.EventHandling.Events.EnterEnemyIslandEvent;
+import Game.Misc.EventHandling.EventListeners.ExitDungeonEventListener;
+import Game.Misc.EventHandling.Events.ExitDungeonEvent;
 import Game.Misc.PlayerStats;
 import Game.Misc.UtilityFunctions;
 import Game.Systems.*;
@@ -82,7 +84,8 @@ public class DungeonScene extends GameScene {
     private void declareEntities() {
         PlayerEntity player = new PlayerEntity(Config.scaledTileSize + Config.scaledTileSize / 2, Config.scaledTileSize + Config.scaledTileSize / 2, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 0.8 * 0.55, Config.scaledTileSize * 0.8);
         player.addComponent(new HealthComponent(PlayerStats.health));
-        new EventTriggerEntity(0, Config.scaledTileSize, Config.scaledTileSize, Config.scaledTileSize * 3, new EnterEnemyIslandEvent(new Point(4 * 150, 2 * 150 + 150 * 0.25 - 1)), new EnterEnemyIslandEventListener());
+        new EventTriggerEntity(0, Config.scaledTileSize, Config.scaledTileSize, Config.scaledTileSize * 3, new ExitDungeonEvent(new Point(4 * 150, 2 * 150 + 150 * 0.25 - 1)), new ExitDungeonEventListener());
+        new EnemyLabel(String.valueOf(EntityHub.getInstance().getEntitiesWithType(PolarBearEntity.class).size()), 100, 300, 100, 100);
         new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
         new HealthLabel(String.valueOf(PlayerStats.health), 100, 200, 100, 100);
         EnterEnemyIslandLabel enterEnemyIslandLabel = new EnterEnemyIslandLabel("Press 'E' to leave dungeon", Config.scaledTileSize, 3 * Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);

@@ -13,7 +13,7 @@ public class SkyBoxEntity extends Entity {
     public SkyBoxEntity() {
         addComponent(new ShapeComponent<>(new Rectangle(new Point(0, 0), Config.scaledTileSize *Config.chunkWidth, Config.scaledTileSize *Config.chunkHeight)));
         addComponent(new DaytimeComponent(DayTimeData.lastDayTime));
-        addComponent(new TimeComponent(10000));//2 * 60000)); //1 time period = 2 minutes, 1 day = 4 minutes
+        addComponent(new TimeComponent(2 * 60000)); //1 time period = 2 minutes, 1 day = 4 minutes
 
         addToManager();
     }

@@ -1,9 +1,7 @@
 package Game.Systems;
 
-import Game.Entities.Labels.DamageLabel;
-import Game.Entities.Labels.GoldGainedLabel;
-import Game.Entities.Labels.GoldLabel;
-import Game.Entities.Labels.HealthLabel;
+import Game.Entities.Labels.*;
+import Game.Entities.PolarBearEntity;
 import Game.Misc.PlayerStats;
 import inf.elte.hu.gameengine_javafx.Components.TimeComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
@@ -16,6 +14,7 @@ import javafx.scene.Node;
 public class UserInterfaceSystem extends GameSystem {
     private double lastGold = PlayerStats.gold;
     private double lastHealth = PlayerStats.health;
+    private int lastEnemies = 0;
 
     @Override
     public void start() {
@@ -57,6 +56,17 @@ public class UserInterfaceSystem extends GameSystem {
 
         var goldLabel = EntityHub.getInstance().getEntitiesWithType(GoldLabel.class).getFirst();
         var healthLabel = EntityHub.getInstance().getEntitiesWithType(HealthLabel.class).getFirst();
+        if (!EntityHub.getInstance().getEntitiesWithType(EnemyLabel.class).isEmpty()) {
+            var enemiesLabel = EntityHub.getInstance().getEntitiesWithType(EnemyLabel.class).getFirst();
+            var enemies = EntityHub.getInstance().getEntitiesWithType(PolarBearEntity.class);
+            int size = enemies.size();
+            if (size != lastEnemies) {
+                Platform.runLater(() -> {
+                    enemiesLabel.getComponent(LabelComponent.class).getUIElement().setText(String.valueOf(size));
+                    lastEnemies = size;
+                });
+            }
+        }
         if (goldLabel != null && healthLabel != null) {
             if (PlayerStats.gold != lastGold) {
                 Platform.runLater(() -> {
@@ -70,18 +80,6 @@ public class UserInterfaceSystem extends GameSystem {
                     lastHealth = PlayerStats.health;
                 });
             }
-        }
-
-        if (goldLabel == null) {
-            Platform.runLater(() -> {
-                new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
-            });
-        }
-
-        if (healthLabel == null) {
-            Platform.runLater(() -> {
-                new HealthLabel(String.valueOf(PlayerStats.health), 100, 200, 100, 100);
-            });
         }
     }
 }

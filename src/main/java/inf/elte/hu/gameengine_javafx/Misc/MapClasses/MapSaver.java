@@ -12,17 +12,30 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class MapSaver {
-    public static void saveMap(WorldEntity map, String path, TileLoader tileLoader) throws IOException {
+    public static void saveMap(WorldEntity map, String path) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            writer.write(map.getComponent(WorldDimensionComponent.class).getWorldWidth() / Config.scaledTileSize + " " + map.getComponent(WorldDimensionComponent.class).getWorldHeight() / Config.scaledTileSize);
+            int width = (int) map.getComponent(WorldDimensionComponent.class).getWorldWidth();
+            int height = (int) map.getComponent(WorldDimensionComponent.class).getWorldHeight();
+
+            writer.write(width + " " + height);
             writer.newLine();
 
-            for (int y = 0; y < map.getComponent(WorldDimensionComponent.class).getWorldHeight() / Config.scaledTileSize; y++) {
-                for (int x = 0; x < map.getComponent(WorldDimensionComponent.class).getWorldWidth() / Config.scaledTileSize; x++) {
-                    writer.write(map.getComponent(WorldDataComponent.class).getMapData().getElementAt(new Point(y*Config.scaledTileSize +Config.scaledTileSize /2, x*Config.scaledTileSize +Config.scaledTileSize /2)).getComponent(TileValueComponent.class).getTileValue() + " ");
+            for (int x = 0; x < height; x++) {
+                for (int y = 0; y < width; y++) {
+                    writer.write(
+                            map.getComponent(WorldDataComponent.class)
+                                    .getMapData()
+                                    .getElementAt(new Point(y * Config.scaledTileSize + Config.scaledTileSize / 2,
+                                            x * Config.scaledTileSize + Config.scaledTileSize / 2))
+                                    .getComponent(TileValueComponent.class)
+                                    .getTileValue() + " "
+                    );
                 }
-                writer.newLine();
+                if (x < height - 1) {
+                    writer.newLine();
+                }
             }
         }
     }
+
 }

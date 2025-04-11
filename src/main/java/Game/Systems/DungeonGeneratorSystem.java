@@ -4,7 +4,9 @@ import Game.Entities.ChestEntity;
 import Game.Entities.PathfindingEntity;
 import Game.Entities.PolarBearEntity;
 import Game.Entities.PolarBearSpawner;
+import Game.Misc.PlayerStats;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
+import inf.elte.hu.gameengine_javafx.Components.FilePathComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
@@ -21,13 +23,13 @@ import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
-import inf.elte.hu.gameengine_javafx.Misc.MapClasses.Chunk;
-import inf.elte.hu.gameengine_javafx.Misc.MapClasses.World;
-import inf.elte.hu.gameengine_javafx.Misc.MapClasses.WorldGenerator;
+import inf.elte.hu.gameengine_javafx.Misc.MapClasses.*;
 import inf.elte.hu.gameengine_javafx.Misc.Pathfinding;
 import inf.elte.hu.gameengine_javafx.Misc.Tuple;
 import inf.elte.hu.gameengine_javafx.Misc.Walker;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -60,6 +62,14 @@ public class DungeonGeneratorSystem extends GameSystem {
         this.active = true;
         WorldEntity map = WorldEntity.getInstance();
         if (map == null) return;
+        String saveDir = PlayerStats.currentSave;
+        File saveFile = new File(saveDir, "lastMapGenerated.txt");
+        if (saveFile.exists()) {
+            map.getComponent(WorldDataComponent.class).clear();
+            map.addComponent(new FilePathComponent(saveFile.getPath()));
+            MapLoader.loadMap();
+            return;
+        }
         double walkablePercent;
         do {
             resetEntities();
@@ -80,6 +90,11 @@ public class DungeonGeneratorSystem extends GameSystem {
             walkablePercent = walkable/(Config.chunkWidth*width*Config.chunkHeight*height);
         }
         while (walkablePercent < 0.63);
+        try {
+            MapSaver.saveMap(map, PlayerStats.currentSave + "/lastMapGenerated.txt");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void resetEntities() {

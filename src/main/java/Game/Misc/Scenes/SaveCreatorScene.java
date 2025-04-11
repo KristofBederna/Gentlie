@@ -1,5 +1,6 @@
 package Game.Misc.Scenes;
 
+import Game.Misc.PlayerStats;
 import Game.Misc.UtilityFunctions;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
@@ -17,6 +18,8 @@ import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 public class SaveCreatorScene extends GameScene {
@@ -122,6 +125,16 @@ public class SaveCreatorScene extends GameScene {
                 200 * Config.relativeWidthRatio,
                 80 * Config.relativeHeightRatio,
                 () -> {
+                    // Project root
+                    Path projectRoot = Paths.get(System.getProperty("user.dir"));
+
+                    // Full path of the save folder
+                    Path savePath = saveFolder.toPath();
+
+                    // Try to relativize
+                    Path relativePath = projectRoot.relativize(savePath);
+
+                    PlayerStats.currentSave = relativePath.toString().replace("\\", "/");
                     SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), Config.resolution.first(), Config.resolution.second(), new Point(10 * 100 + 100 / 2, 3 * 100)));
                 });
         ButtonEntity no = new ButtonEntity("No",

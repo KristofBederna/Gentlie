@@ -1,5 +1,6 @@
 package Game.Misc.Scenes;
 
+import Game.Misc.PlayerStats;
 import Game.Misc.UtilityFunctions;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
@@ -15,6 +16,8 @@ import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 public class LoadSelectorScene extends GameScene {
@@ -109,6 +112,16 @@ public class LoadSelectorScene extends GameScene {
     }
 
     private void startLoad(File saveFolder) {
+        // Project root
+        Path projectRoot = Paths.get(System.getProperty("user.dir"));
+
+        // Full path of the save folder
+        Path savePath = saveFolder.toPath();
+
+        // Try to relativize
+        Path relativePath = projectRoot.relativize(savePath);
+
+        PlayerStats.currentSave = relativePath.toString().replace("\\", "/");
         // SaveManager.loadSaveFromFolder(saveFolder);
     }
 
