@@ -12,6 +12,7 @@ import Game.Misc.EventHandling.Events.OpenShopEvent;
 import Game.Misc.PlayerStats;
 import Game.Misc.UtilityFunctions;
 import Game.Systems.EventTileSystem;
+import Game.Systems.GameSaverSystem;
 import Game.Systems.ShopPriceUpdateSystem;
 import Game.Systems.UserInterfaceSystem;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
@@ -20,6 +21,7 @@ import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
+import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
@@ -42,8 +44,11 @@ import javafx.scene.Parent;
 import java.util.List;
 
 public class InnScene extends GameScene {
-    public InnScene(Parent parent, double width, double height) {
+    Point spawn;
+
+    public InnScene(Parent parent, double width, double height, Point spawn) {
         super(parent, width, height);
+        this.spawn = spawn;
     }
 
     @Override
@@ -66,7 +71,7 @@ public class InnScene extends GameScene {
     }
 
     private void declareEntities() {
-        new PlayerEntity(5 * Config.scaledTileSize + Config.scaledTileSize / 2, 8 * Config.scaledTileSize, "idle", "/assets/images/Gentlie/Gentlie_Down_1.png", Config.scaledTileSize * 2 * 0.55, Config.scaledTileSize * 2);
+        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_1.png", Config.scaledTileSize * 2 * 0.55, Config.scaledTileSize * 2);
         new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
         new HealthLabel(String.format("%.0f", PlayerStats.health), 100, 200, 100, 100);
         new BartenderPenguinEntity(9 * Config.scaledTileSize + Config.scaledTileSize / 2, 2 * Config.scaledTileSize, "/assets/images/Penguins/Penguin_Down_1.png", Config.scaledTileSize * 2 * 0.55, Config.scaledTileSize * 2);
@@ -96,6 +101,7 @@ public class InnScene extends GameScene {
         systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 11);
         systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 12);
         systemHub.addSystem(RenderSystem.class, new RenderSystem(), 13);
+        systemHub.addSystem(GameSaverSystem.class, new GameSaverSystem(), 14);
     }
 
     private void interactionSetup() {

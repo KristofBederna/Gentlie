@@ -10,10 +10,7 @@ import Game.Misc.EventHandling.Events.EnterHomeEvent;
 import Game.Misc.EventHandling.Events.EnterInnEvent;
 import Game.Misc.PlayerStats;
 import Game.Misc.UtilityFunctions;
-import Game.Systems.DayNightCycleSystem;
-import Game.Systems.EventTileSystem;
-import Game.Systems.PenguinMoverSystem;
-import Game.Systems.UserInterfaceSystem;
+import Game.Systems.*;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
@@ -142,6 +139,7 @@ public class HomeIslandScene extends GameScene {
         systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 13);
         systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 14);
         systemHub.addSystem(RenderSystem.class, new RenderSystem(), 15);
+        systemHub.addSystem(GameSaverSystem.class, new GameSaverSystem(), 16);
     }
 
     private void interactionSetup() {

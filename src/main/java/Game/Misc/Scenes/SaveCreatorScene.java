@@ -1,6 +1,8 @@
 package Game.Misc.Scenes;
 
+import Game.Misc.EnemyStats;
 import Game.Misc.PlayerStats;
+import Game.Misc.ShopItemPrices;
 import Game.Misc.UtilityFunctions;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
@@ -135,6 +137,11 @@ public class SaveCreatorScene extends GameScene {
                     Path relativePath = projectRoot.relativize(savePath);
 
                     PlayerStats.currentSave = relativePath.toString().replace("\\", "/");
+                    PlayerStats.resetToBaseline();
+                    EnemyStats.resetToBaseline();
+                    ShopItemPrices.resetToBaseline();
+                    File saveFile = new File(PlayerStats.currentSave);
+                    clearDirectory(saveFile);
                     SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), Config.resolution.first(), Config.resolution.second(), new Point(10 * 100 + 100 / 2, 3 * 100)));
                 });
         ButtonEntity no = new ButtonEntity("No",
@@ -148,8 +155,22 @@ public class SaveCreatorScene extends GameScene {
         label.addStyleClass("main-menu-label");
         yes.addStyleClass("main-menu-button");
         no.addStyleClass("main-menu-button");
-        // SaveManager.loadSaveFromFolder(saveFolder);
     }
+
+    public static void clearDirectory(File directory) {
+        if (directory.exists() && directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        clearDirectory(file);
+                    }
+                    file.delete();
+                }
+            }
+        }
+    }
+
 
     private void systemStartUp() {
         SystemHub systemHub = SystemHub.getInstance();

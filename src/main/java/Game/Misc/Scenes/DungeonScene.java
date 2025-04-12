@@ -57,8 +57,11 @@ import javafx.scene.text.TextAlignment;
 import java.util.List;
 
 public class DungeonScene extends GameScene {
-    public DungeonScene(Parent parent, double width, double height) {
+    Point spawn;
+
+    public DungeonScene(Parent parent, double width, double height, Point spawn) {
         super(parent, width, height);
+        this.spawn = spawn;
     }
 
     @Override
@@ -82,7 +85,7 @@ public class DungeonScene extends GameScene {
     }
 
     private void declareEntities() {
-        PlayerEntity player = new PlayerEntity(Config.scaledTileSize + Config.scaledTileSize / 2, Config.scaledTileSize + Config.scaledTileSize / 2, "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 0.8 * 0.55, Config.scaledTileSize * 0.8);
+        PlayerEntity player = new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 0.8 * 0.55, Config.scaledTileSize * 0.8);
         player.addComponent(new HealthComponent(PlayerStats.health));
         new EventTriggerEntity(0, Config.scaledTileSize, Config.scaledTileSize, Config.scaledTileSize * 3, new ExitDungeonEvent(new Point(4 * 150, 2 * 150 + 150 * 0.25 - 1)), new ExitDungeonEventListener());
         new EnemyLabel(String.valueOf(EntityHub.getInstance().getEntitiesWithType(PolarBearEntity.class).size()), 100, 300, 100, 100);
@@ -115,6 +118,7 @@ public class DungeonScene extends GameScene {
         systemHub.addSystem(RemoveDeadObjectSystem.class, new RemoveDeadObjectSystem(), 16);
         systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 17);
         systemHub.addSystem(RenderSystem.class, new RenderSystem(), 18);
+        systemHub.addSystem(GameSaverSystem.class, new GameSaverSystem(), 19);
     }
 
     private void interactionSetup() {

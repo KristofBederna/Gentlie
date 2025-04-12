@@ -1,7 +1,9 @@
 package Game.Misc.Scenes;
 
+import Game.Misc.GameSaver;
 import Game.Misc.PlayerStats;
 import Game.Misc.UtilityFunctions;
+import inf.elte.hu.gameengine_javafx.Components.UIComponents.ButtonComponent;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
 import inf.elte.hu.gameengine_javafx.Misc.Config;
@@ -85,6 +87,9 @@ public class LoadSelectorScene extends GameScene {
                                     80 * Config.relativeHeightRatio,
                                     () -> startLoad(folder)
                             );
+                            if (folder.listFiles() == null || folder.listFiles().length == 0) {
+                                saveButton.getComponent(ButtonComponent.class).getUIElement().setDisable(true);
+                            }
                             saveButton.addStyleClass("main-menu-button");
                         }
                     }
@@ -122,7 +127,8 @@ public class LoadSelectorScene extends GameScene {
         Path relativePath = projectRoot.relativize(savePath);
 
         PlayerStats.currentSave = relativePath.toString().replace("\\", "/");
-        // SaveManager.loadSaveFromFolder(saveFolder);
+        GameSaver.loadEntityStats();
+        GameSaver.loadShopPrices();
     }
 
     private void systemStartUp() {

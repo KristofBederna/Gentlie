@@ -6,6 +6,7 @@ import Game.Misc.Scenes.DungeonScene;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
+import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListener;
 import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.KeyboardInputHandler;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
@@ -17,7 +18,7 @@ public class EnterDungeonEventListener implements EventListener<EnterDungeonEven
     public void onEvent(EnterDungeonEvent event) {
         ((DungeonLabel)EntityHub.getInstance().getEntitiesWithType(DungeonLabel.class).getFirst()).addToUI();
         if (KeyboardInputHandler.getInstance().isKeyPressed(KeyCode.E))
-            SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new DungeonScene(new BorderPane(), 1920, 1080));
+            SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new DungeonScene(new BorderPane(), 1920, 1080, new Point(200 + 200 / 2, 200 + 200 / 2)));
     }
 
     @Override
