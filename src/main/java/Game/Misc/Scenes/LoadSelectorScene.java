@@ -49,7 +49,7 @@ public class LoadSelectorScene extends GameScene {
         double startY = 150 * Config.relativeHeightRatio;
         double gap = 100 * Config.relativeHeightRatio;
 
-        File saveDir = new File(System.getProperty("user.dir"), "src/main/java/Game/savefiles");
+        File saveDir = new File(System.getProperty("user.dir"), "savefiles");
 
         if (!saveDir.exists()) {
             System.err.println("savefiles directory does not exist. Creating it...");

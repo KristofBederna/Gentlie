@@ -23,7 +23,6 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
-
 public class SaveCreatorScene extends GameScene {
 
     public SaveCreatorScene(Parent parent, double width, double height) {
@@ -51,11 +50,11 @@ public class SaveCreatorScene extends GameScene {
         double startY = 150 * Config.relativeHeightRatio;
         double gap = 100 * Config.relativeHeightRatio;
 
-        File saveDir = new File(System.getProperty("user.dir"), "src/main/java/Game/savefiles");
+        // Use the working directory (where the JAR is run) and create the "savefiles" folder there
+        File saveDir = new File(System.getProperty("user.dir"), "savefiles");
 
         if (!saveDir.exists()) {
             System.err.println("savefiles directory does not exist. Creating it...");
-
             boolean created = saveDir.mkdir();
             if (!created) {
                 System.err.println("Failed to create folder: " + saveDir.getAbsolutePath());
@@ -170,7 +169,6 @@ public class SaveCreatorScene extends GameScene {
             }
         }
     }
-
 
     private void systemStartUp() {
         SystemHub systemHub = SystemHub.getInstance();
