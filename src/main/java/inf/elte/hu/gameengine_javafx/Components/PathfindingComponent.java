@@ -7,7 +7,7 @@ import inf.elte.hu.gameengine_javafx.Core.Architecture.Component;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,61 +74,63 @@ public class PathfindingComponent extends Component {
     public void resetPathing(Entity entity) {
         path = null;
         neighbours = null;
-        start = WorldEntity.getInstance().getComponent(MapMeshComponent.class).getMapCoordinate(Math.floorDiv((int) entity.getComponent(CentralMassComponent.class).getCentralX(), (int) Config.scaledTileSize), Math.floorDiv((int) entity.getComponent(CentralMassComponent.class).getCentralY(), (int) Config.scaledTileSize));
+        start = WorldEntity.getInstance().getComponent(MapMeshComponent.class).getMapCoordinate(Math.floorDiv((int) entity.getComponent(CentralMassComponent.class).getCentralX(), (int) MapConfig.scaledTileSize), Math.floorDiv((int) entity.getComponent(CentralMassComponent.class).getCentralY(), (int) MapConfig.scaledTileSize));
     }
 
     public List<Point> getNeighbours(Point current) {
         List<Point> neighbours = new ArrayList<>();
-        MapMeshComponent mapMeshComponent = WorldEntity.getInstance().getComponent(MapMeshComponent.class);
+        MapMeshComponent mapMesh = WorldEntity.getInstance().getComponent(MapMeshComponent.class);
+        WorldDimensionComponent dimensions = WorldEntity.getInstance().getComponent(WorldDimensionComponent.class);
 
-        int currentX = (int) Math.floor(current.getX() / Config.scaledTileSize);
-        int currentY = (int) Math.floor(current.getY() / Config.scaledTileSize);
+        int currentX = toTileCoordinate(current.getX());
+        int currentY = toTileCoordinate(current.getY());
 
-        int worldWidth = (int) WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldWidth();
-        int worldHeight = (int) WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldHeight();
+        int worldWidth = (int) dimensions.getWorldWidth();
+        int worldHeight = (int) dimensions.getWorldHeight();
 
-
-        // Define directions
-        int[][] directions = {
-                {-1, 0}, {1, 0}, {0, -1}, {0, 1}, // Cardinal (Up, Down, Left, Right)
-                {-1, -1}, {-1, 1}, {1, -1}, {1, 1} // Diagonal
-        };
+        int[][] directions = getAllDirections();
 
         for (int[] dir : directions) {
             int neighbourX = currentX + dir[0];
             int neighbourY = currentY + dir[1];
 
+            if (!isInBounds(neighbourX, neighbourY, worldWidth, worldHeight)) continue;
 
-            // Out of bounds check
-            if (neighbourX < 0 || neighbourX >= worldWidth || neighbourY < 0 || neighbourY >= worldHeight) {
-                continue;
-            }
+            Point neighbour = mapMesh.getMapCoordinate(neighbourX, neighbourY);
+            if (neighbour == null) continue;
 
-            // Get the neighbour point
-            Point neighbour = mapMeshComponent.getMapCoordinate(neighbourX, neighbourY);
+            if (isDiagonal(dir) && !canMoveDiagonally(mapMesh, currentX, currentY, dir)) continue;
 
-            if (neighbour == null) {
-                continue; // Skip invalid points
-            }
-
-            boolean isDiagonal = (dir[0] != 0 && dir[1] != 0);
-            if (isDiagonal) {
-                // Check if at least one adjacent tile is passable
-                boolean canMoveDiagonally =
-                        (mapMeshComponent.getMapCoordinate(currentX + dir[0], currentY) != null) &&
-                                (mapMeshComponent.getMapCoordinate(currentX, currentY + dir[1]) != null);
-
-                if (!canMoveDiagonally) {
-                    continue; // Skip this diagonal move
-                }
-            }
-
-            // Add valid neighbour
             neighbours.add(neighbour);
         }
 
         return neighbours;
     }
+
+    private int toTileCoordinate(double value) {
+        return (int) Math.floor(value / MapConfig.scaledTileSize);
+    }
+
+    private int[][] getAllDirections() {
+        return new int[][]{
+                {-1, 0}, {1, 0}, {0, -1}, {0, 1},
+                {-1, -1}, {-1, 1}, {1, -1}, {1, 1}
+        };
+    }
+
+    private boolean isInBounds(int x, int y, int width, int height) {
+        return x >= 0 && x < width && y >= 0 && y < height;
+    }
+
+    private boolean isDiagonal(int[] dir) {
+        return dir[0] != 0 && dir[1] != 0;
+    }
+
+    private boolean canMoveDiagonally(MapMeshComponent mapMesh, int x, int y, int[] dir) {
+        return mapMesh.getMapCoordinate(x + dir[0], y) != null &&
+                mapMesh.getMapCoordinate(x, y + dir[1]) != null;
+    }
+
 
     public void setStart(Point start) {
         this.start = start;

@@ -1,9 +1,8 @@
 package inf.elte.hu.gameengine_javafx.Maths.Geometry;
 
 
-import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -36,68 +35,67 @@ public class ComplexShape extends Shape {
         }
     }
 
-
     public void render(GraphicsContext gc, Color color) {
-        CameraEntity cameraEntity = CameraEntity.getInstance();
-
         gc.setStroke(color);
         gc.setLineWidth(2);
 
-        if (points.isEmpty()) {
-            updateEdges();
-        }
+        renderShape(gc);
+    }
+
+    public void render(GraphicsContext gc, Color color, double strokeWidth) {
+        gc.setStroke(color);
+        gc.setLineWidth(strokeWidth);
+
+        renderShape(gc);
+    }
+
+    private void renderShape(GraphicsContext gc) {
+        updateEdgesForShape();
 
         Point prev = points.getLast();
         for (Point p : points) {
-            double x1 = prev.getX() - cameraEntity.getComponent(PositionComponent.class).getGlobalX();
-            double y1 = prev.getY() - cameraEntity.getComponent(PositionComponent.class).getGlobalY();
-            double x2 = p.getX() - cameraEntity.getComponent(PositionComponent.class).getGlobalX();
-            double y2 = p.getY() - cameraEntity.getComponent(PositionComponent.class).getGlobalY();
+            double x1 = CameraEntity.getRenderX(prev.getX());
+            double y1 = CameraEntity.getRenderY(prev.getY());
+            double x2 = CameraEntity.getRenderX(p.getX());
+            double y2 = CameraEntity.getRenderY(p.getY());
 
-            gc.strokeLine(x1* Config.relativeWidthRatio, y1*Config.relativeHeightRatio, x2*Config.relativeWidthRatio, y2*Config.relativeHeightRatio);
+            gc.strokeLine(x1 * DisplayConfig.relativeWidthRatio, y1 * DisplayConfig.relativeHeightRatio, x2 * DisplayConfig.relativeWidthRatio, y2 * DisplayConfig.relativeHeightRatio);
             prev = p;
         }
     }
 
     public void renderFill(GraphicsContext gc, Color color) {
-        CameraEntity cameraEntity = CameraEntity.getInstance();
-
-        if (points.isEmpty()) {
-            updateEdges();
-        }
+        updateEdgesForShape();
 
         double[] xPoints = new double[points.size()];
         double[] yPoints = new double[points.size()];
 
-        double cameraX = cameraEntity.getComponent(PositionComponent.class).getGlobalX();
-        double cameraY = cameraEntity.getComponent(PositionComponent.class).getGlobalY();
-
         for (int i = 0; i < points.size(); i++) {
-            xPoints[i] = (points.get(i).getX() - cameraX)*Config.relativeWidthRatio;
-            yPoints[i] = (points.get(i).getY() - cameraY)*Config.relativeHeightRatio;
+            xPoints[i] = CameraEntity.getRenderX(points.get(i).getX()) * DisplayConfig.relativeWidthRatio;
+            yPoints[i] = CameraEntity.getRenderY(points.get(i).getY()) * DisplayConfig.relativeHeightRatio;
         }
 
         gc.setFill(color);
         gc.fillPolygon(xPoints, yPoints, points.size());
     }
 
-    public void renderFillWithStroke(GraphicsContext gc, Color color, Color stroke, double outerStrokeWidth) {
-        CameraEntity cameraEntity = CameraEntity.getInstance();
-
+    private void updateEdgesForShape() {
         if (points.isEmpty()) {
             updateEdges();
         }
+    }
+
+    public void renderFillWithStroke(GraphicsContext gc, Color color, Color stroke, double outerStrokeWidth) {
+        updateEdgesForShape();
 
         double[] xPoints = new double[points.size()];
         double[] yPoints = new double[points.size()];
 
-        double cameraX = cameraEntity.getComponent(PositionComponent.class).getGlobalX();
-        double cameraY = cameraEntity.getComponent(PositionComponent.class).getGlobalY();
-
         for (int i = 0; i < points.size(); i++) {
-            xPoints[i] = (points.get(i).getX() - cameraX)* Config.relativeWidthRatio;
-            yPoints[i] = (points.get(i).getY() - cameraY)* Config.relativeHeightRatio;
+            xPoints[i] = CameraEntity.getRenderX(points.get(i).getX()) * DisplayConfig.relativeWidthRatio;
+            yPoints[i] = CameraEntity.getRenderY(points.get(i).getY()) * DisplayConfig.relativeHeightRatio;
         }
+
         gc.setStroke(stroke);
         gc.setLineWidth(outerStrokeWidth);
 
@@ -127,11 +125,6 @@ public class ComplexShape extends Shape {
         for (Point p : points) {
             p.translate(x, y);
         }
-        updateEdges();
-    }
-
-    public void addShape(Shape shape) {
-        points.addAll(shape.getPoints());
         updateEdges();
     }
 

@@ -33,7 +33,7 @@ public class EventTileSystem extends GameSystem {
                 event.getComponent(isInsideEventComponent.class).setInside(true, event);
             } else {
                 if (event.getComponent(isInsideEventComponent.class).isInside()) {
-                    event.getComponent(EventComponent.class).getEventHandler().onExit();
+                    event.getComponent(EventComponent.class).getEventHandler().onExit(event.getComponent(EventComponent.class).getEvent());
                 }
                 event.getComponent(isInsideEventComponent.class).setInside(false, null);
             }

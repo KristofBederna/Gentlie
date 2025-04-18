@@ -21,7 +21,7 @@ import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Shape;
 import inf.elte.hu.gameengine_javafx.Maths.Vector;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
 
 import java.util.Random;
@@ -64,7 +64,7 @@ public class PolarBearAttackSystem extends GameSystem {
                     double speed = 1500 * Time.getInstance().getDeltaTime();
                     Vector throwDirection = new Vector((dx / length) * speed, (dy / length) * speed);
 
-                    new BigSnowBallEntity(bearCentral.getX(), bearCentral.getY(), Config.scaledTileSize / 2, Config.scaledTileSize / 2, throwDirection);
+                    new BigSnowBallEntity(bearCentral.getX(), bearCentral.getY(), MapConfig.scaledTileSize / 2, MapConfig.scaledTileSize / 2, throwDirection);
 
                     bear.addComponent(new AttackTimeOutComponent(SNOWBALL_COOLDOWN));
                     bear.getComponent(VelocityComponent.class).stopMovement();

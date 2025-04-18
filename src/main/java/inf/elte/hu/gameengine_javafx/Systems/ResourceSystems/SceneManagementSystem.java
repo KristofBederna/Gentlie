@@ -2,7 +2,7 @@ package inf.elte.hu.gameengine_javafx.Systems.ResourceSystems;
 
 import Game.Misc.Scenes.MainScene;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -12,14 +12,12 @@ public class SceneManagementSystem extends GameSystem {
     private GameScene nextScene;
     private Stage stage;
 
-    public SceneManagementSystem() {
-        // Initialize with a default scene
-        currentScene = new MainScene(new BorderPane(), Config.resolution.first(), Config.resolution.second());
-    }
-
     @Override
     public void start() {
         active = true;
+        // Initialize with a default scene
+        currentScene = new MainScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second());
+        currentScene.setup();
     }
 
     @Override

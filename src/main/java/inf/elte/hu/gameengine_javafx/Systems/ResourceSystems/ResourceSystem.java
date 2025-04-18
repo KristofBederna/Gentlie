@@ -3,10 +3,11 @@ package inf.elte.hu.gameengine_javafx.Systems.ResourceSystems;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.ResourceManager;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.ResourceConfig;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The ResourceSystem is responsible for managing and updating resources within the game engine.
@@ -32,25 +33,21 @@ public class ResourceSystem extends GameSystem {
     public void update() {
         Map<Class<?>, ResourceManager<?>> resourceManagers = ResourceHub.getInstance().getAllResourceManagers();
 
-        long threshold = System.currentTimeMillis() - 10000; // Define threshold time of 10000ms
+        long threshold = System.currentTimeMillis() - ResourceConfig.resourceUnloadThresholdTime;
 
-        // Iterate over all resource managers and clean up old resources
+        List<String> resourcesToRemove = new ArrayList<>();
         for (ResourceManager<?> resourceManager : resourceManagers.values()) {
-            synchronized (resourceManager) {
-                // Take a snapshot of the current resources
-                Map<String, ?> resourcesSnapshot = new ConcurrentHashMap<>(resourceManager.getResources());
-                Iterator<? extends Map.Entry<String, ?>> iterator = resourcesSnapshot.entrySet().iterator();
+            resourcesToRemove.clear();
+            for (Map.Entry<String, ?> entry : resourceManager.getResources().entrySet()) {
+                String key = entry.getKey();
+                Long lastAccessed = resourceManager.getLastAccessed(key);
 
-                // Remove resources that have not been accessed for over the threshold time
-                while (iterator.hasNext()) {
-                    Map.Entry<String, ?> resourceEntry = iterator.next();
-                    String resourceKey = resourceEntry.getKey();
-                    Long lastAccessed = resourceManager.getLastAccessed(resourceKey);
-
-                    if (lastAccessed != null && lastAccessed < threshold) {
-                        iterator.remove(); // Remove the resource if it hasn't been accessed in time
-                    }
+                if (lastAccessed != null && lastAccessed < threshold) {
+                    resourcesToRemove.add(key);
                 }
+            }
+            for (String key : resourcesToRemove) {
+                resourceManager.unload(key);
             }
         }
     }

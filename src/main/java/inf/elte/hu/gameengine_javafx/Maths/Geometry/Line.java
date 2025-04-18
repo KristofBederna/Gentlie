@@ -1,8 +1,7 @@
 package inf.elte.hu.gameengine_javafx.Maths.Geometry;
 
-import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -29,27 +28,31 @@ public class Line extends Shape {
         }
     }
 
-    public void render(GraphicsContext gc, Color color, int thickness) {
-        CameraEntity cameraEntity = CameraEntity.getInstance();
+    public void render(GraphicsContext gc, Color color) {
+        gc.setStroke(color);
+        gc.setLineWidth(1);
 
+        renderShape(gc);
+    }
+
+    public void render(GraphicsContext gc, Color color, double thickness) {
         gc.setStroke(color);
         gc.setLineWidth(thickness);
 
+        renderShape(gc);
+    }
+
+    private void renderShape(GraphicsContext gc) {
         if (points.size() >= 2) {
             Point start = points.get(0);
             Point end = points.get(1);
 
-            // Get camera position to apply the offset
-            double cameraX = cameraEntity.getComponent(PositionComponent.class).getGlobalX();
-            double cameraY = cameraEntity.getComponent(PositionComponent.class).getGlobalY();
+            double x1 = CameraEntity.getRenderX(start.getX()) * DisplayConfig.relativeWidthRatio;
+            double y1 = CameraEntity.getRenderY(start.getY()) * DisplayConfig.relativeHeightRatio;
+            double x2 = CameraEntity.getRenderX(end.getX()) * DisplayConfig.relativeWidthRatio;
+            double y2 = CameraEntity.getRenderY(end.getY()) * DisplayConfig.relativeHeightRatio;
 
-            // Scale the start and end points based on the camera position
-            double x1 = (start.getX() - cameraX) * Config.relativeWidthRatio;
-            double y1 = (start.getY() - cameraY) * Config.relativeHeightRatio;
-            double x2 = (end.getX() - cameraX) * Config.relativeWidthRatio;
-            double y2 = (end.getY() - cameraY) * Config.relativeHeightRatio;
 
-            // Draw the line with scaled coordinates
             gc.strokeLine(x1, y1, x2, y2);
         }
     }

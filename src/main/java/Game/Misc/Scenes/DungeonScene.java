@@ -31,7 +31,7 @@ import inf.elte.hu.gameengine_javafx.Maths.Geometry.ComplexShape;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
 import inf.elte.hu.gameengine_javafx.Maths.Vector;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Direction;
 import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.MouseInputHandler;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
@@ -46,7 +46,6 @@ import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementDeterminerSy
 import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.AnimationSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.ParticleSystem;
-import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.RenderSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
 import javafx.scene.Parent;
@@ -66,8 +65,8 @@ public class DungeonScene extends GameScene {
 
     @Override
     public void setup() {
-        Config.wallTiles = List.of(0, 1, 3);
-        Config.setTileScale(2.0);
+        MapConfig.wallTiles = List.of(0, 1, 3);
+        MapConfig.setTileScale(2.0);
 
         new ResourceStartUp();
 
@@ -85,13 +84,13 @@ public class DungeonScene extends GameScene {
     }
 
     private void declareEntities() {
-        PlayerEntity player = new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 0.8 * 0.55, Config.scaledTileSize * 0.8);
+        PlayerEntity player = new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", MapConfig.scaledTileSize * 0.8 * 0.55, MapConfig.scaledTileSize * 0.8);
         player.addComponent(new HealthComponent(PlayerStats.health));
-        new EventTriggerEntity(0, Config.scaledTileSize, Config.scaledTileSize, Config.scaledTileSize * 3, new ExitDungeonEvent(new Point(4 * 150, 2 * 150 + 150 * 0.25 - 1)), new ExitDungeonEventListener());
+        new EventTriggerEntity(0, MapConfig.scaledTileSize, MapConfig.scaledTileSize, MapConfig.scaledTileSize * 3, new ExitDungeonEvent(new Point(4 * 150, 2 * 150 + 150 * 0.25 - 1)), new ExitDungeonEventListener());
         new EnemyLabel(String.valueOf(EntityHub.getInstance().getEntitiesWithType(PolarBearEntity.class).size()), 100, 300, 100, 100);
         new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
         new HealthLabel(String.format("%.0f", PlayerStats.health), 100, 200, 100, 100);
-        EnterEnemyIslandLabel enterEnemyIslandLabel = new EnterEnemyIslandLabel("Press 'E' to leave dungeon", Config.scaledTileSize, 3 * Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
+        EnterEnemyIslandLabel enterEnemyIslandLabel = new EnterEnemyIslandLabel("Press 'E' to leave dungeon", MapConfig.scaledTileSize, 3 * MapConfig.scaledTileSize, MapConfig.scaledTileSize * 0.75, MapConfig.scaledTileSize * 0.75);
         enterEnemyIslandLabel.removeFromUI();
         enterEnemyIslandLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
     }
@@ -117,7 +116,7 @@ public class DungeonScene extends GameScene {
         systemHub.addSystem(AttackSystem.class, new AttackSystem(), 15);
         systemHub.addSystem(RemoveDeadObjectSystem.class, new RemoveDeadObjectSystem(), 16);
         systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 17);
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(), 18);
+        systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 18);
         systemHub.addSystem(GameSaverSystem.class, new GameSaverSystem(), 19);
     }
 
@@ -277,7 +276,7 @@ public class DungeonScene extends GameScene {
             double speed = 1500 * Time.getInstance().getDeltaTime();
             Vector throwDirection = new Vector((dx / length) * speed, (dy / length) * speed);
 
-            new SnowBallEntity(playerX, playerY, Config.scaledTileSize / 5, Config.scaledTileSize / 5, throwDirection);
+            new SnowBallEntity(playerX, playerY, MapConfig.scaledTileSize / 5, MapConfig.scaledTileSize / 5, throwDirection);
             player.getComponent(VelocityComponent.class).stopMovement();
             player.getComponent(AccelerationComponent.class).stopMovement();
         });

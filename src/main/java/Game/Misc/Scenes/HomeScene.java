@@ -9,6 +9,7 @@ import Game.Misc.EventHandling.EventListeners.ExitHomeEventListener;
 import Game.Misc.EventHandling.Events.ExitHomeEvent;
 import Game.Misc.PlayerStats;
 import Game.Misc.UtilityFunctions;
+import Game.Systems.CustomRenderSystem;
 import Game.Systems.EventTileSystem;
 import Game.Systems.GameSaverSystem;
 import Game.Systems.UserInterfaceSystem;
@@ -20,7 +21,7 @@ import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.MouseInputHandler;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
@@ -34,7 +35,6 @@ import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.AnimationSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.CameraSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.ParticleSystem;
-import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.RenderSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.WorldLoaderSystem;
@@ -53,8 +53,8 @@ public class HomeScene extends GameScene {
 
     @Override
     public void setup() {
-        Config.wallTiles = List.of(0, 1, 3);
-        Config.setTileScale(1.5);
+        MapConfig.wallTiles = List.of(0, 1, 3);
+        MapConfig.setTileScale(1.5);
 
         new ResourceStartUp();
         WorldEntity.getInstance("/assets/maps/gentlieHome.txt", "/assets/tileSets/gameTileSet.txt");
@@ -71,14 +71,14 @@ public class HomeScene extends GameScene {
     }
 
     private void declareEntities() {
-        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", Config.scaledTileSize * 2 * 0.55, Config.scaledTileSize * 2);
+        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", MapConfig.scaledTileSize * 2 * 0.55, MapConfig.scaledTileSize * 2);
         new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
         new HealthLabel(String.format("%.0f", PlayerStats.health), 100, 200, 100, 100);
-        new CampfireEntity(7*Config.scaledTileSize+Config.scaledTileSize*0.2, 5*Config.scaledTileSize, "/assets/images/Campfire/Campfire_1.png", Config.scaledTileSize*0.8, Config.scaledTileSize*0.8);
-        new WorldObject(6*Config.scaledTileSize, 1*Config.scaledTileSize-Config.scaledTileSize*0.2, 3*Config.scaledTileSize, 3*0.27*Config.scaledTileSize, "/assets/images/Bed.png", true, 2);
-        new WorldObject(2*Config.scaledTileSize+Config.scaledTileSize*0.3, 3*Config.scaledTileSize-Config.scaledTileSize*0.2, 1.5*0.15*Config.scaledTileSize, 1.5*Config.scaledTileSize, "/assets/images/Fishing_Rod.png", false, 2);
-        new WorldObject(10*Config.scaledTileSize-Config.scaledTileSize*0.8, 9*Config.scaledTileSize+Config.scaledTileSize*0.3, 0.75*0.98*Config.scaledTileSize, 0.75*Config.scaledTileSize, "/assets/images/Backpack.png", false, 2);
-        new EventTriggerEntity(6*Config.scaledTileSize, 11*Config.scaledTileSize +Config.scaledTileSize *0.8, 3*Config.scaledTileSize, 0.2*Config.scaledTileSize, new ExitHomeEvent(), new ExitHomeEventListener());
+        new CampfireEntity(7 * MapConfig.scaledTileSize + MapConfig.scaledTileSize * 0.2, 5 * MapConfig.scaledTileSize, "/assets/images/Campfire/Campfire_1.png", MapConfig.scaledTileSize * 0.8, MapConfig.scaledTileSize * 0.8);
+        new WorldObject(6 * MapConfig.scaledTileSize, 1 * MapConfig.scaledTileSize - MapConfig.scaledTileSize * 0.2, 3 * MapConfig.scaledTileSize, 3 * 0.27 * MapConfig.scaledTileSize, "/assets/images/Bed.png", true, 2);
+        new WorldObject(2 * MapConfig.scaledTileSize + MapConfig.scaledTileSize * 0.3, 3 * MapConfig.scaledTileSize - MapConfig.scaledTileSize * 0.2, 1.5 * 0.15 * MapConfig.scaledTileSize, 1.5 * MapConfig.scaledTileSize, "/assets/images/Fishing_Rod.png", false, 2);
+        new WorldObject(10 * MapConfig.scaledTileSize - MapConfig.scaledTileSize * 0.8, 9 * MapConfig.scaledTileSize + MapConfig.scaledTileSize * 0.3, 0.75 * 0.98 * MapConfig.scaledTileSize, 0.75 * MapConfig.scaledTileSize, "/assets/images/Backpack.png", false, 2);
+        new EventTriggerEntity(6 * MapConfig.scaledTileSize, 11 * MapConfig.scaledTileSize + MapConfig.scaledTileSize * 0.8, 3 * MapConfig.scaledTileSize, 0.2 * MapConfig.scaledTileSize, new ExitHomeEvent(), new ExitHomeEventListener());
     }
 
     private void SystemStartUp() {
@@ -97,7 +97,7 @@ public class HomeScene extends GameScene {
         systemHub.addSystem(CameraSystem.class, new CameraSystem(), 11);
         systemHub.addSystem(SoundSystem.class, new SoundSystem(), 12);
         systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 13);
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(),14);
+        systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 14);
         systemHub.addSystem(GameSaverSystem.class, new GameSaverSystem(), 15);
     }
 

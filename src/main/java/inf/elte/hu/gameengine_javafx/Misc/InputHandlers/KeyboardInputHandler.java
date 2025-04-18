@@ -1,6 +1,7 @@
 package inf.elte.hu.gameengine_javafx.Misc.InputHandlers;
 
 import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -21,8 +22,13 @@ public class KeyboardInputHandler {
      * Private constructor that initializes key event handlers for the game scene.
      */
     private KeyboardInputHandler() {
-        GameCanvas.getInstance().getScene().setOnKeyPressed(this::keyPressed);
-        GameCanvas.getInstance().getScene().setOnKeyReleased(this::keyReleased);
+        Scene scene = GameCanvas.getInstance().getScene();
+        scene.setOnKeyPressed(this::keyPressed);
+        scene.setOnKeyReleased(this::keyReleased);
+    }
+
+    private KeyboardInputHandler(boolean test) {
+
     }
 
     /**
@@ -34,6 +40,13 @@ public class KeyboardInputHandler {
     public static KeyboardInputHandler getInstance() {
         if (instance == null) {
             instance = new KeyboardInputHandler();
+        }
+        return instance;
+    }
+
+    public static KeyboardInputHandler getInstance(boolean test) {
+        if (instance == null) {
+            instance = new KeyboardInputHandler(test);
         }
         return instance;
     }

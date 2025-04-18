@@ -19,7 +19,7 @@ import inf.elte.hu.gameengine_javafx.Entities.ParticleEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.NSidedShape;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Direction;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
 import javafx.scene.layout.BorderPane;
@@ -51,7 +51,7 @@ public class RemoveDeadObjectSystem extends GameSystem {
         for (var entity : dead) {
             if (entity instanceof PlayerEntity) {
                 Random rand = new Random();
-                SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), Config.resolution.first(), Config.resolution.second(), new Point(10 * 100 + 100 / 2, 3 * 100)));
+                SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second(), new Point(10 * 100 + 100 / 2, 3 * 100)));
                 PlayerStats.gold = (int) (PlayerStats.gold * rand.nextDouble(0.5, 0.75));
                 PlayerStats.health = rand.nextInt(25, 100);
                 continue;

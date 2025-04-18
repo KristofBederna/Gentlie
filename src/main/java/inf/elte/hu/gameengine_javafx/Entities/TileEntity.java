@@ -12,7 +12,7 @@ import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 import inf.elte.hu.gameengine_javafx.Misc.MapClasses.TileLoader;
 
 public class TileEntity extends Entity {
@@ -23,22 +23,10 @@ public class TileEntity extends Entity {
         this.addComponent(new ZIndexComponent(0));
         this.addComponent(new DimensionComponent(width, height));
         this.addComponent(new CentralMassComponent(x + width / 2, y + height / 2));
-        this.addComponent(new FrictionComponent(4));
-
-        addToManager();
-    }
-
-    public TileEntity(int value, double x, double y, String path, double width, double height, boolean hasHitBox) {
-        this.addComponent(new TileValueComponent(value));
-        this.addComponent(new ImageComponent(path, width, height));
-        this.getComponent(PositionComponent.class).setLocalPosition(x, y, this);
-        this.addComponent(new ZIndexComponent(0));
-        this.addComponent(new DimensionComponent(width, height));
-        this.addComponent(new CentralMassComponent(x + width / 2, y + height / 2));
-        if (hasHitBox) {
+        if (MapConfig.wallTiles.contains(value)) {
             this.addComponent(new HitBoxComponent(new Rectangle(new Point(x, y), width, height).getPoints()));
         }
-        this.addComponent(new FrictionComponent(4));
+        this.addComponent(new FrictionComponent(0.4));
 
         addToManager();
     }
@@ -60,7 +48,7 @@ public class TileEntity extends Entity {
     public void changeValues(int value) {
         this.getComponent(TileValueComponent.class).setTileValue(value);
         this.getComponent(ImageComponent.class).setImagePath("/assets/tiles/"+ TileLoader.getTilePath(value)+".png");
-        if (Config.wallTiles.contains(value)) {
+        if (MapConfig.wallTiles.contains(value)) {
             this.addHitBox(getComponent(PositionComponent.class).getGlobalX(), getComponent(PositionComponent.class).getGlobalY(), getComponent(DimensionComponent.class).getWidth(), getComponent(DimensionComponent.class).getHeight());
         } else {
             this.removeComponentsByType(HitBoxComponent.class);

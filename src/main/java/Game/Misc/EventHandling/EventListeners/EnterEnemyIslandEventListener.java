@@ -21,7 +21,7 @@ public class EnterEnemyIslandEventListener implements EventListener<EnterEnemyIs
     }
 
     @Override
-    public void onExit() {
+    public void onExit(EnterEnemyIslandEvent event) {
         ((LabelEntity)EntityHub.getInstance().getEntitiesWithType(EnterEnemyIslandLabel.class).getFirst()).removeFromUI();
     }
 }

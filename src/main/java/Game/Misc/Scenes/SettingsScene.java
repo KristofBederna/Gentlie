@@ -1,14 +1,14 @@
 package Game.Misc.Scenes;
 
 import Game.Misc.UtilityFunctions;
+import Game.Systems.CustomRenderSystem;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.ResourceStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.SystemStartUp;
-import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.RenderSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
 import javafx.scene.Parent;
@@ -47,7 +47,7 @@ public class SettingsScene extends GameScene {
 
     private void declareEntities() {
         UtilityFunctions.showDetailedSettingsMenu();
-        ButtonEntity exit = new ButtonEntity("Back", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 + 350*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new MainScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
+        ButtonEntity exit = new ButtonEntity("Back", DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 + 350 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 80 * DisplayConfig.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new MainScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second())));
 
         exit.addStyleClass("main-menu-button");
     }
@@ -56,7 +56,7 @@ public class SettingsScene extends GameScene {
         //Define systems to be started up here
         SystemHub systemHub = SystemHub.getInstance();
         systemHub.addSystem(ResourceSystem.class, new ResourceSystem(),1);
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(), 2);
+        systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 2);
     }
 
     @Override

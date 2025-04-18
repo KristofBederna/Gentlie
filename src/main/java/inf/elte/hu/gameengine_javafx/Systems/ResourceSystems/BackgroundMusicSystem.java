@@ -4,7 +4,7 @@ import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusic;
 import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusicStore;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.ResourceConfig;
 
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
@@ -34,7 +34,7 @@ public class BackgroundMusicSystem extends GameSystem {
     protected void update() {
         synchronized (playbackLock) {
             if (currentClip != null && currentClip.isOpen()) {
-                setVolume(currentClip, Config.backgroundMusicVolume * Config.masterVolume);
+                setVolume(currentClip, ResourceConfig.backgroundMusicVolume * ResourceConfig.masterVolume);
             }
 
             if (shouldPlayNewTrack()) {
@@ -80,13 +80,12 @@ public class BackgroundMusicSystem extends GameSystem {
             if (playQueue.isEmpty()) {
                 playQueue.addAll(availableMusic);
             }
-            return playQueue.remove(0);
+            return playQueue.removeFirst();
         }
     }
 
     private void playMusic(BackgroundMusic music) {
         synchronized (playbackLock) {
-            // Small delay to ensure any previous clip fully stops
             try { Thread.sleep(30); }
             catch (InterruptedException e) { Thread.currentThread().interrupt(); }
 
@@ -103,7 +102,7 @@ public class BackgroundMusicSystem extends GameSystem {
             try {
                 currentClip = clip;
                 lastPlayed = music;
-                setVolume(currentClip, Config.backgroundMusicVolume * Config.masterVolume);
+                setVolume(currentClip, ResourceConfig.backgroundMusicVolume * ResourceConfig.masterVolume);
                 currentClip.setFramePosition(0);
 
                 currentListener = event -> {
@@ -160,8 +159,15 @@ public class BackgroundMusicSystem extends GameSystem {
 
         try {
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            float dB = (float) (Math.log10(Math.max(volume, 0.0001f)) * 20);
-            gainControl.setValue(dB);
+            if (ResourceConfig.linearVolumeControl) {
+                float minGain = gainControl.getMinimum();
+                float maxGain = gainControl.getMaximum();
+                float gain = minGain + (maxGain - minGain) * volume;
+                gainControl.setValue(gain);
+            } else {
+                float dB = (float) (Math.log10(Math.max(volume, 0.0001f)) * 20);
+                gainControl.setValue(dB);
+            }
         } catch (Exception e) {
             System.err.println("Failed to set volume: " + e.getMessage());
         }

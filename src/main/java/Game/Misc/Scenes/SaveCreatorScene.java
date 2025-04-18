@@ -4,16 +4,16 @@ import Game.Misc.EnemyStats;
 import Game.Misc.PlayerStats;
 import Game.Misc.ShopItemPrices;
 import Game.Misc.UtilityFunctions;
+import Game.Systems.CustomRenderSystem;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.ResourceStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.SystemStartUp;
-import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.RenderSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
 import javafx.scene.Parent;
@@ -47,10 +47,9 @@ public class SaveCreatorScene extends GameScene {
     }
 
     private void declareEntities() {
-        double startY = 150 * Config.relativeHeightRatio;
-        double gap = 100 * Config.relativeHeightRatio;
+        double startY = 150 * DisplayConfig.relativeHeightRatio;
+        double gap = 100 * DisplayConfig.relativeHeightRatio;
 
-        // Use the working directory (where the JAR is run) and create the "savefiles" folder there
         File saveDir = new File(System.getProperty("user.dir"), "savefiles");
 
         if (!saveDir.exists()) {
@@ -82,10 +81,10 @@ public class SaveCreatorScene extends GameScene {
 
                             ButtonEntity saveButton = new ButtonEntity(
                                     folderName,
-                                    Config.resolution.first() / 2 - 50 * Config.relativeWidthRatio,
+                                    DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio,
                                     startY + i * gap,
-                                    200 * Config.relativeWidthRatio,
-                                    80 * Config.relativeHeightRatio,
+                                    200 * DisplayConfig.relativeWidthRatio,
+                                    80 * DisplayConfig.relativeHeightRatio,
                                     () -> startLoad(folder)
                             );
                             saveButton.addStyleClass("main-menu-button");
@@ -103,28 +102,28 @@ public class SaveCreatorScene extends GameScene {
 
         ButtonEntity exit = new ButtonEntity(
                 "Back",
-                Config.resolution.first() / 2 - 50 * Config.relativeWidthRatio,
-                Config.resolution.second() / 2 + 350 * Config.relativeHeightRatio,
-                200 * Config.relativeWidthRatio,
-                80 * Config.relativeHeightRatio,
+                DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio,
+                DisplayConfig.resolution.second() / 2 + 350 * DisplayConfig.relativeHeightRatio,
+                200 * DisplayConfig.relativeWidthRatio,
+                80 * DisplayConfig.relativeHeightRatio,
                 () -> SystemHub.getInstance()
                         .getSystem(SceneManagementSystem.class)
-                        .requestSceneChange(new MainScene(new BorderPane(), Config.resolution.first(), Config.resolution.second()))
+                        .requestSceneChange(new MainScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second()))
         );
         exit.addStyleClass("main-menu-button");
     }
 
     private void startLoad(File saveFolder) {
         LabelEntity label = new LabelEntity("Are you sure you want to overwrite the save file at " + saveFolder.getName() + "?",
-                Config.resolution.first() / 2 - 350 * Config.relativeWidthRatio,
-                Config.resolution.second() / 2 + 175 * Config.relativeHeightRatio,
-                200 * Config.relativeWidthRatio,
-                80 * Config.relativeHeightRatio);
+                DisplayConfig.resolution.first() / 2 - 350 * DisplayConfig.relativeWidthRatio,
+                DisplayConfig.resolution.second() / 2 + 175 * DisplayConfig.relativeHeightRatio,
+                200 * DisplayConfig.relativeWidthRatio,
+                80 * DisplayConfig.relativeHeightRatio);
         ButtonEntity yes = new ButtonEntity("Yes",
-                Config.resolution.first() / 2 - 175 * Config.relativeWidthRatio,
-                Config.resolution.second() / 2 + 265 * Config.relativeHeightRatio,
-                200 * Config.relativeWidthRatio,
-                80 * Config.relativeHeightRatio,
+                DisplayConfig.resolution.first() / 2 - 175 * DisplayConfig.relativeWidthRatio,
+                DisplayConfig.resolution.second() / 2 + 265 * DisplayConfig.relativeHeightRatio,
+                200 * DisplayConfig.relativeWidthRatio,
+                80 * DisplayConfig.relativeHeightRatio,
                 () -> {
                     // Project root
                     Path projectRoot = Paths.get(System.getProperty("user.dir"));
@@ -141,15 +140,15 @@ public class SaveCreatorScene extends GameScene {
                     ShopItemPrices.resetToBaseline();
                     File saveFile = new File(PlayerStats.currentSave);
                     clearDirectory(saveFile);
-                    SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), Config.resolution.first(), Config.resolution.second(), new Point(10 * 100 + 100 / 2, 3 * 100)));
+                    SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second(), new Point(10 * 100 + 100 / 2, 3 * 100)));
                 });
         ButtonEntity no = new ButtonEntity("No",
-                Config.resolution.first() / 2 + 75 * Config.relativeWidthRatio,
-                Config.resolution.second() / 2 + 265 * Config.relativeHeightRatio,
-                200 * Config.relativeWidthRatio,
-                80 * Config.relativeHeightRatio,
+                DisplayConfig.resolution.first() / 2 + 75 * DisplayConfig.relativeWidthRatio,
+                DisplayConfig.resolution.second() / 2 + 265 * DisplayConfig.relativeHeightRatio,
+                200 * DisplayConfig.relativeWidthRatio,
+                80 * DisplayConfig.relativeHeightRatio,
                 () -> {
-                    SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new SaveCreatorScene(new BorderPane(), Config.resolution.first(), Config.resolution.second()));
+                    SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new SaveCreatorScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second()));
                 });
         label.addStyleClass("main-menu-label");
         yes.addStyleClass("main-menu-button");
@@ -173,7 +172,7 @@ public class SaveCreatorScene extends GameScene {
     private void systemStartUp() {
         SystemHub systemHub = SystemHub.getInstance();
         systemHub.addSystem(ResourceSystem.class, new ResourceSystem(), 1);
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(), 2);
+        systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 2);
     }
 
     @Override

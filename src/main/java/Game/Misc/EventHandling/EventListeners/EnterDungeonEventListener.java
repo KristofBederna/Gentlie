@@ -22,7 +22,7 @@ public class EnterDungeonEventListener implements EventListener<EnterDungeonEven
     }
 
     @Override
-    public void onExit() {
+    public void onExit(EnterDungeonEvent event) {
         ((LabelEntity)EntityHub.getInstance().getEntitiesWithType(DungeonLabel.class).getFirst()).removeFromUI();
     }
 }

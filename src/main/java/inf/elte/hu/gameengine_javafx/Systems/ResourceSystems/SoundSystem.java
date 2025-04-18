@@ -5,6 +5,7 @@ import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.ResourceConfig;
 import inf.elte.hu.gameengine_javafx.Misc.SoundEffect;
 import inf.elte.hu.gameengine_javafx.Misc.SoundEffectStore;
 
@@ -85,10 +86,15 @@ public class SoundSystem extends GameSystem {
     private void setVolume(Clip clip, float volume) {
         try {
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            float minGain = gainControl.getMinimum();
-            float maxGain = gainControl.getMaximum();
-            float gain = minGain + (maxGain - minGain) * volume;
-            gainControl.setValue(gain);
+            if (ResourceConfig.linearVolumeControl) {
+                float minGain = gainControl.getMinimum();
+                float maxGain = gainControl.getMaximum();
+                float gain = minGain + (maxGain - minGain) * volume;
+                gainControl.setValue(gain);
+            } else {
+                float dB = (float) (Math.log10(Math.max(volume, 0.0001f)) * 20);
+                gainControl.setValue(dB);
+            }
         } catch (Exception e) {
             System.err.println("Failed to set volume: " + e.getMessage());
         }

@@ -24,10 +24,11 @@ public class MaxDistanceFromOriginComponent extends Component {
         if (entity == null) {
             return false;
         }
+
         ParentComponent parent = entity.getComponent(ParentComponent.class);
         PositionComponent position = entity.getComponent(PositionComponent.class);
         if (position == null || parent == null || parent.getParent() == null) {
-            return false;
+            throw new RuntimeException("Entity has no parent or position");
         }
 
         PositionComponent parentPosition = parent.getParent().getComponent(PositionComponent.class);

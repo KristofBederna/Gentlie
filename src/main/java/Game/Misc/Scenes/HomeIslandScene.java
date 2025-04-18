@@ -22,7 +22,7 @@ import inf.elte.hu.gameengine_javafx.Entities.ParticleEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Direction;
 import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.MouseInputHandler;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
@@ -37,7 +37,6 @@ import inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems.MovementSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.AnimationSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.CameraSystem;
 import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.ParticleSystem;
-import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.RenderSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.WorldLoaderSystem;
@@ -65,8 +64,8 @@ public class HomeIslandScene extends GameScene {
 
     @Override
     public void setup() {
-        Config.wallTiles = List.of(3, 5, 6, 7);
-        Config.setTileScale(1.5);
+        MapConfig.wallTiles = List.of(3, 5, 6, 7);
+        MapConfig.setTileScale(1.5);
 
         new ResourceStartUp();
         WorldEntity.getInstance("/assets/maps/homeIsland.txt", "/assets/tileSets/gameTileSet.txt");
@@ -83,41 +82,41 @@ public class HomeIslandScene extends GameScene {
     }
 
     private void declareEntities() {
-        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_1.png",  Config.scaledTileSize * 0.75 * 0.55,  Config.scaledTileSize * 0.75);
+        new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_1.png", MapConfig.scaledTileSize * 0.75 * 0.55, MapConfig.scaledTileSize * 0.75);
 
         Random random = new Random();
-        new PenguinEntity(random.nextInt(2, 10)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_1.png",  Config.scaledTileSize*0.55,  Config.scaledTileSize);
-        new PenguinEntity(random.nextInt(2, 10)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_1.png",  Config.scaledTileSize*0.55,  Config.scaledTileSize);
-        new PenguinEntity(random.nextInt(2, 10)*Config.scaledTileSize, 2*Config.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_1.png",  Config.scaledTileSize*0.55,  Config.scaledTileSize);
+        new PenguinEntity(random.nextInt(2, 10) * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_1.png", MapConfig.scaledTileSize * 0.55, MapConfig.scaledTileSize);
+        new PenguinEntity(random.nextInt(2, 10) * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_1.png", MapConfig.scaledTileSize * 0.55, MapConfig.scaledTileSize);
+        new PenguinEntity(random.nextInt(2, 10) * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, "idle", "/assets/images/Penguins/Penguin_Down_1.png", MapConfig.scaledTileSize * 0.55, MapConfig.scaledTileSize);
         new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
         new HealthLabel(String.format("%.0f", PlayerStats.health), 100, 200, 100, 100);
         new WaterEntity();
         new SkyBoxEntity();
 
-        new IglooEntity(6*Config.scaledTileSize, Config.scaledTileSize, 2*Config.scaledTileSize, 2*Config.scaledTileSize);
-        new ShipEntity(14*Config.scaledTileSize, 1.5*Config.scaledTileSize, 2*Config.scaledTileSize, 2*Config.scaledTileSize);
-        new InnEntity(2*Config.scaledTileSize, Config.scaledTileSize, 2*Config.scaledTileSize, 2*Config.scaledTileSize);
+        new IglooEntity(6 * MapConfig.scaledTileSize, MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize);
+        new ShipEntity(14 * MapConfig.scaledTileSize, 1.5 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize);
+        new InnEntity(2 * MapConfig.scaledTileSize, MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize);
 
         new ParticleEmitterEntity(0, -300, new ParticleEntity(0, 0, 20, 20, "/assets/images/snowflake.png", 3000), Direction.RIGHT, 1, 60);
         new ParticleEmitterEntity(2400, -300, new ParticleEntity(0, 0, 20, 20, "/assets/images/snowflake.png", 3000), Direction.LEFT, 1, 60);
 
 
-        EnterHomeLabel homeLabel = new EnterHomeLabel("Press 'E' to enter your home", 6* Config.scaledTileSize, 3*Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
+        EnterHomeLabel homeLabel = new EnterHomeLabel("Press 'E' to enter your home", 6 * MapConfig.scaledTileSize, 3 * MapConfig.scaledTileSize, MapConfig.scaledTileSize * 0.75, MapConfig.scaledTileSize * 0.75);
         homeLabel.removeFromUI();
         homeLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
-        EnterInnLabel innLabel = new EnterInnLabel("Press 'E' to enter the inn", 3* Config.scaledTileSize, 3*Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
+        EnterInnLabel innLabel = new EnterInnLabel("Press 'E' to enter the inn", 3 * MapConfig.scaledTileSize, 3 * MapConfig.scaledTileSize, MapConfig.scaledTileSize * 0.75, MapConfig.scaledTileSize * 0.75);
         innLabel.removeFromUI();
         innLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
-        EnterEnemyIslandLabel enterEnemyIslandLabel = new EnterEnemyIslandLabel("Press 'E' to go on an adventure", 10 * Config.scaledTileSize, 3*Config.scaledTileSize, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75);
+        EnterEnemyIslandLabel enterEnemyIslandLabel = new EnterEnemyIslandLabel("Press 'E' to go on an adventure", 10 * MapConfig.scaledTileSize, 3 * MapConfig.scaledTileSize, MapConfig.scaledTileSize * 0.75, MapConfig.scaledTileSize * 0.75);
         enterEnemyIslandLabel.removeFromUI();
         enterEnemyIslandLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
 
-        new EventTriggerEntity(7 * Config.scaledTileSize - Config.scaledTileSize * 0.25 - 1, 2 * Config.scaledTileSize + Config.scaledTileSize * 0.25 - 1, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75, new EnterHomeEvent(new Point(6 * Config.scaledTileSize + Config.scaledTileSize * 0.33, 8 * Config.scaledTileSize)), new EnterHomeEventListener());
-        new EventTriggerEntity(2* Config.scaledTileSize +Config.scaledTileSize *0.25-1, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1, Config.scaledTileSize * 0.75, Config.scaledTileSize * 0.75, new EnterInnEvent(), new EnterInnListener());
-        new EventTriggerEntity(14*Config.scaledTileSize, 2.5*Config.scaledTileSize, 2*Config.scaledTileSize, Config.scaledTileSize /2, new EnterEnemyIslandEvent(new Point(3*Config.scaledTileSize, 2*Config.scaledTileSize +Config.scaledTileSize *0.25-1)), new EnterEnemyIslandEventListener());
+        new EventTriggerEntity(7 * MapConfig.scaledTileSize - MapConfig.scaledTileSize * 0.25 - 1, 2 * MapConfig.scaledTileSize + MapConfig.scaledTileSize * 0.25 - 1, MapConfig.scaledTileSize * 0.75, MapConfig.scaledTileSize * 0.75, new EnterHomeEvent(new Point(6 * MapConfig.scaledTileSize + MapConfig.scaledTileSize * 0.33, 8 * MapConfig.scaledTileSize)), new EnterHomeEventListener());
+        new EventTriggerEntity(2 * MapConfig.scaledTileSize + MapConfig.scaledTileSize * 0.25 - 1, 2 * MapConfig.scaledTileSize + MapConfig.scaledTileSize * 0.25 - 1, MapConfig.scaledTileSize * 0.75, MapConfig.scaledTileSize * 0.75, new EnterInnEvent(), new EnterInnListener());
+        new EventTriggerEntity(14 * MapConfig.scaledTileSize, 2.5 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, MapConfig.scaledTileSize / 2, new EnterEnemyIslandEvent(new Point(3 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize + MapConfig.scaledTileSize * 0.25 - 1)), new EnterEnemyIslandEventListener());
     }
 
     private void SystemStartUp() {
@@ -138,7 +137,7 @@ public class HomeIslandScene extends GameScene {
         systemHub.addSystem(SoundSystem.class, new SoundSystem(), 12);
         systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 13);
         systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 14);
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(), 15);
+        systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 15);
         systemHub.addSystem(GameSaverSystem.class, new GameSaverSystem(), 16);
     }
 

@@ -1,8 +1,7 @@
 package inf.elte.hu.gameengine_javafx.Maths.Geometry;
 
-import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -77,8 +76,8 @@ public class Rectangle extends Shape {
     }
 
     public void moveTo(Point newPoint) {
-        double deltaX = newPoint.getX() - points.get(0).getX();
-        double deltaY = newPoint.getY() - points.get(0).getY();
+        double deltaX = newPoint.getX() - points.getFirst().getX();
+        double deltaY = newPoint.getY() - points.getFirst().getY();
 
         for (Point p : points) {
             p.setX(p.getX() + deltaX);
@@ -91,50 +90,47 @@ public class Rectangle extends Shape {
         gc.setStroke(color);
         gc.setLineWidth(2);
 
-        CameraEntity cameraEntity = CameraEntity.getInstance();
-        double cameraX = cameraEntity.getComponent(PositionComponent.class).getGlobalX();
-        double cameraY = cameraEntity.getComponent(PositionComponent.class).getGlobalY();
-
-        double x = points.get(0).getX() - cameraX;
-        double y = points.get(0).getY() - cameraY;
+        double x = CameraEntity.getRenderX(points.get(0).getX());
+        double y = CameraEntity.getRenderY(points.get(0).getY());
         double width = points.get(1).getX() - points.get(0).getX();
         double height = points.get(3).getY() - points.get(0).getY();
 
-        gc.strokeRect(x* Config.relativeWidthRatio, y*Config.relativeHeightRatio, width* Config.relativeWidthRatio, height*Config.relativeHeightRatio);
+        gc.strokeRect(x * DisplayConfig.relativeWidthRatio, y * DisplayConfig.relativeHeightRatio, width * DisplayConfig.relativeWidthRatio, height * DisplayConfig.relativeHeightRatio);
+    }
+
+    public void render(GraphicsContext gc, Color color, double strokeWidth) {
+        gc.setStroke(color);
+        gc.setLineWidth(strokeWidth);
+
+        double x = CameraEntity.getRenderX(points.get(0).getX());
+        double y = CameraEntity.getRenderY(points.get(0).getY());
+        double width = points.get(1).getX() - points.get(0).getX();
+        double height = points.get(3).getY() - points.get(0).getY();
+
+        gc.strokeRect(x * DisplayConfig.relativeWidthRatio, y * DisplayConfig.relativeHeightRatio, width * DisplayConfig.relativeWidthRatio, height * DisplayConfig.relativeHeightRatio);
     }
 
     public void renderFill(GraphicsContext gc, Color color) {
-        CameraEntity cameraEntity = CameraEntity.getInstance();
-        if (cameraEntity == null) {
-            return;
-        }
-        double cameraX = cameraEntity.getComponent(PositionComponent.class).getGlobalX();
-        double cameraY = cameraEntity.getComponent(PositionComponent.class).getGlobalY();
-
-        double x = points.get(0).getX() - cameraX;
-        double y = points.get(0).getY() - cameraY;
+        double x = CameraEntity.getRenderX(points.get(0).getX());
+        double y = CameraEntity.getRenderY(points.get(0).getY());
         double width = points.get(1).getX() - points.get(0).getX();
         double height = points.get(3).getY() - points.get(0).getY();
 
         gc.setFill(color);
-        gc.fillRect(x* Config.relativeWidthRatio, y*Config.relativeHeightRatio, width* Config.relativeWidthRatio, height*Config.relativeHeightRatio);
+        gc.fillRect(x * DisplayConfig.relativeWidthRatio, y * DisplayConfig.relativeHeightRatio, width * DisplayConfig.relativeWidthRatio, height * DisplayConfig.relativeHeightRatio);
     }
 
     public void renderFillWithStroke(GraphicsContext gc, double radius, Color color, Color strokeColor, double outerStrokeWidth) {
-        CameraEntity cameraEntity = CameraEntity.getInstance();
-        double cameraX = cameraEntity.getComponent(PositionComponent.class).getGlobalX();
-        double cameraY = cameraEntity.getComponent(PositionComponent.class).getGlobalY();
-
-        double x = points.get(0).getX() - cameraX;
-        double y = points.get(0).getY() - cameraY;
+        double x = CameraEntity.getRenderX(points.get(0).getX());
+        double y = CameraEntity.getRenderY(points.get(0).getY());
         double width = points.get(1).getX() - points.get(0).getX();
         double height = points.get(3).getY() - points.get(0).getY();
 
         gc.setFill(color);
-        gc.fillRect(x* Config.relativeWidthRatio, y*Config.relativeHeightRatio, width* Config.relativeWidthRatio, height*Config.relativeHeightRatio);
+        gc.fillRect(x * DisplayConfig.relativeWidthRatio, y * DisplayConfig.relativeHeightRatio, width * DisplayConfig.relativeWidthRatio, height * DisplayConfig.relativeHeightRatio);
 
         gc.setStroke(strokeColor);
         gc.setLineWidth(outerStrokeWidth);
-        gc.strokeRect(x* Config.relativeWidthRatio, y*Config.relativeHeightRatio, width* Config.relativeWidthRatio, height*Config.relativeHeightRatio);
+        gc.strokeRect(x * DisplayConfig.relativeWidthRatio, y * DisplayConfig.relativeHeightRatio, width * DisplayConfig.relativeWidthRatio, height * DisplayConfig.relativeHeightRatio);
     }
 }

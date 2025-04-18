@@ -24,7 +24,7 @@ public class ExitDungeonEventListener implements EventListener<ExitDungeonEvent>
     }
 
     @Override
-    public void onExit() {
+    public void onExit(ExitDungeonEvent event) {
         ((LabelEntity) EntityHub.getInstance().getEntitiesWithType(EnterEnemyIslandLabel.class).getFirst()).removeFromUI();
     }
 }

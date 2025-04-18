@@ -2,7 +2,7 @@ package inf.elte.hu.gameengine_javafx.Misc.MapClasses;
 
 import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Tuple;
 
 import java.util.HashMap;
@@ -84,7 +84,8 @@ public class World {
      * @param chunk the chunk to add
      */
     public void addChunk(int x, int y, Chunk chunk) {
-        chunks.putIfAbsent(new Tuple<>(x, y), chunk);
+        chunks.put(new Tuple<>(x, y), chunk);
+        savedChunks.put(new Tuple<>(x, y), chunk);
     }
 
     /**
@@ -94,14 +95,14 @@ public class World {
      * @return the {@code TileEntity} at the specified point, or {@code null} if not found
      */
     public TileEntity getElementAt(Point point) {
-        int tileX = Math.floorDiv((int) point.getX(), (int) Config.scaledTileSize);
-        int tileY = Math.floorDiv((int) point.getY(), (int) Config.scaledTileSize);
+        int tileX = Math.floorDiv((int) point.getX(), (int) MapConfig.scaledTileSize);
+        int tileY = Math.floorDiv((int) point.getY(), (int) MapConfig.scaledTileSize);
 
-        int chunkX = Math.floorDiv(tileX, Config.chunkWidth);
-        int chunkY = Math.floorDiv(tileY, Config.chunkHeight);
+        int chunkX = Math.floorDiv(tileX, MapConfig.chunkWidth);
+        int chunkY = Math.floorDiv(tileY, MapConfig.chunkHeight);
 
-        int localX = Math.floorMod(tileY, Config.chunkWidth);
-        int localY = Math.floorMod(tileX, Config.chunkHeight);
+        int localX = Math.floorMod(tileY, MapConfig.chunkWidth);
+        int localY = Math.floorMod(tileX, MapConfig.chunkHeight);
 
         Chunk chunk = chunks.get(new Tuple<>(chunkX, chunkY));
         if (chunk != null) {
@@ -110,20 +111,49 @@ public class World {
         return null;
     }
 
+    public TileEntity getElementAtSaved(Point point) {
+        int tileX = Math.floorDiv((int) point.getX(), (int) MapConfig.scaledTileSize);
+        int tileY = Math.floorDiv((int) point.getY(), (int) MapConfig.scaledTileSize);
+
+        int chunkX = Math.floorDiv(tileX, MapConfig.chunkWidth);
+        int chunkY = Math.floorDiv(tileY, MapConfig.chunkHeight);
+
+        int localX = Math.floorMod(tileY, MapConfig.chunkWidth);
+        int localY = Math.floorMod(tileX, MapConfig.chunkHeight);
+
+        Chunk chunk = savedChunks.get(new Tuple<>(chunkX, chunkY));
+        if (chunk != null) {
+            return chunk.getElement(localX, localY);
+        }
+        return null;
+    }
+
     public void setElementAt(Point point, int value) {
-        int tileX = Math.floorDiv((int) point.getX(), (int) Config.scaledTileSize);
-        int tileY = Math.floorDiv((int) point.getY(), (int) Config.scaledTileSize);
+        int tileX = Math.floorDiv((int) point.getX(), (int) MapConfig.scaledTileSize);
+        int tileY = Math.floorDiv((int) point.getY(), (int) MapConfig.scaledTileSize);
 
-        int chunkX = Math.floorDiv(tileX, Config.chunkWidth);
-        int chunkY = Math.floorDiv(tileY, Config.chunkHeight);
+        int chunkX = Math.floorDiv(tileX, MapConfig.chunkWidth);
+        int chunkY = Math.floorDiv(tileY, MapConfig.chunkHeight);
 
-        int localX = Math.floorMod(tileY, Config.chunkWidth);
-        int localY = Math.floorMod(tileX, Config.chunkHeight);
+        int localX = Math.floorMod(tileY, MapConfig.chunkWidth);
+        int localY = Math.floorMod(tileX, MapConfig.chunkHeight);
 
         Chunk chunk = chunks.get(new Tuple<>(chunkX, chunkY));
         if (chunk != null) {
             chunk.setElement(localX, localY, value);
         }
+    }
+
+    public void setElementAtSaved(Point point, int value) {
+        int tileX = Math.floorDiv((int) point.getX(), (int) MapConfig.scaledTileSize);
+        int tileY = Math.floorDiv((int) point.getY(), (int) MapConfig.scaledTileSize);
+
+        int chunkX = Math.floorDiv(tileX, MapConfig.chunkWidth);
+        int chunkY = Math.floorDiv(tileY, MapConfig.chunkHeight);
+
+        int localX = Math.floorMod(tileY, MapConfig.chunkWidth);
+        int localY = Math.floorMod(tileX, MapConfig.chunkHeight);
+
         Chunk savedChunk = savedChunks.get(new Tuple<>(chunkX, chunkY));
         if (savedChunk != null) {
             savedChunk.setElement(localX, localY, value);

@@ -1,6 +1,6 @@
 package inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners;
 
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListener;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.ResolutionChangeEvent;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
@@ -9,18 +9,18 @@ public class ResolutionChangeEventListener implements EventListener<ResolutionCh
     @Override
     public void onEvent(ResolutionChangeEvent event) {
         GameCanvas canvas = GameCanvas.getInstance();
-        if (!Config.fullScreenMode) {
+        if (!DisplayConfig.fullScreenMode) {
             canvas.getScene().getWindow().setWidth(event.getWidth());
             canvas.getScene().getWindow().setHeight(event.getHeight());
         }
         canvas.setWidth(event.getWidth());
         canvas.setHeight(event.getHeight());
-        Config.setRelativeAspectRatio();
-        //SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(SystemHub.getInstance().getSystem(SceneManagementSystem.class).getCurrentScene());
+        DisplayConfig.setRelativeAspectRatio();
+//        SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(SystemHub.getInstance().getSystem(SceneManagementSystem.class).getCurrentScene());
     }
 
     @Override
-    public void onExit() {
+    public void onExit(ResolutionChangeEvent event) {
 
     }
 

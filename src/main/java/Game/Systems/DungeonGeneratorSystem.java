@@ -22,7 +22,7 @@ import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 import inf.elte.hu.gameengine_javafx.Misc.MapClasses.*;
 import inf.elte.hu.gameengine_javafx.Misc.Pathfinding;
 import inf.elte.hu.gameengine_javafx.Misc.Tuple;
@@ -52,8 +52,8 @@ public class DungeonGeneratorSystem extends GameSystem {
         this.width = width;
         this.height = height;
 
-        WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).setWorldWidth(width * Config.chunkWidth);
-        WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).setWorldHeight(height * Config.chunkHeight);
+        WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).setWorldWidth(width * MapConfig.chunkWidth);
+        WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).setWorldHeight(height * MapConfig.chunkHeight);
     }
 
     /**
@@ -78,7 +78,7 @@ public class DungeonGeneratorSystem extends GameSystem {
                     br.readLine();
                     while ((line = br.readLine()) != null && !Objects.equals(line, "Chests")) {
                         String[] split = line.split(" ");
-                        new PolarBearSpawner(Double.parseDouble(split[0]) + Config.scaledTileSize * 0.75 / 2, Double.parseDouble(split[1]) + Config.scaledTileSize * 0.75 / 2);
+                        new PolarBearSpawner(Double.parseDouble(split[0]) + MapConfig.scaledTileSize * 0.75 / 2, Double.parseDouble(split[1]) + MapConfig.scaledTileSize * 0.75 / 2);
                     }
 
                     // Skip the "Chests" line
@@ -86,7 +86,7 @@ public class DungeonGeneratorSystem extends GameSystem {
                         // Now process chests
                         for (String chestLine = br.readLine(); chestLine != null; chestLine = br.readLine()) {
                             String[] split = chestLine.split(" ");
-                            new ChestEntity(Double.parseDouble(split[0]), Double.parseDouble(split[1]), Config.scaledTileSize * 0.7, Config.scaledTileSize * 0.7);
+                            new ChestEntity(Double.parseDouble(split[0]), Double.parseDouble(split[1]), MapConfig.scaledTileSize * 0.7, MapConfig.scaledTileSize * 0.7);
                         }
                     }
                 } catch (IOException e) {
@@ -114,7 +114,7 @@ public class DungeonGeneratorSystem extends GameSystem {
                     }
                 }
             }
-            walkablePercent = walkable/(Config.chunkWidth*width*Config.chunkHeight*height);
+            walkablePercent = walkable / (MapConfig.chunkWidth * width * MapConfig.chunkHeight * height);
         }
         while (walkablePercent < 0.63);
         try {
@@ -164,13 +164,13 @@ public class DungeonGeneratorSystem extends GameSystem {
                 WorldDataComponent worldData = WorldEntity.getInstance().getComponent(WorldDataComponent.class);
                 World mapData = worldData.getMapData();
 
-                boolean left = mapData.getElementAt(new Point(p.getX() - Config.scaledTileSize, p.getY()))
+                boolean left = mapData.getElementAt(new Point(p.getX() - MapConfig.scaledTileSize, p.getY()))
                         .getComponent(TileValueComponent.class).getTileValue() == 4;
-                boolean right = mapData.getElementAt(new Point(p.getX() + Config.scaledTileSize, p.getY()))
+                boolean right = mapData.getElementAt(new Point(p.getX() + MapConfig.scaledTileSize, p.getY()))
                         .getComponent(TileValueComponent.class).getTileValue() == 4;
-                boolean up = mapData.getElementAt(new Point(p.getX(), p.getY() - Config.scaledTileSize))
+                boolean up = mapData.getElementAt(new Point(p.getX(), p.getY() - MapConfig.scaledTileSize))
                         .getComponent(TileValueComponent.class).getTileValue() == 4;
-                boolean down = mapData.getElementAt(new Point(p.getX(), p.getY() + Config.scaledTileSize))
+                boolean down = mapData.getElementAt(new Point(p.getX(), p.getY() + MapConfig.scaledTileSize))
                         .getComponent(TileValueComponent.class).getTileValue() == 4;
 
                 int count = (left ? 1 : 0) + (right ? 1 : 0) + (up ? 1 : 0) + (down ? 1 : 0);
@@ -196,13 +196,13 @@ public class DungeonGeneratorSystem extends GameSystem {
                 WorldDataComponent worldData = WorldEntity.getInstance().getComponent(WorldDataComponent.class);
                 World mapData = worldData.getMapData();
 
-                boolean left = mapData.getElementAt(new Point(p.getX() - Config.scaledTileSize, p.getY()))
+                boolean left = mapData.getElementAt(new Point(p.getX() - MapConfig.scaledTileSize, p.getY()))
                         .getComponent(TileValueComponent.class).getTileValue() == 1;
-                boolean right = mapData.getElementAt(new Point(p.getX() + Config.scaledTileSize, p.getY()))
+                boolean right = mapData.getElementAt(new Point(p.getX() + MapConfig.scaledTileSize, p.getY()))
                         .getComponent(TileValueComponent.class).getTileValue() == 1;
-                boolean up = mapData.getElementAt(new Point(p.getX(), p.getY() - Config.scaledTileSize))
+                boolean up = mapData.getElementAt(new Point(p.getX(), p.getY() - MapConfig.scaledTileSize))
                         .getComponent(TileValueComponent.class).getTileValue() == 1;
-                boolean down = mapData.getElementAt(new Point(p.getX(), p.getY() + Config.scaledTileSize))
+                boolean down = mapData.getElementAt(new Point(p.getX(), p.getY() + MapConfig.scaledTileSize))
                         .getComponent(TileValueComponent.class).getTileValue() == 1;
 
                 int count = (left ? 1 : 0) + (right ? 1 : 0) + (up ? 1 : 0) + (down ? 1 : 0);
@@ -210,7 +210,7 @@ public class DungeonGeneratorSystem extends GameSystem {
                 boolean isOpposingBlocked = (up && down && !left && !right) || (left && right && !up && !down);
 
                 if (count >= 2 && !isOpposingBlocked) {
-                    new ChestEntity(p.getX(), p.getY(), Config.scaledTileSize * 0.7, Config.scaledTileSize * 0.7);
+                    new ChestEntity(p.getX(), p.getY(), MapConfig.scaledTileSize * 0.7, MapConfig.scaledTileSize * 0.7);
                     luckFactor = -1;
                     return luckFactor;
                 }
@@ -233,10 +233,10 @@ public class DungeonGeneratorSystem extends GameSystem {
                     PositionComponent pos = tile.getComponent(PositionComponent.class);
                     //Spawn location
                     if (chunkKey.first() == 0 && chunkKey.second() == 0
-                            && pos.getGlobal().getX() <= 3 * Config.scaledTileSize
-                            && pos.getGlobal().getY() <= 3 * Config.scaledTileSize
-                            && pos.getGlobal().getY() >= Config.scaledTileSize) {
-                        if (pos.getGlobal().getX() < Config.scaledTileSize) {
+                            && pos.getGlobal().getX() <= 3 * MapConfig.scaledTileSize
+                            && pos.getGlobal().getY() <= 3 * MapConfig.scaledTileSize
+                            && pos.getGlobal().getY() >= MapConfig.scaledTileSize) {
+                        if (pos.getGlobal().getX() < MapConfig.scaledTileSize) {
                             tile.changeValues(0);
                             return;
                         }
@@ -252,8 +252,8 @@ public class DungeonGeneratorSystem extends GameSystem {
         Random random = new Random();
 
         // Start with one walker at a random position
-        int startX = random.nextInt(Config.chunkWidth*width);
-        int startY = random.nextInt(Config.chunkHeight*height);
+        int startX = random.nextInt(MapConfig.chunkWidth * width);
+        int startY = random.nextInt(MapConfig.chunkHeight * height);
         Walker walker = new Walker(startX, startY, WorldEntity.getInstance(), new ArrayList<>());
 
         walker.walk();
@@ -274,8 +274,8 @@ public class DungeonGeneratorSystem extends GameSystem {
         double camWidth = camera.getComponent(DimensionComponent.class).getWidth();
         double camHeight = camera.getComponent(DimensionComponent.class).getHeight();
 
-        int playerChunkX = Math.floorDiv((int) (camX + camWidth / 2), (int) (Config.chunkWidth * Config.scaledTileSize));
-        int playerChunkY = Math.floorDiv((int) (camY + camHeight / 2), (int) (Config.chunkHeight * Config.scaledTileSize));
+        int playerChunkX = Math.floorDiv((int) (camX + camWidth / 2), (int) (MapConfig.chunkWidth * MapConfig.scaledTileSize));
+        int playerChunkY = Math.floorDiv((int) (camY + camHeight / 2), (int) (MapConfig.chunkHeight * MapConfig.scaledTileSize));
 
         loadSurroundingChunks(playerChunkX, playerChunkY);
         unloadFarChunks(playerChunkX, playerChunkY);
@@ -300,8 +300,8 @@ public class DungeonGeneratorSystem extends GameSystem {
      */
     private void loadSurroundingChunks(int playerChunkX, int playerChunkY) {
         Set<Tuple<Integer, Integer>> loadedChunks = WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getWorld().keySet();
-        for (int dx = -Config.loadDistance; dx <= Config.loadDistance; dx++) {
-            for (int dy = -Config.loadDistance; dy <= Config.loadDistance; dy++) {
+        for (int dx = -MapConfig.loadDistance; dx <= MapConfig.loadDistance; dx++) {
+            for (int dy = -MapConfig.loadDistance; dy <= MapConfig.loadDistance; dy++) {
                 int chunkX = playerChunkX + dx;
                 int chunkY = playerChunkY + dy;
                 if (chunkX >= 0 && chunkX < width && chunkY >= 0 && chunkY < height) {
@@ -326,7 +326,7 @@ public class DungeonGeneratorSystem extends GameSystem {
             Map.Entry<Tuple<Integer, Integer>, Chunk> entry = iterator.next();
             int chunkX = entry.getKey().first();
             int chunkY = entry.getKey().second();
-            if (Math.abs(chunkX - playerChunkX) > Config.loadDistance || Math.abs(chunkY - playerChunkY) > Config.loadDistance) {
+            if (Math.abs(chunkX - playerChunkX) > MapConfig.loadDistance || Math.abs(chunkY - playerChunkY) > MapConfig.loadDistance) {
                 WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getSavedChunks().put(entry.getKey(), entry.getValue());
                 iterator.remove();
             }
@@ -345,7 +345,7 @@ public class DungeonGeneratorSystem extends GameSystem {
         if (WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getSavedChunks().containsKey(chunkKey)) {
             WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().addChunk(chunkX, chunkY, WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getSavedChunks().get(chunkKey));
         } else {
-            Chunk newChunk = WorldGenerator.generateChunk(chunkX, chunkY, Config.chunkWidth, Config.chunkHeight);
+            Chunk newChunk = WorldGenerator.generateChunk(chunkX, chunkY, MapConfig.chunkWidth, MapConfig.chunkHeight);
             WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getSavedChunks().put(chunkKey, newChunk);
             WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getWorld().put(chunkKey, newChunk);
         }
@@ -364,14 +364,14 @@ public class DungeonGeneratorSystem extends GameSystem {
             mapMesh.getMapCoordinates().clear();
         }
 
-        int worldWidth = width * Config.chunkWidth;  // Total world width in tiles
-        int worldHeight = height * Config.chunkHeight;  // Total world height in tiles
+        int worldWidth = width * MapConfig.chunkWidth;  // Total world width in tiles
+        int worldHeight = height * MapConfig.chunkHeight;  // Total world height in tiles
 
         // Iterate over each row of the world
         for (int row = 0; row < worldHeight; row++) {
             List<Point> meshRow = new ArrayList<>();
             for (int col = 0; col < worldWidth; col++) {
-                TileEntity entity = map.getComponent(WorldDataComponent.class).getMapData().getElementAt(new Point(col * Config.scaledTileSize + (double)Config.scaledTileSize / 2, row * Config.scaledTileSize + (double)Config.scaledTileSize / 2));
+                TileEntity entity = map.getComponent(WorldDataComponent.class).getMapData().getElementAt(new Point(col * MapConfig.scaledTileSize + (double) MapConfig.scaledTileSize / 2, row * MapConfig.scaledTileSize + (double) MapConfig.scaledTileSize / 2));
                 if (entity.getComponent(HitBoxComponent.class) == null) {
                     meshRow.add(entity.getComponent(CentralMassComponent.class).getCentral());
                 } else {
@@ -393,23 +393,23 @@ public class DungeonGeneratorSystem extends GameSystem {
      * @param chunkY The Y coordinate of the chunk.
      */
     private void addBoundaryWalls(Chunk chunk, int chunkX, int chunkY) {
-        for (int x = 0; x < Config.chunkWidth; x++) {
-            for (int y = 0; y < Config.chunkHeight; y++) {
+        for (int x = 0; x < MapConfig.chunkWidth; x++) {
+            for (int y = 0; y < MapConfig.chunkHeight; y++) {
                 if (x == 0 && y == 0 && chunkX == 0 && chunkY == 0) {
                     chunk.setElement(x, y, 1); // topLeftWall
-                } else if (x == Config.chunkWidth - 1 && y == 0 && chunkX == 0 && chunkY == height - 1) {
+                } else if (x == MapConfig.chunkWidth - 1 && y == 0 && chunkX == 0 && chunkY == height - 1) {
                     chunk.setElement(x, y, 1); // BottomLeftWall
-                } else if (x == 0 && y == Config.chunkHeight - 1 && chunkX == width - 1 && chunkY == 0) {
+                } else if (x == 0 && y == MapConfig.chunkHeight - 1 && chunkX == width - 1 && chunkY == 0) {
                     chunk.setElement(x, y, 1); // topRightWall
-                } else if (x == Config.chunkWidth - 1 && y == Config.chunkHeight - 1 && chunkX == width - 1 && chunkY == height - 1) {
+                } else if (x == MapConfig.chunkWidth - 1 && y == MapConfig.chunkHeight - 1 && chunkX == width - 1 && chunkY == height - 1) {
                     chunk.setElement(x, y, 1); // bottomRightWall
                 } else if (x == 0 && chunkY == 0) {
                     chunk.setElement(x, y, 1); // topWall
-                } else if (x == Config.chunkWidth - 1 && chunkY == height - 1) {
+                } else if (x == MapConfig.chunkWidth - 1 && chunkY == height - 1) {
                     chunk.setElement(x, y, 1); // bottomWall
                 } else if (y == 0 && chunkX == 0) {
                     chunk.setElement(x, y, 1); // leftWall
-                } else if (y == Config.chunkHeight - 1 && chunkX == width - 1) {
+                } else if (y == MapConfig.chunkHeight - 1 && chunkX == width - 1) {
                     chunk.setElement(x, y, 1); // rightWall
                 } else {
                     chunk.setElement(x, y, 4); // walkable tile

@@ -12,7 +12,7 @@ import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 
 import java.util.Random;
 
@@ -37,7 +37,7 @@ public class PolarBearMoverSystem extends GameSystem {
             Point end = mapMesh.get(random.nextInt(1, 31)).get(random.nextInt(1, 31));
 
             if (playerCentral.getCentral().distanceTo(entityCentral.getCentral()) < 800) {
-                end = mapMesh.get(Math.floorDiv((int) playerCentral.getCentralY(), (int) Config.scaledTileSize)).get(Math.floorDiv((int) playerCentral.getCentralX(), (int) Config.scaledTileSize));
+                end = mapMesh.get(Math.floorDiv((int) playerCentral.getCentralY(), (int) MapConfig.scaledTileSize)).get(Math.floorDiv((int) playerCentral.getCentralX(), (int) MapConfig.scaledTileSize));
                 if (end == null) {
                     continue;
                 }

@@ -1,8 +1,7 @@
 package inf.elte.hu.gameengine_javafx.Maths.Geometry;
 
-import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -42,45 +41,38 @@ public class Point {
     }
 
     public void render(GraphicsContext gc, double radius, Color color) {
-        CameraEntity cameraEntity = CameraEntity.getInstance();
-
         gc.setStroke(color);
 
-        double x = this.getX() - cameraEntity.getComponent(PositionComponent.class).getGlobalX();
-        double y = this.getY() - cameraEntity.getComponent(PositionComponent.class).getGlobalY();
+        double x = CameraEntity.getRenderX(this.getX());
+        double y = CameraEntity.getRenderY(this.getY());
 
-        x *= Config.relativeWidthRatio;
-        y *= Config.relativeHeightRatio;
-        radius *= Math.min(Config.relativeWidthRatio, Config.relativeHeightRatio);
+        x *= DisplayConfig.relativeWidthRatio;
+        y *= DisplayConfig.relativeHeightRatio;
+        radius *= Math.min(DisplayConfig.relativeWidthRatio, DisplayConfig.relativeHeightRatio);
 
         gc.strokeOval(x - radius, y - radius, radius * 2, radius * 2);
     }
 
     public void renderFill(GraphicsContext gc, double radius, Color color) {
-        CameraEntity cameraEntity = CameraEntity.getInstance();
-
         gc.setFill(color);
-        double x = this.getX() - cameraEntity.getComponent(PositionComponent.class).getGlobalX();
-        double y = this.getY() - cameraEntity.getComponent(PositionComponent.class).getGlobalY();
+        double x = CameraEntity.getRenderX(this.getX());
+        double y = CameraEntity.getRenderY(this.getY());
 
-        x *= Config.relativeWidthRatio;
-        y *= Config.relativeHeightRatio;
-        radius *= Math.min(Config.relativeWidthRatio, Config.relativeHeightRatio);
+        x *= DisplayConfig.relativeWidthRatio;
+        y *= DisplayConfig.relativeHeightRatio;
+        radius *= Math.min(DisplayConfig.relativeWidthRatio, DisplayConfig.relativeHeightRatio);
 
         gc.fillOval(x - radius, y - radius, radius * 2, radius * 2);
     }
 
     public void renderFillWithStroke(GraphicsContext gc, double radius, Color color, Color strokeColor, double outerStrokeWidth) {
-        CameraEntity cameraEntity = CameraEntity.getInstance();
-
         gc.setFill(color);
+        double x = CameraEntity.getRenderX(this.getX());
+        double y = CameraEntity.getRenderY(this.getY());
 
-        double x = this.getX() - cameraEntity.getComponent(PositionComponent.class).getGlobalX();
-        double y = this.getY() - cameraEntity.getComponent(PositionComponent.class).getGlobalY();
-
-        x *= Config.relativeWidthRatio;
-        y *= Config.relativeHeightRatio;
-        radius *= Math.min(Config.relativeWidthRatio, Config.relativeHeightRatio);
+        x *= DisplayConfig.relativeWidthRatio;
+        y *= DisplayConfig.relativeHeightRatio;
+        radius *= Math.min(DisplayConfig.relativeWidthRatio, DisplayConfig.relativeHeightRatio);
 
         gc.fillOval(x - radius, y - radius, radius * 2, radius * 2);
 
@@ -95,6 +87,13 @@ public class Point {
             return false;
         }
         return Math.abs(this.getX() - other.getX()) < 10 && Math.abs(this.getY() - other.getY()) < 10;
+    }
+
+    public boolean compareCoordinates(Point other, double delta) {
+        if (other == null) {
+            return false;
+        }
+        return Math.abs(this.getX() - other.getX()) < delta && Math.abs(this.getY() - other.getY()) < delta;
     }
 
     public void setCoordinates(int x, int y) {

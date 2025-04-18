@@ -11,7 +11,7 @@ import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 import inf.elte.hu.gameengine_javafx.Misc.MapClasses.Chunk;
 import inf.elte.hu.gameengine_javafx.Misc.MapClasses.World;
 import inf.elte.hu.gameengine_javafx.Misc.MapClasses.WorldGenerator;
@@ -36,9 +36,9 @@ public class InfiniteWorldLoaderSystem extends GameSystem {
         WorldEntity map = WorldEntity.getInstance();
         if (map == null) return;
 
+
         World worldData = map.getComponent(WorldDataComponent.class).getMapData();
 
-        // Load an initial grid of chunks around the player
         for (int cx = -1; cx <= 1; cx++) {
             for (int cy = -1; cy <= 1; cy++) {
                 loadOrGenerateChunk(worldData, cx, cy);
@@ -56,7 +56,6 @@ public class InfiniteWorldLoaderSystem extends GameSystem {
         WorldEntity map = WorldEntity.getInstance();
         if (map == null || camera == null) return;
 
-        // Get the camera's position and dimensions
         double camX = camera.getComponent(PositionComponent.class).getGlobalX();
         double camY = camera.getComponent(PositionComponent.class).getGlobalY();
         double camWidth = camera.getComponent(DimensionComponent.class).getWidth();
@@ -65,13 +64,11 @@ public class InfiniteWorldLoaderSystem extends GameSystem {
         World worldData = map.getComponent(WorldDataComponent.class).getMapData();
         Set<Tuple<Integer, Integer>> loadedChunks = worldData.getWorld().keySet();
 
-        // Calculate the player's current chunk position
-        int playerChunkX = Math.floorDiv((int) (camX + camWidth / 2), (int) (Config.chunkWidth * Config.scaledTileSize));
-        int playerChunkY = Math.floorDiv((int) (camY + camHeight / 2), (int) (Config.chunkHeight * Config.scaledTileSize));
+        int playerChunkX = Math.floorDiv((int) (camX + camWidth / 2), (int) (MapConfig.chunkWidth * MapConfig.scaledTileSize));
+        int playerChunkY = Math.floorDiv((int) (camY + camHeight / 2), (int) (MapConfig.chunkHeight * MapConfig.scaledTileSize));
 
-        // Load chunks within a specified distance from the player
-        for (int dx = -Config.loadDistance; dx <= Config.loadDistance; dx++) {
-            for (int dy = -Config.loadDistance; dy <= Config.loadDistance; dy++) {
+        for (int dx = -MapConfig.loadDistance; dx <= MapConfig.loadDistance; dx++) {
+            for (int dy = -MapConfig.loadDistance; dy <= MapConfig.loadDistance; dy++) {
                 int chunkX = playerChunkX + dx;
                 int chunkY = playerChunkY + dy;
                 Tuple<Integer, Integer> chunkKey = new Tuple<>(chunkX, chunkY);
@@ -82,11 +79,9 @@ public class InfiniteWorldLoaderSystem extends GameSystem {
             }
         }
 
-        // Unload chunks that are far from the player
         unloadFarChunks(worldData, playerChunkX, playerChunkY);
     }
 
-    // A set to keep track of the tile coordinates that have been added to the world mesh
     private Set<Tuple<Double, Double>> addedTileCoordinates = new HashSet<>();
 
     /**
@@ -101,7 +96,6 @@ public class InfiniteWorldLoaderSystem extends GameSystem {
         List<Point> meshRow = new ArrayList<>();
         Map<Tuple<Integer, Integer>, Chunk> worldChunks = map.getComponent(WorldDataComponent.class).getMapData().getWorld();
 
-        // Iterate over each chunk and its tiles to add them to the mesh
         worldChunks.values().forEach(chunk -> {
             for (List<TileEntity> tileEntities : chunk.getChunk()) {
                 for (TileEntity tileEntity : tileEntities) {
@@ -109,7 +103,6 @@ public class InfiniteWorldLoaderSystem extends GameSystem {
                         continue;
                     }
 
-                    // Get the tile's coordinates and ensure it hasn't been added already
                     double tileX = tileEntity.getComponent(CentralMassComponent.class).getCentralX();
                     double tileY = tileEntity.getComponent(CentralMassComponent.class).getCentralY();
                     Tuple<Double, Double> tileCoordinates = new Tuple<>(tileX, tileY);
@@ -119,7 +112,6 @@ public class InfiniteWorldLoaderSystem extends GameSystem {
                     }
                 }
 
-                // If the mesh row is not empty, add it to the map mesh and clear the row for the next iteration
                 if (!meshRow.isEmpty()) {
                     mapMesh.addRow(new ArrayList<>(meshRow));
                     meshRow.clear();
@@ -143,8 +135,7 @@ public class InfiniteWorldLoaderSystem extends GameSystem {
             int chunkX = entry.getKey().first();
             int chunkY = entry.getKey().second();
 
-            // If the chunk is too far from the player, save it and remove it from the active world
-            if (Math.abs(chunkX - playerChunkX) > Config.loadDistance || Math.abs(chunkY - playerChunkY) > Config.loadDistance) {
+            if (Math.abs(chunkX - playerChunkX) > MapConfig.loadDistance || Math.abs(chunkY - playerChunkY) > MapConfig.loadDistance) {
                 worldData.getSavedChunks().put(entry.getKey(), entry.getValue());
                 iterator.remove();
             }
@@ -162,16 +153,14 @@ public class InfiniteWorldLoaderSystem extends GameSystem {
     private void loadOrGenerateChunk(World worldData, int chunkX, int chunkY) {
         Tuple<Integer, Integer> chunkKey = new Tuple<>(chunkX, chunkY);
 
-        // If the chunk is already saved, load it from the saved chunks
         if (worldData.getSavedChunks().containsKey(chunkKey)) {
             worldData.addChunk(chunkX, chunkY, worldData.getSavedChunks().get(chunkKey));
         } else {
-            // Otherwise, generate a new chunk and add it to the world
-            Chunk newChunk = WorldGenerator.generateChunk(chunkX, chunkY, Config.chunkWidth, Config.chunkHeight);
+            Chunk newChunk = WorldGenerator.generateChunk(chunkX, chunkY, MapConfig.chunkWidth, MapConfig.chunkHeight);
             worldData.getSavedChunks().put(chunkKey, newChunk);
             worldData.addChunk(chunkX, chunkY, newChunk);
         }
 
-        addWorldMesh(); // Update the world mesh after loading the chunk
+        addWorldMesh();
     }
 }

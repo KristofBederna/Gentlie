@@ -10,6 +10,7 @@ import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AnimationSystem extends GameSystem {
     @Override
@@ -21,19 +22,37 @@ public class AnimationSystem extends GameSystem {
     public void update() {
         var entitiesSnapshot = new ArrayList<>(EntityHub.getInstance().getEntitiesWithComponent(AnimationStateMachineComponent.class));
         entitiesSnapshot.retainAll(EntityHub.getInstance().getEntitiesWithComponent(ImageComponent.class));
+        List<Entity> toRemove = new ArrayList<>();
 
         if (entitiesSnapshot.isEmpty()) {
             return;
         }
         for (Entity entity : entitiesSnapshot) {
-            if (entity == null) continue;
-            PositionComponent position = entity.getComponent(PositionComponent.class);
-            ImageComponent img = entity.getComponent(ImageComponent.class);
-            entity.getComponent(AnimationStateMachineComponent.class).getAnimationStateMachine().setAnimationState();
-            AnimationComponent animation = entity.getComponent(AnimationComponent.class);
+            processEntity(entity, toRemove);
+        }
+        for (Entity entity : toRemove) {
+            entity.removeComponentsByType(AnimationComponent.class);
+        }
+    }
 
-            if (position != null && img != null && animation != null) {
-                img.setNextFrame(animation.getNextFrame());
+    private void processEntity(Entity entity, List<Entity> toRemove) {
+        if (entity == null) return;
+        PositionComponent position = entity.getComponent(PositionComponent.class);
+        ImageComponent img = entity.getComponent(ImageComponent.class);
+        AnimationStateMachineComponent stateMachineComp = entity.getComponent(AnimationStateMachineComponent.class);
+
+        if (stateMachineComp != null) {
+            stateMachineComp.getAnimationStateMachine().setAnimationState();
+        }
+
+        AnimationComponent animation = entity.getComponent(AnimationComponent.class);
+
+        if (position != null && img != null && animation != null) {
+            String framePath = animation.getController().getNextFrame();
+            img.setNextFrame(framePath);
+            //Since animations need multiple frames an animation with just 1 frame counts as an Image, which the Image component can handle just fine alone
+            if (animation.getController().getFrames().size() == 1) {
+                toRemove.add(entity);
             }
         }
     }

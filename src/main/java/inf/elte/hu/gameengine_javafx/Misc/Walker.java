@@ -4,6 +4,9 @@ import inf.elte.hu.gameengine_javafx.Components.TileValueComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDataComponent;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.WalkerConfig;
+import inf.elte.hu.gameengine_javafx.Misc.MapClasses.World;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -13,9 +16,7 @@ public class Walker {
     private int y;
     private ArrayList<Walker> walkers;
     private WorldEntity world;
-    private static final int MAX_X = 30;
-    private static final int MAX_Y = 30;
-    private static final int STOP_PERCENTAGE = 30;
+    private static final Random random = new Random(); // Shared random instance
 
     public Walker(int x, int y, WorldEntity world, ArrayList<Walker> walkers) {
         this.x = x;
@@ -25,80 +26,128 @@ public class Walker {
     }
 
     public void walk() {
-        Random r = new Random();
-        while (getFilledPercentage() < STOP_PERCENTAGE) {
-            if (Config.wallTiles.contains(world.getComponent(WorldDataComponent.class).getMapData().getElementAt(new Point(y*Config.scaledTileSize +Config.scaledTileSize /2, x*Config.scaledTileSize +Config.scaledTileSize /2)).getComponent(TileValueComponent.class).getTileValue())) {
+        while (getFilledPercentage() < WalkerConfig.stopPercentage) {
+            if (isWallTile()) {
                 changeDirection();
                 continue;
             }
 
             placeTile();
-            if (r.nextInt(10) % 3 == 0) {
-                multiply();
-            } else if (r.nextInt(10) % 4 == 0) {
-                die();
-            } else if (r.nextInt(10) % 9 == 0) {
-                teleport();
-            }
-            changeDirection();
+            performRandomAction();  // Handle random actions (multiply, die, teleport)
+            changeDirection();  // Move the walker in a random direction
         }
     }
 
-    private void teleport() {
-        Random r = new Random();
-        this.x = r.nextInt(1, MAX_X);  // Random number between 1 and MAX_X
-        this.y = r.nextInt(1, MAX_Y);  // Random number between 1 and MAX_Y
+    // Check if the current position is a wall tile
+    private boolean isWallTile() {
+        return MapConfig.wallTiles.contains(
+                world.getComponent(WorldDataComponent.class)
+                        .getMapData()
+                        .getElementAt(new Point(y * MapConfig.scaledTileSize + MapConfig.scaledTileSize / 2,
+                                x * MapConfig.scaledTileSize + MapConfig.scaledTileSize / 2))
+                        .getComponent(TileValueComponent.class)
+                        .getTileValue()
+        );
     }
 
+    // Perform a random action like multiply, die, or teleport
+    private void performRandomAction() {
+        int action = random.nextInt(10);
+        if (action % WalkerConfig.moduloToTeleport == 0) {
+            teleport();
+        } else if (action % WalkerConfig.moduloToMultiply == 0) {
+            multiply();
+        } else if (action % WalkerConfig.moduloToDie == 0) {
+            die();
+        }
+    }
+
+    // Calculate the filled percentage of tiles in the world
     public int getFilledPercentage() {
         int filledTiles = 0;
-        int totalTiles = MAX_X * MAX_Y; // Total number of tiles
+        World map = WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData();
+        int totalTiles = map.size() * MapConfig.chunkHeight * MapConfig.chunkWidth;
 
-        // Count the filled tiles (0s)
-        for (int i = 0; i < MAX_X; i++) {
-            for (int j = 0; j < MAX_Y; j++) {
-                if (Config.wallTiles.contains(world.getComponent(WorldDataComponent.class).getMapData().getElementAt(new Point(j*Config.scaledTileSize +Config.scaledTileSize /2, i*Config.scaledTileSize +Config.scaledTileSize /2)).getComponent(TileValueComponent.class).getTileValue())) {
+        for (int i = 0; i < WalkerConfig.maxX; i++) {
+            for (int j = 0; j < WalkerConfig.maxY; j++) {
+                if (isWalkerTileAt(i, j)) {
                     filledTiles++;
                 }
             }
         }
 
-        // Calculate the percentage of filled tiles
         return (filledTiles * 100) / totalTiles;
     }
 
+    // Check if a specific tile is a wall tile
+    private boolean isWalkerTileAt(int i, int j) {
+        return WalkerConfig.placeTileNumber == (
+                world.getComponent(WorldDataComponent.class)
+                        .getMapData()
+                        .getElementAt(new Point(j * MapConfig.scaledTileSize + MapConfig.scaledTileSize / 2,
+                                i * MapConfig.scaledTileSize + MapConfig.scaledTileSize / 2))
+                        .getComponent(TileValueComponent.class)
+                        .getTileValue()
+        );
+    }
+
+    // Change the direction of the walker
     private void changeDirection() {
-        Random random = new Random();
         int direction = random.nextInt(4);
 
         switch (direction) {
-            case 0 -> { if (y < MAX_Y) y++; } // Move Up
-            case 1 -> { if (y > 0) y--; } // Move Down
-            case 2 -> { if (x > 0) x--; } // Move Left
-            case 3 -> { if (x < MAX_X) x++; } // Move Right
+            case 0 -> moveUp();
+            case 1 -> moveDown();
+            case 2 -> moveLeft();
+            case 3 -> moveRight();
         }
     }
 
+    // Move the walker up
+    private void moveUp() {
+        if (y < WalkerConfig.maxY) y++;
+    }
+
+    // Move the walker down
+    private void moveDown() {
+        if (y > 0) y--;
+    }
+
+    // Move the walker left
+    private void moveLeft() {
+        if (x > 0) x--;
+    }
+
+    // Move the walker right
+    private void moveRight() {
+        if (x < WalkerConfig.maxX) x++;
+    }
+
+    // Place the tile on the map and the saved chunk
     private void placeTile() {
-        // Mark the tile as non-walkable (1)
-        this.world.getComponent(WorldDataComponent.class).getMapData().setElementAt(new Point(x*Config.scaledTileSize, y*Config.scaledTileSize), 1);
-        this.world.getComponent(WorldDataComponent.class).getMapData().getSavedChunks().get(new Tuple<>(Math.floorDiv(x, Config.chunkWidth), Math.floorDiv(y, Config.chunkHeight))).setElement(x % Config.chunkWidth, y % Config.chunkHeight, 1);
+        Point currentPoint = new Point(x * MapConfig.scaledTileSize, y * MapConfig.scaledTileSize);
+        world.getComponent(WorldDataComponent.class).getMapData().setElementAt(currentPoint, WalkerConfig.placeTileNumber);
+        world.getComponent(WorldDataComponent.class).getMapData().setElementAtSaved(currentPoint, WalkerConfig.placeTileNumber);
     }
 
+    // Create a new walker to multiply the current one
     private void multiply() {
-        if (walkers.size() >= 3) {
-            return;  // Limit the number of walkers to avoid too many
+        if (walkers.size() < WalkerConfig.maxWalkers) {
+            Walker newWalker = new Walker(this.x, this.y, this.world, this.walkers);
+            walkers.add(newWalker);
         }
-        Walker walker = new Walker(this.x, this.y, this.world, this.walkers);
-        walkers.add(walker);
     }
 
+    // Remove a walker from the list to simulate death
     private void die() {
-        if (walkers.size() <= 1) {
-            return; // No walkers to remove
+        if (walkers.size() > 1) {
+            walkers.removeLast(); // Remove the last walker
         }
-        if (!walkers.isEmpty()) {
-            walkers.remove(walkers.size() - 1); // Safely remove the last walker
-        }
+    }
+
+    // Teleport the walker to a new random position
+    private void teleport() {
+        this.x = random.nextInt(WalkerConfig.minX, WalkerConfig.maxX);
+        this.y = random.nextInt(WalkerConfig.minY, WalkerConfig.maxY);
     }
 }

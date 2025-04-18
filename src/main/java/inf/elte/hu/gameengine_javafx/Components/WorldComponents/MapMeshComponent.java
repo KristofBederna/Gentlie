@@ -41,4 +41,14 @@ public class MapMeshComponent extends Component {
     public String getStatus() {
         return "";
     }
+
+    public void addToRow(int rowNum, List<Point> meshRow) {
+        if (mapCoordinates.size() <= rowNum) {
+            addRow(meshRow);
+            return;
+        }
+        List<Point> oldRow = mapCoordinates.get(rowNum);
+        oldRow.addAll(meshRow);
+        mapCoordinates.set(rowNum, oldRow);
+    }
 }

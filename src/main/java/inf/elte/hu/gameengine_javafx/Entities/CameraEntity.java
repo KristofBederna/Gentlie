@@ -53,19 +53,27 @@ public class CameraEntity extends Entity {
     }
 
     public void setClampedPosition(double x, double y) {
-        double clampedX = Math.max(0, Math.min(x, this.getComponent(WorldDimensionComponent.class).getWorldWidth() - this.getComponent(DimensionComponent.class).getWidth()));
-        double clampedY = Math.max(0, Math.min(y, this.getComponent(WorldDimensionComponent.class).getWorldHeight() - this.getComponent(DimensionComponent.class).getHeight()));
+        double clampedX = calculateClampedX(x);
+        double clampedY = calculateClampedY(y);
         this.getComponent(PositionComponent.class).setLocalPosition(clampedX, clampedY, this);
     }
 
     public void moveUIRootToMatch(double x, double y) {
         Platform.runLater(() -> {
-            double clampedX = Math.max(0, Math.min(x, this.getComponent(WorldDimensionComponent.class).getWorldWidth() - this.getComponent(DimensionComponent.class).getWidth()));
-            double clampedY = Math.max(0, Math.min(y, this.getComponent(WorldDimensionComponent.class).getWorldHeight() - this.getComponent(DimensionComponent.class).getHeight()));
+            double clampedX = calculateClampedX(x);
+            double clampedY = calculateClampedY(y);
 
             uiRoot.getInstance().setLayoutX(clampedX);
             uiRoot.getInstance().setLayoutY(clampedY);
         });
+    }
+
+    private double calculateClampedY(double y) {
+        return Math.max(0, Math.min(y, this.getComponent(WorldDimensionComponent.class).getWorldHeight() - this.getComponent(DimensionComponent.class).getHeight()));
+    }
+
+    private double calculateClampedX(double x) {
+        return Math.max(0, Math.min(x, this.getComponent(WorldDimensionComponent.class).getWorldWidth() - this.getComponent(DimensionComponent.class).getWidth()));
     }
 
     public void setWidth(double width) {
@@ -77,11 +85,27 @@ public class CameraEntity extends Entity {
     }
 
     public boolean isPositionInsideViewport(double entityX, double entityY, double entityWidth, double entityHeight) {
-        double renderX = entityX - this.getComponent(PositionComponent.class).getGlobalX();
-        double renderY = entityY - this.getComponent(PositionComponent.class).getGlobalY();
+        double renderX = getRenderX(entityX);
+        double renderY = getRenderY(entityY);
 
         return renderX + entityWidth >= 0 && renderX <= this.getComponent(DimensionComponent.class).getWidth() &&
                 renderY + entityHeight >= 0 && renderY <= this.getComponent(DimensionComponent.class).getHeight();
+    }
+
+    public static double getRenderY(double entityY) {
+        CameraEntity cameraEntity = CameraEntity.getInstance();
+        if (cameraEntity == null) {
+            return entityY;
+        }
+        return entityY - cameraEntity.getComponent(PositionComponent.class).getGlobalY();
+    }
+
+    public static double getRenderX(double entityX) {
+        CameraEntity cameraEntity = CameraEntity.getInstance();
+        if (cameraEntity == null) {
+            return entityX;
+        }
+        return entityX - cameraEntity.getComponent(PositionComponent.class).getGlobalX();
     }
 
     public void attachTo(Entity entity) {

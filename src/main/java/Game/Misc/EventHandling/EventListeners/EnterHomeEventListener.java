@@ -21,7 +21,7 @@ public class EnterHomeEventListener implements EventListener<EnterHomeEvent> {
     }
 
     @Override
-    public void onExit() {
+    public void onExit(EnterHomeEvent event) {
         ((LabelEntity)EntityHub.getInstance().getEntitiesWithType(EnterHomeLabel.class).getFirst()).removeFromUI();
     }
 }

@@ -140,27 +140,33 @@ public class EntityHub {
      * @return a list of entities inside the camera's viewport
      */
     public List<Entity> getEntitiesInsideViewport(CameraEntity cameraEntity) {
-        if (cameraEntity == null) return null;
-
         List<Entity> visibleEntities = new ArrayList<>();
-        synchronized (entities) {
-            for (Entity entity : entities.values()) {
-                PositionComponent position = entity.getComponent(PositionComponent.class);
-                if (position == null) continue;
+        Collection<Entity> entityValues;
 
-                if (entity.getComponent(ImageComponent.class) == null) {
-                    continue;
-                }
-                if (cameraEntity.isPositionInsideViewport(
-                        position.getGlobalX(),
-                        position.getGlobalY(),
-                        entity.getComponent(DimensionComponent.class).getWidth(),
-                        entity.getComponent(DimensionComponent.class).getHeight())) {
-                    visibleEntities.add(entity);
-                }
+        synchronized (entities) {
+            entityValues = new ArrayList<>(entities.values());
+        }
+
+        for (Entity entity : entityValues) {
+            if (entity == null) continue;
+            PositionComponent position = entity.getComponent(PositionComponent.class);
+            if (position == null) continue;
+
+            if (entity.getComponent(ImageComponent.class) == null) continue;
+
+            DimensionComponent dimension = entity.getComponent(DimensionComponent.class);
+            if (dimension == null) continue;
+
+            if (cameraEntity.isPositionInsideViewport(
+                    position.getGlobalX(),
+                    position.getGlobalY(),
+                    dimension.getWidth(),
+                    dimension.getHeight())) {
+                visibleEntities.add(entity);
             }
         }
         return visibleEntities;
+
     }
 
     /**
@@ -194,13 +200,18 @@ public class EntityHub {
      */
     public List<Entity> getEntitiesWithType(Class<? extends Entity> type) {
         List<Entity> entitiesWithType = new ArrayList<>();
+        Collection<Entity> entityValues;
+
         synchronized (entities) {
-            for (Entity entity : entities.values()) {
-                if (type.isInstance(entity)) {
-                    entitiesWithType.add(entity);
-                }
+            entityValues = new ArrayList<>(entities.values());
+        }
+
+        for (Entity entity : entityValues) {
+            if (type.isInstance(entity)) {
+                entitiesWithType.add(entity);
             }
         }
+
         return entitiesWithType;
     }
 

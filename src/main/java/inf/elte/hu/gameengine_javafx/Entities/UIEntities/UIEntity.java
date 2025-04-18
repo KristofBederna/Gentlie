@@ -41,8 +41,7 @@ public abstract class UIEntity<T extends UIComponent<?>> extends Entity {
         T component = getUIComponent();
         if (component != null && component.getNode() != null) {
             if (component.getNode() instanceof Region) {
-                ((Region) component.getNode()).getStylesheets().add(
-                        Objects.requireNonNull(getClass().getResource(cssFilePath)).toExternalForm());
+                ((Region) component.getNode()).getStylesheets().add(Objects.requireNonNull(getClass().getResource(cssFilePath)).toExternalForm());
             }
         }
     }

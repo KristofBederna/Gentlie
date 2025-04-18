@@ -1,6 +1,7 @@
 package inf.elte.hu.gameengine_javafx.Misc.Layers;
 
 import javafx.application.Platform;
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
 /**
@@ -40,5 +41,9 @@ public class uiRoot extends Pane {
      */
     public void unloadAll() {
         Platform.runLater(() -> this.getChildren().clear());
+    }
+
+    public void unload(Node element) {
+        this.getChildren().remove(element);
     }
 }

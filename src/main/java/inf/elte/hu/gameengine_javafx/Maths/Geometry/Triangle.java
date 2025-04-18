@@ -2,16 +2,17 @@ package inf.elte.hu.gameengine_javafx.Maths.Geometry;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Triangle extends Shape {
 
     public Triangle(Point a, Point b, Point c) {
-        this.points = List.of(a, b, c);
+        this.points = new ArrayList<>(List.of(a, b, c));
         updateEdges();
     }
 
@@ -63,8 +64,8 @@ public class Triangle extends Shape {
     }
 
     public void moveTo(Point newPoint) {
-        double deltaX = newPoint.getX() - points.get(0).getX();
-        double deltaY = newPoint.getY() - points.get(0).getY();
+        double deltaX = newPoint.getX() - points.getFirst().getX();
+        double deltaY = newPoint.getY() - points.getFirst().getY();
 
         for (Point p : points) {
             p.setX(p.getX() + deltaX);
@@ -77,11 +78,17 @@ public class Triangle extends Shape {
         double[] x = new double[3];
         double[] y = new double[3];
 
-        applyCameraOffset(x, y);
+        CameraEntity camera = CameraEntity.getInstance();
+        PositionComponent camPos = camera.getComponent(PositionComponent.class);
 
         for (int i = 0; i < 3; i++) {
-            x[i] *= Config.relativeWidthRatio;
-            y[i] *= Config.relativeHeightRatio;
+            x[i] = points.get(i).getX() - camPos.getGlobalX();
+            y[i] = points.get(i).getY() - camPos.getGlobalY();
+        }
+
+        for (int i = 0; i < 3; i++) {
+            x[i] *= DisplayConfig.relativeWidthRatio;
+            y[i] *= DisplayConfig.relativeHeightRatio;
         }
 
         gc.setStroke(color);
@@ -89,15 +96,27 @@ public class Triangle extends Shape {
         gc.strokePolygon(x, y, 3);
     }
 
+    public void render(GraphicsContext gc, Color color, double strokeWidth) {
+        double[] x = new double[3];
+        double[] y = new double[3];
+
+        for (int i = 0; i < 3; i++) {
+            x[i] = CameraEntity.getRenderX(points.get(i).getX()) * DisplayConfig.relativeWidthRatio;
+            y[i] = CameraEntity.getRenderY(points.get(i).getY()) * DisplayConfig.relativeHeightRatio;
+        }
+
+        gc.setStroke(color);
+        gc.setLineWidth(strokeWidth);
+        gc.strokePolygon(x, y, 3);
+    }
+
     public void renderFill(GraphicsContext gc, Color color) {
         double[] x = new double[3];
         double[] y = new double[3];
 
-        applyCameraOffset(x, y);
-
         for (int i = 0; i < 3; i++) {
-            x[i] *= Config.relativeWidthRatio;
-            y[i] *= Config.relativeHeightRatio;
+            x[i] = CameraEntity.getRenderX(points.get(i).getX()) * DisplayConfig.relativeWidthRatio;
+            y[i] = CameraEntity.getRenderY(points.get(i).getY()) * DisplayConfig.relativeHeightRatio;
         }
 
         gc.setFill(color);
@@ -109,11 +128,9 @@ public class Triangle extends Shape {
         double[] x = new double[3];
         double[] y = new double[3];
 
-        applyCameraOffset(x, y);
-
         for (int i = 0; i < 3; i++) {
-            x[i] *= Config.relativeWidthRatio;
-            y[i] *= Config.relativeHeightRatio;
+            x[i] = CameraEntity.getRenderX(points.get(i).getX()) * DisplayConfig.relativeWidthRatio;
+            y[i] = CameraEntity.getRenderY(points.get(i).getY()) * DisplayConfig.relativeHeightRatio;
         }
 
         gc.setFill(color);
@@ -122,15 +139,5 @@ public class Triangle extends Shape {
         gc.setStroke(stroke);
         gc.setLineWidth(outerStrokeWidth);
         gc.strokePolygon(x, y, 3);
-    }
-
-    private void applyCameraOffset(double[] x, double[] y) {
-        CameraEntity camera = CameraEntity.getInstance();
-        PositionComponent camPos = camera.getComponent(PositionComponent.class);
-
-        for (int i = 0; i < 3; i++) {
-            x[i] = points.get(i).getX() - camPos.getGlobalX();
-            y[i] = points.get(i).getY() - camPos.getGlobalY();
-        }
     }
 }

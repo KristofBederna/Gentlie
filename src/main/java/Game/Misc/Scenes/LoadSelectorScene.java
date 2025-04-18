@@ -3,15 +3,15 @@ package Game.Misc.Scenes;
 import Game.Misc.GameSaver;
 import Game.Misc.PlayerStats;
 import Game.Misc.UtilityFunctions;
+import Game.Systems.CustomRenderSystem;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.ButtonComponent;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.ResourceStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.SystemStartUp;
-import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.RenderSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
 import javafx.scene.Parent;
@@ -46,8 +46,8 @@ public class LoadSelectorScene extends GameScene {
     }
 
     private void declareEntities() {
-        double startY = 150 * Config.relativeHeightRatio;
-        double gap = 100 * Config.relativeHeightRatio;
+        double startY = 150 * DisplayConfig.relativeHeightRatio;
+        double gap = 100 * DisplayConfig.relativeHeightRatio;
 
         File saveDir = new File(System.getProperty("user.dir"), "savefiles");
 
@@ -81,10 +81,10 @@ public class LoadSelectorScene extends GameScene {
 
                             ButtonEntity saveButton = new ButtonEntity(
                                     folderName,
-                                    Config.resolution.first() / 2 - 50 * Config.relativeWidthRatio,
+                                    DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio,
                                     startY + i * gap,
-                                    200 * Config.relativeWidthRatio,
-                                    80 * Config.relativeHeightRatio,
+                                    200 * DisplayConfig.relativeWidthRatio,
+                                    80 * DisplayConfig.relativeHeightRatio,
                                     () -> startLoad(folder)
                             );
                             if (folder.listFiles() == null || folder.listFiles().length == 0) {
@@ -105,13 +105,13 @@ public class LoadSelectorScene extends GameScene {
 
         ButtonEntity exit = new ButtonEntity(
                 "Back",
-                Config.resolution.first() / 2 - 50 * Config.relativeWidthRatio,
-                Config.resolution.second() / 2 + 350 * Config.relativeHeightRatio,
-                200 * Config.relativeWidthRatio,
-                80 * Config.relativeHeightRatio,
+                DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio,
+                DisplayConfig.resolution.second() / 2 + 350 * DisplayConfig.relativeHeightRatio,
+                200 * DisplayConfig.relativeWidthRatio,
+                80 * DisplayConfig.relativeHeightRatio,
                 () -> SystemHub.getInstance()
                         .getSystem(SceneManagementSystem.class)
-                        .requestSceneChange(new MainScene(new BorderPane(), Config.resolution.first(), Config.resolution.second()))
+                        .requestSceneChange(new MainScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second()))
         );
         exit.addStyleClass("main-menu-button");
     }
@@ -134,7 +134,7 @@ public class LoadSelectorScene extends GameScene {
     private void systemStartUp() {
         SystemHub systemHub = SystemHub.getInstance();
         systemHub.addSystem(ResourceSystem.class, new ResourceSystem(), 1);
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(), 2);
+        systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 2);
     }
 
     @Override

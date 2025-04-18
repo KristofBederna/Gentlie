@@ -47,7 +47,7 @@ public class ParticleEntity extends Entity {
         if (shapeComponent != null) {
             Shape shape = shapeComponent.getShape();
             if (shape instanceof Line) {
-                ((Line) shape).render(gc, getComponent(ColorComponent.class).getColor(), 5);
+                shape.render(gc, getComponent(ColorComponent.class).getColor(), 5);
             } else {
                 shape.renderFillWithStroke(gc, getComponent(ColorComponent.class).getColor(), getComponent(ColorComponent.class).getStroke(), 1);
             }
@@ -83,13 +83,14 @@ public class ParticleEntity extends Entity {
         ImageComponent imageComponent = entity.getComponent(ImageComponent.class);
         ColorComponent col = entity.getComponent(ColorComponent.class);
         MaxDistanceFromOriginComponent maxDistance = entity.getComponent(MaxDistanceFromOriginComponent.class);
+
         if (shapeComponent != null) {
             return new ParticleEntity(pos.getGlobalX(), pos.getGlobalY(), dim.getWidth(), dim.getHeight(), shapeComponent.getShape(), col.getColor(), col.getStroke(), maxDistance.getMaxDistance());
         }
         if (imageComponent != null) {
             return new ParticleEntity(pos.getGlobalX(), pos.getGlobalY(), dim.getWidth(), dim.getHeight(), imageComponent.getImagePath(), maxDistance.getMaxDistance());
         }
-        System.err.println("Couldn't hard copy particle entity");
-        return null;
+
+        throw new RuntimeException("Couldn't hard copy particle entity");
     }
 }

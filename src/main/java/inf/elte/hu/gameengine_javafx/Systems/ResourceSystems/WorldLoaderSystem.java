@@ -1,32 +1,28 @@
 package inf.elte.hu.gameengine_javafx.Systems.ResourceSystems;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
-import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
-import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ImageComponent;
-import inf.elte.hu.gameengine_javafx.Components.TileValueComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDataComponent;
+import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDimensionComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
-import inf.elte.hu.gameengine_javafx.Core.EntityHub;
-import inf.elte.hu.gameengine_javafx.Core.EntityManager;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
-import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 import inf.elte.hu.gameengine_javafx.Misc.MapClasses.Chunk;
 import inf.elte.hu.gameengine_javafx.Misc.MapClasses.MapLoader;
-import inf.elte.hu.gameengine_javafx.Misc.MapClasses.World;
+import inf.elte.hu.gameengine_javafx.Misc.Tuple;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * The WorldLoaderSystem is responsible for loading the world map data from a file and managing tile entities in the game world.
  * It handles the initial map data loading, the chunk-based map division, and dynamically loads and unloads tiles based on the camera's viewport.
  */
 public class WorldLoaderSystem extends GameSystem {
+    private int width = (int) WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldWidth();
+    private int height = (int) WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldHeight();
 
     /**
      * Starts the system, loading the world map data from the file and dividing the map into chunks.
@@ -39,8 +35,7 @@ public class WorldLoaderSystem extends GameSystem {
     }
 
     /**
-     * Updates the world by dynamically loading and unloading tiles based on the camera's position and viewport.
-     * Tiles outside the camera's view are unloaded, while new tiles inside the viewport are loaded.
+     * Updates the system by checking the player's position and loading/unloading chunks accordingly.
      */
     @Override
     public void update() {
@@ -53,49 +48,67 @@ public class WorldLoaderSystem extends GameSystem {
         double camWidth = camera.getComponent(DimensionComponent.class).getWidth();
         double camHeight = camera.getComponent(DimensionComponent.class).getHeight();
 
-        // Get the tile manager to manage the loaded tiles
-        EntityManager<TileEntity> tileManager = EntityHub.getInstance().getEntityManager(TileEntity.class);
-        List<TileEntity> toRemove = new ArrayList<>();
+        int playerChunkX = Math.floorDiv((int) (camX + camWidth / 2), (int) (MapConfig.chunkWidth * MapConfig.scaledTileSize));
+        int playerChunkY = Math.floorDiv((int) (camY + camHeight / 2), (int) (MapConfig.chunkHeight * MapConfig.scaledTileSize));
 
-        // Unload tiles that are outside of the camera's viewport
-        for (TileEntity tile : tileManager.getEntities().values()) {
-            double tileX = tile.getComponent(PositionComponent.class).getGlobalX();
-            double tileY = tile.getComponent(PositionComponent.class).getGlobalY();
+        loadSurroundingChunks(playerChunkX, playerChunkY);
+        unloadFarChunks(playerChunkX, playerChunkY);
+    }
 
-            if (tileX + Config.scaledTileSize < camX || tileX > camX + camWidth || tileY + Config.scaledTileSize < camY || tileY > camY + camHeight) {
-                toRemove.add(tile);
-            }
-        }
-
-        // Remove the tiles that are outside of the camera's viewport
-        for (TileEntity tile : toRemove) {
-            tileManager.unload(tile.getId());
-        }
-
-        // Get the world data from the map
-        World worldData = map.getComponent(WorldDataComponent.class).getMapData();
-        Set<String> existingTiles = tileManager.getEntities().values().stream()
-                .map(t -> t.getComponent(PositionComponent.class).getGlobalX() + "," + t.getComponent(PositionComponent.class).getGlobalY())
-                .collect(Collectors.toSet());
-
-        // Load tiles that are inside the camera's viewport
-        for (Chunk row : worldData.getWorld().values()) {
-            for (List<TileEntity> tiles : row.getChunk()) {
-                for (TileEntity tileEntity : tiles) {
-                    double tileX = tileEntity.getComponent(PositionComponent.class).getGlobalX();
-                    double tileY = tileEntity.getComponent(PositionComponent.class).getGlobalY();
-
-                    if (tileX + Config.scaledTileSize >= camX && tileX <= camX + camWidth && tileY + Config.scaledTileSize >= camY && tileY <= camY + camHeight) {
-
-                        String key = tileX + "," + tileY;
-                        if (!existingTiles.contains(key)) {
-                            boolean hasHitBox = tileEntity.getComponent(HitBoxComponent.class) != null;
-                            TileEntity newTile = new TileEntity(tileEntity.getComponent(TileValueComponent.class).getTileValue(), tileX, tileY, tileEntity.getComponent(ImageComponent.class).getImagePath(), Config.scaledTileSize, Config.scaledTileSize, hasHitBox);
-                            tileManager.register(newTile);
-                        }
+    /**
+     * Loads the chunks surrounding the player based on the player's chunk coordinates.
+     *
+     * @param playerChunkX The player's current chunk X coordinate.
+     * @param playerChunkY The player's current chunk Y coordinate.
+     */
+    private void loadSurroundingChunks(int playerChunkX, int playerChunkY) {
+        Set<Tuple<Integer, Integer>> loadedChunks = WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getWorld().keySet();
+        for (int dx = -MapConfig.loadDistance; dx <= MapConfig.loadDistance; dx++) {
+            for (int dy = -MapConfig.loadDistance; dy <= MapConfig.loadDistance; dy++) {
+                int chunkX = playerChunkX + dx;
+                int chunkY = playerChunkY + dy;
+                if (chunkX >= 0 && chunkX < width / MapConfig.chunkWidth && chunkY >= 0 && chunkY < height / MapConfig.chunkHeight) {
+                    Tuple<Integer, Integer> chunkKey = new Tuple<>(chunkX, chunkY);
+                    if (!loadedChunks.contains(chunkKey)) {
+                        loadChunk(chunkX, chunkY);
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Unloads chunks that are too far away from the player and stores them in the saved chunks map.
+     *
+     * @param playerChunkX The player's current chunk X coordinate.
+     * @param playerChunkY The player's current chunk Y coordinate.
+     */
+    private void unloadFarChunks(int playerChunkX, int playerChunkY) {
+        Iterator<Map.Entry<Tuple<Integer, Integer>, Chunk>> iterator = WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getWorld().entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Tuple<Integer, Integer>, Chunk> entry = iterator.next();
+            int chunkX = entry.getKey().first();
+            int chunkY = entry.getKey().second();
+            if (Math.abs(chunkX - playerChunkX) > MapConfig.loadDistance || Math.abs(chunkY - playerChunkY) > MapConfig.loadDistance) {
+                WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getSavedChunks().put(entry.getKey(), entry.getValue());
+                iterator.remove();
+            }
+        }
+    }
+
+    /**
+     * Loads a chunk from saved data or generates it if it doesn't exist yet.
+     *
+     * @param chunkX The X coordinate of the chunk to load or generate.
+     * @param chunkY The Y coordinate of the chunk to load or generate.
+     */
+    private void loadChunk(int chunkX, int chunkY) {
+        Tuple<Integer, Integer> chunkKey = new Tuple<>(chunkX, chunkY);
+
+        if (WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getSavedChunks().containsKey(chunkKey)) {
+            WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().addChunk(chunkX, chunkY, WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getSavedChunks().get(chunkKey));
+        } else {
+            System.err.println("Chunk not found, bad map loading or map not big enough");
         }
     }
 }

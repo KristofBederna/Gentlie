@@ -1,17 +1,17 @@
 package Game.Misc.Scenes;
 
 import Game.Misc.UtilityFunctions;
+import Game.Systems.CustomRenderSystem;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
 import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusic;
 import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusicStore;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.ResourceStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.SystemStartUp;
-import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.RenderSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.BackgroundMusicSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
@@ -47,12 +47,12 @@ public class MainScene extends GameScene {
     }
 
     private void declareEntities() {
-        LabelEntity label = new LabelEntity("Gentile", Config.resolution.first()/2 - 20*Config.relativeWidthRatio, Config.resolution.second()/2 - 250*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0);
+        LabelEntity label = new LabelEntity("Gentile", DisplayConfig.resolution.first() / 2 - 20 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 250 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0);
 
-        ButtonEntity start = new ButtonEntity("Start Game", Config.resolution.first() / 2 - 50 * Config.relativeWidthRatio, Config.resolution.second() / 2 - 150 * Config.relativeHeightRatio, 200 * Config.relativeWidthRatio, 80 * Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new SaveCreatorScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
-        ButtonEntity continueGame = new ButtonEntity("Continue Game", Config.resolution.first() / 2 - 50 * Config.relativeWidthRatio, Config.resolution.second() / 2 - 50 * Config.relativeHeightRatio, 200 * Config.relativeWidthRatio, 80 * Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new LoadSelectorScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
-        ButtonEntity settings = new ButtonEntity("Settings", Config.resolution.first() / 2 - 50 * Config.relativeWidthRatio, Config.resolution.second() / 2 + 50 * Config.relativeHeightRatio, 200 * Config.relativeWidthRatio, 80 * Config.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new SettingsScene(new BorderPane(), Config.resolution.first(), Config.resolution.second())));
-        ButtonEntity exit = new ButtonEntity("Exit", Config.resolution.first() / 2 - 50 * Config.relativeWidthRatio, Config.resolution.second() / 2 + 150 * Config.relativeHeightRatio, 200 * Config.relativeWidthRatio, 80 * Config.relativeHeightRatio, () -> System.exit(0));
+        ButtonEntity start = new ButtonEntity("Start Game", DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 150 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 80 * DisplayConfig.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new SaveCreatorScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second())));
+        ButtonEntity continueGame = new ButtonEntity("Continue Game", DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 50 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 80 * DisplayConfig.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new LoadSelectorScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second())));
+        ButtonEntity settings = new ButtonEntity("Settings", DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 + 50 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 80 * DisplayConfig.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new SettingsScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second())));
+        ButtonEntity exit = new ButtonEntity("Exit", DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 + 150 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 80 * DisplayConfig.relativeHeightRatio, () -> System.exit(0));
 
         start.addStyleClass("main-menu-button");
         continueGame.addStyleClass("main-menu-button");
@@ -76,7 +76,7 @@ public class MainScene extends GameScene {
         if (systemHub.getSystem(BackgroundMusicSystem.class) == null) {
             systemHub.addSystem(BackgroundMusicSystem.class, new BackgroundMusicSystem(), 2);
         }
-        systemHub.addSystem(RenderSystem.class, new RenderSystem(), 3);
+        systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 3);
     }
 
     @Override

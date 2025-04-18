@@ -13,7 +13,7 @@ public class InteractiveComponent extends Component {
     private final Map<MouseButton, Tuple<Runnable, Runnable>> mouseInputMapping;
     private Runnable scrollAction;
     private Runnable mouseMoveAction;
-    private Map<Tuple<KeyCode, MouseButton>, Tuple<Long, Long>> lastTimeCalled;
+    private final Map<Tuple<KeyCode, MouseButton>, Tuple<Long, Long>> lastTimeCalled;
 
     public InteractiveComponent() {
         this.keyInputMapping = new HashMap<>();

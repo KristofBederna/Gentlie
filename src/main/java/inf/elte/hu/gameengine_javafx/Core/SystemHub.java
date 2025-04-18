@@ -40,6 +40,10 @@ public class SystemHub {
         return instance;
     }
 
+    public static void resetInstance() {
+        instance = new SystemHub();
+    }
+
     /**
      * Adds a system to the SystemHub with a specified priority.
      * The system will be stored in a TreeMap, where it is ordered by priority.
@@ -57,7 +61,7 @@ public class SystemHub {
     /**
      * Removes a system from the SystemHub.
      *
-     * @param systemClass the class type of the system to remove
+     * @param systemClass the class type of the system to unload
      * @param <T>         the type of the system
      */
     public <T extends GameSystem> void removeSystem(Class<T> systemClass) {
@@ -90,7 +94,6 @@ public class SystemHub {
 
     /**
      * Shuts down all systems in the SystemHub, aborting each one in the reverse priority order,
-     * except for the {@code SceneManagementSystem}, which is left running.
      * The systems are cleared from the system hub after shutdown.
      */
     public void shutDownSystems() {
@@ -100,29 +103,39 @@ public class SystemHub {
 
         isShuttingDown = true;
         try {
-            SceneManagementSystem sceneManagementSystem = getSystem(SceneManagementSystem.class);
-            BackgroundMusicSystem backgroundMusicSystem = getSystem(BackgroundMusicSystem.class);
-
-            // Shut down systems in reverse priority order, but leave the SceneManagementSystem running
-            for (GameSystem system : getAllSystemsInPriorityOrder().reversed()) {
-                if (system == sceneManagementSystem) {
-                    continue;
-                }
-                if (system == backgroundMusicSystem) {
-                    continue;
-                }
-                system.abort();
-            }
-
-            // Clear all systems except for SceneManagementSystem
-            systems.clear();
-            systems.put(998, backgroundMusicSystem);
-            systems.put(999, sceneManagementSystem);
-            systemPriorities.clear();
-            systemPriorities.put(BackgroundMusicSystem.class, 998);
-            systemPriorities.put(SceneManagementSystem.class, 999);
+            abortIfNotKept();
         } finally {
             isShuttingDown = false;
         }
+    }
+
+    private void abortIfNotKept() {
+        SceneManagementSystem sceneManagementSystem = getSystem(SceneManagementSystem.class);
+        BackgroundMusicSystem backgroundMusicSystem = getSystem(BackgroundMusicSystem.class);
+
+        abortReversed(sceneManagementSystem, backgroundMusicSystem);
+        resetSystems(backgroundMusicSystem, sceneManagementSystem);
+        resetSystemPriorities();
+    }
+
+    private void abortReversed(SceneManagementSystem sceneManagementSystem, BackgroundMusicSystem backgroundMusicSystem) {
+        for (GameSystem system : getAllSystemsInPriorityOrder().reversed()) {
+            if (system == sceneManagementSystem || system == backgroundMusicSystem) {
+                continue;
+            }
+            system.abort();
+        }
+    }
+
+    private void resetSystems(BackgroundMusicSystem backgroundMusicSystem, SceneManagementSystem sceneManagementSystem) {
+        systems.clear();
+        systems.put(998, backgroundMusicSystem);
+        systems.put(999, sceneManagementSystem);
+    }
+
+    private void resetSystemPriorities() {
+        systemPriorities.clear();
+        systemPriorities.put(BackgroundMusicSystem.class, 998);
+        systemPriorities.put(SceneManagementSystem.class, 999);
     }
 }

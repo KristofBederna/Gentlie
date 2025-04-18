@@ -15,7 +15,9 @@ import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.*;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.ResourceConfig;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners.FullScreenToggleEventListener;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners.ResolutionChangeEventListener;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.FullScreenToggleEvent;
@@ -40,12 +42,15 @@ public class UtilityFunctions {
     public static void showSettingsMenu(InteractiveComponent playerInteractiveComponent) {
         playerInteractiveComponent.mapInput(KeyCode.ESCAPE, 100, () -> {
             Time.getInstance().setTimeScale(0.0);
-            ButtonEntity start = new ButtonEntity("Back to main menu", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 150*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> {
-                SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new MainScene(new BorderPane(), Config.resolution.first(), Config.resolution.second()));
+            ButtonEntity start = new ButtonEntity("Back to main menu", DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 150 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 80 * DisplayConfig.relativeHeightRatio, () -> {
+                SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new MainScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second()));
                 Time.getInstance().setTimeScale(1.0);
             });
-            ButtonEntity settings = new ButtonEntity("Settings", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, ()->{showDetailedSettingsMenu(); backButton();});
-            ButtonEntity exit = new ButtonEntity("Back", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 + 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> {
+            ButtonEntity settings = new ButtonEntity("Settings", DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 50 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 80 * DisplayConfig.relativeHeightRatio, () -> {
+                showDetailedSettingsMenu();
+                backButton();
+            });
+            ButtonEntity exit = new ButtonEntity("Back", DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 + 50 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 80 * DisplayConfig.relativeHeightRatio, () -> {
                 uiRoot.getInstance().unloadAll();
                 Time.getInstance().setTimeScale(1.0);
             });
@@ -54,22 +59,22 @@ public class UtilityFunctions {
 
     public static void showDetailedSettingsMenu() {
         uiRoot.getInstance().unloadAll();
-        LabelEntity label = new LabelEntity("Settings", Config.resolution.first()/2 - 20*Config.relativeWidthRatio, Config.resolution.second()/2 - 250*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0);
+        LabelEntity label = new LabelEntity("Settings", DisplayConfig.resolution.first() / 2 - 20 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 250 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0);
 
-        LabelEntity soundLabel = new LabelEntity("Master volume: ", Config.resolution.first()/2 - 200*Config.relativeWidthRatio, Config.resolution.second()/2 - 150*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0);
-        SliderEntity sound = new SliderEntity(Config.resolution.first()/2 - 20*Config.relativeWidthRatio, Config.resolution.second()/2 - 150*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0, 0.0f, 1.0f, Config.masterVolume);
+        LabelEntity soundLabel = new LabelEntity("Master volume: ", DisplayConfig.resolution.first() / 2 - 200 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 150 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0);
+        SliderEntity sound = new SliderEntity(DisplayConfig.resolution.first() / 2 - 20 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 150 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0, 0.0f, 1.0f, ResourceConfig.masterVolume);
 
         Slider slider2 = sound.getComponent(SliderComponent.class).getUIElement();
         slider2.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Config.masterVolume = newValue.floatValue();
+            ResourceConfig.masterVolume = newValue.floatValue();
         });
 
-        LabelEntity musicLabel = new LabelEntity("Music volume: ", Config.resolution.first()/2 - 200*Config.relativeWidthRatio, Config.resolution.second()/2 - 100*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0);
-        SliderEntity music = new SliderEntity(Config.resolution.first()/2 - 20*Config.relativeWidthRatio, Config.resolution.second()/2 - 100*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0, 0.0f, 1.0f, Config.backgroundMusicVolume);
+        LabelEntity musicLabel = new LabelEntity("Music volume: ", DisplayConfig.resolution.first() / 2 - 200 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 100 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0);
+        SliderEntity music = new SliderEntity(DisplayConfig.resolution.first() / 2 - 20 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 100 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0, 0.0f, 1.0f, ResourceConfig.backgroundMusicVolume);
 
         Slider slider = music.getComponent(SliderComponent.class).getUIElement();
         slider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Config.backgroundMusicVolume = newValue.floatValue();
+            ResourceConfig.backgroundMusicVolume = newValue.floatValue();
         });
 
         ObservableList<Tuple<Double, Double>> options = FXCollections.observableArrayList();
@@ -79,12 +84,12 @@ public class UtilityFunctions {
         options.add(new Tuple<>(1440.0, 900.0));
         options.add(new Tuple<>(1920.0, 1080.0));
         options.add(new Tuple<>(2560.0, 1440.0));
-        LabelEntity resolutionLabel = new LabelEntity("Resolution: ", Config.resolution.first()/2 - 200*Config.relativeWidthRatio, Config.resolution.second()/2 - 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0);
-        ComboBoxEntity<Tuple<Double,Double>> resolution = new ComboBoxEntity<>(new ComboBoxComponent<>(Config.resolution.first()/2 - 20*Config.relativeWidthRatio, Config.resolution.second()/2 - 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 0, options));
+        LabelEntity resolutionLabel = new LabelEntity("Resolution: ", DisplayConfig.resolution.first() / 2 - 200 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 50 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0);
+        ComboBoxEntity<Tuple<Double, Double>> resolution = new ComboBoxEntity<>(new ComboBoxComponent<>(DisplayConfig.resolution.first() / 2 - 20 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 50 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0, options));
 
         ComboBox<Tuple<Double, Double>> comboBox = (ComboBox<Tuple<Double, Double>>) resolution.getComponent(ComboBoxComponent.class).getUIElement();
 
-        comboBox.setValue(Config.resolution);
+        comboBox.setValue(DisplayConfig.resolution);
 
         comboBox.setCellFactory(cb -> new ListCell<>() {
             @Override
@@ -112,21 +117,21 @@ public class UtilityFunctions {
 
         comboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-                Config.resolution = new Tuple<>(newVal.first(), newVal.second());
+                DisplayConfig.resolution = new Tuple<>(newVal.first(), newVal.second());
                 new ResolutionChangeEventListener().onEvent(new ResolutionChangeEvent(newVal.first(), newVal.second()));
             }
         });
 
-        LabelEntity fullScreenLabel = new LabelEntity("Fullscreen mode: ", Config.resolution.first()/2 - 200*Config.relativeWidthRatio, Config.resolution.second()/2, 200*Config.relativeWidthRatio, 0);
-        CheckBoxEntity fullscreen = new CheckBoxEntity("",Config.resolution.first()/2 - 20*Config.relativeWidthRatio, Config.resolution.second()/2, 200*Config.relativeWidthRatio, 0);
+        LabelEntity fullScreenLabel = new LabelEntity("Fullscreen mode: ", DisplayConfig.resolution.first() / 2 - 200 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2, 200 * DisplayConfig.relativeWidthRatio, 0);
+        CheckBoxEntity fullscreen = new CheckBoxEntity("", DisplayConfig.resolution.first() / 2 - 20 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2, 200 * DisplayConfig.relativeWidthRatio, 0);
 
         CheckBox checkBox = fullscreen.getComponent(CheckBoxComponent.class).getUIElement();
 
-        checkBox.setSelected(Config.fullScreenMode);
+        checkBox.setSelected(DisplayConfig.fullScreenMode);
 
         checkBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-                Config.fullScreenMode = newVal;
+                DisplayConfig.fullScreenMode = newVal;
 
                 Stage stage = (Stage) checkBox.getScene().getWindow();
 
@@ -140,14 +145,17 @@ public class UtilityFunctions {
     }
 
     public static void backButton() {
-        ButtonEntity back = new ButtonEntity("Back", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 + 350*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> {
+        ButtonEntity back = new ButtonEntity("Back", DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 + 350 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 80 * DisplayConfig.relativeHeightRatio, () -> {
             uiRoot.getInstance().unloadAll();
-            ButtonEntity start = new ButtonEntity("Back to main menu", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 150*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> {
-                SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new MainScene(new BorderPane(), Config.resolution.first(), Config.resolution.second()));
+            ButtonEntity start = new ButtonEntity("Back to main menu", DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 150 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 80 * DisplayConfig.relativeHeightRatio, () -> {
+                SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new MainScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second()));
                 Time.getInstance().setTimeScale(1.0);
             });
-            ButtonEntity settings = new ButtonEntity("Settings", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 - 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, ()->{showDetailedSettingsMenu(); backButton();});
-            ButtonEntity exit = new ButtonEntity("Back", Config.resolution.first()/2 - 50*Config.relativeWidthRatio, Config.resolution.second()/2 + 50*Config.relativeHeightRatio, 200*Config.relativeWidthRatio, 80*Config.relativeHeightRatio, () -> {
+            ButtonEntity settings = new ButtonEntity("Settings", DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 50 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 80 * DisplayConfig.relativeHeightRatio, () -> {
+                showDetailedSettingsMenu();
+                backButton();
+            });
+            ButtonEntity exit = new ButtonEntity("Back", DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 + 50 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 80 * DisplayConfig.relativeHeightRatio, () -> {
                 uiRoot.getInstance().unloadAll();
                 Time.getInstance().setTimeScale(1.0);
             });
@@ -206,7 +214,7 @@ public class UtilityFunctions {
     }
 
     public static void setUpCamera(double width, double height, double worldWidth, double worldHeight) {
-        CameraEntity.getInstance(width, height, worldWidth * Config.scaledTileSize, worldHeight * Config.scaledTileSize);
+        CameraEntity.getInstance(width, height, worldWidth * MapConfig.scaledTileSize, worldHeight * MapConfig.scaledTileSize);
         CameraEntity.getInstance().attachTo(EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class).getFirst());
     }
 

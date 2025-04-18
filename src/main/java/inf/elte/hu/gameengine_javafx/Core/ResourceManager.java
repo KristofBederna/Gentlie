@@ -36,20 +36,32 @@ public class ResourceManager<T> {
      * @return the resource if found, or {@code null} if loading the resource failed
      */
     public T get(String key) {
-        if (resources.containsKey(key)) {
+        if (contains(key)) {
             lastAccessed.put(key, System.currentTimeMillis());
             return resources.get(key);
         }
 
+        return loadThenGet(key);
+    }
+
+    private T loadThenGet(String key) {
         T resource = loader.apply(key);
+
         if (resource == null) {
-            System.err.println("Failed to load resource: " + key);
-            return null;
+            throw new RuntimeException("Resource not found: " + key);
         }
 
         resources.put(key, resource);
         lastAccessed.put(key, System.currentTimeMillis());
         return resource;
+    }
+
+    private boolean contains(String key) {
+        if (resources.containsKey(key)) {
+            lastAccessed.put(key, System.currentTimeMillis());
+            return true;
+        }
+        return false;
     }
 
     /**

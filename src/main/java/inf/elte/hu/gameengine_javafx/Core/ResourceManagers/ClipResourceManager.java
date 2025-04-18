@@ -24,7 +24,7 @@ public class ClipResourceManager extends ResourceManager<Clip> {
                 Clip clip = AudioSystem.getClip();
                 try {
                     clip.open(audioStream);
-                    clip.setFramePosition(0); // Initialize at start position
+                    clip.setFramePosition(0);
                     return clip;
                 } catch (LineUnavailableException | IOException e) {
                     try {

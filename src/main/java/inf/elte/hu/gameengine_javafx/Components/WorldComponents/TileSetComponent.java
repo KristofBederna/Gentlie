@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.util.Objects;
 
 public class TileSetComponent extends Component {
-    private TileLoader tileLoader;
+    private final TileLoader tileLoader;
 
     public TileSetComponent(String tileSetPath) {
         this.tileLoader = new TileLoader();
@@ -27,11 +27,7 @@ public class TileSetComponent extends Component {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] row = line.split(" ");
-                int value = Integer.parseInt(row[0]);
-                String tilePath = row[1];
-
-                tileLoader.addTilePath(value, tilePath);
+                processTileLoading(line, " ", tileLoader);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -43,15 +39,19 @@ public class TileSetComponent extends Component {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] row = line.split(separator);
-                int value = Integer.parseInt(row[0]);
-                String tilePath = row[1];
-
-                tileLoader.addTilePath(value, tilePath);
+                processTileLoading(line, separator, tileLoader);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static void processTileLoading(String line, String separator, TileLoader tileLoader) {
+        String[] row = line.split(separator);
+        int value = Integer.parseInt(row[0]);
+        String tilePath = row[1];
+
+        tileLoader.addTilePath(value, tilePath);
     }
 
     public TileLoader getTileLoader() {

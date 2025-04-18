@@ -129,6 +129,10 @@ public class Time {
         return deltaTime;
     }
 
+    public void setDeltaTime(double deltaTime) {
+        this.deltaTime = deltaTime;
+    }
+
     /**
      * Gets the unscaled delta time since the last frame.
      * <br>
@@ -186,5 +190,9 @@ public class Time {
             fps = fpsCap;
         }
         return fps;
+    }
+
+    public void setFPS(int i) {
+        fps = i;
     }
 }

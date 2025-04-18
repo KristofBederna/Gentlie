@@ -22,7 +22,7 @@ public class EnterInnListener implements EventListener<EnterInnEvent> {
     }
 
     @Override
-    public void onExit() {
+    public void onExit(EnterInnEvent event) {
         ((LabelEntity)EntityHub.getInstance().getEntitiesWithType(EnterInnLabel.class).getFirst()).removeFromUI();
     }
 }

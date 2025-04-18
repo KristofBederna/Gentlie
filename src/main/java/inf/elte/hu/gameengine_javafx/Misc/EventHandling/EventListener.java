@@ -1,5 +1,7 @@
 package inf.elte.hu.gameengine_javafx.Misc.EventHandling;
 
+import Game.Misc.EventHandling.Events.OpenShopEvent;
+
 /**
  * Interface for handling events within the game engine.
  * <br>
@@ -15,5 +17,6 @@ public interface EventListener<T extends Event> {
      * @param event The event instance to be processed.
      */
     void onEvent(T event);
-    void onExit();
+
+    void onExit(T event);
 }

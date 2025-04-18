@@ -34,9 +34,7 @@ public class CampfireEntity extends Entity {
                 AnimationFrame frame2 = new AnimationFrame("/assets/images/Campfire/" + "Campfire_2.png", 15 * Time.getInstance().getFPS() / 60);
                 AnimationFrame frame3 = new AnimationFrame("/assets/images/Campfire/" + "Campfire_3.png", 15 * Time.getInstance().getFPS() / 60);
 
-                if (animationComponent != null) {
-                    animationComponent.setFrames(List.of(frame1, frame2, frame3));
-                } else {
+                if (animationComponent == null) {
                     entity.addComponent(new AnimationComponent(List.of(frame1, frame2, frame3)));
                 }
             }

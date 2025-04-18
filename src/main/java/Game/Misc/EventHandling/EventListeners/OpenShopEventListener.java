@@ -7,7 +7,7 @@ import Game.Misc.PlayerStats;
 import Game.Misc.ShopItemPrices;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListener;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import javafx.application.Platform;
@@ -30,6 +30,14 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
             addShopItems();
             createBuy();
         }
+    }
+
+    @Override
+    public void onExit(OpenShopEvent event) {
+        Platform.runLater(() -> {
+            uiRoot.getInstance().getChildren().remove(shopWrapper);
+            shopWrapper = null;
+        });
     }
 
     private void addShopItems() {
@@ -96,14 +104,6 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
         });
     }
 
-    @Override
-    public void onExit() {
-        Platform.runLater(() -> {
-            uiRoot.getInstance().getChildren().remove(shopWrapper);
-            shopWrapper = null;
-        });
-    }
-
     private void createBuy() {
         VBox shopVBox = new VBox(20);
         shopVBox.setPadding(new Insets(20));
@@ -133,8 +133,8 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
         wrapper.setStyle("-fx-background-color: transparent;");
         wrapper.getChildren().add(scrollPane);
 
-        scrollPane.setLayoutX(Config.resolution.first()/2-300);
-        scrollPane.setLayoutY(Config.resolution.second()/2-200);
+        scrollPane.setLayoutX(DisplayConfig.resolution.first() / 2 - 300);
+        scrollPane.setLayoutY(DisplayConfig.resolution.second() / 2 - 200);
 
         shopWrapper = wrapper;
 

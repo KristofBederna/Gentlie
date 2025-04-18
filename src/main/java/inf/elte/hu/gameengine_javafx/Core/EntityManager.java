@@ -47,32 +47,18 @@ public class EntityManager<T extends Entity> {
      */
     public void register(T entity) {
         this.entities.put(entity.getId(), entity);
+        addIdToComponentCaches(entity);
+        EntityHub.getInstance().refreshEntitiesList();
+    }
+
+    private <T extends Entity> void addIdToComponentCaches(T entity) {
         for (Class<? extends Component> componentClass : entity.getAllComponents().keySet()) {
-            EntityHub.getInstance().getComponentCache()
-                    .computeIfAbsent(componentClass, k -> new HashSet<>() {
-                    })
-                    .add(entity.getId());
+            EntityHub.getInstance().getComponentCache().computeIfAbsent(componentClass, k -> new HashSet<>()).add(entity.getId());
         }
-        EntityHub.getInstance().refreshEntitiesList();
     }
 
-
-    /**
-     * Unloads an entity by its ID, removing it from the manager.
-     *
-     * @param id the ID of the entity to unload
-     */
-    public void unload(Integer id) {
+    public void unload(int id) {
         entities.remove(id);
-        EntityHub.getInstance().refreshEntitiesList();
-    }
-
-    /**
-     * Unloads all entities managed by the {@code EntityManager}.
-     */
-    public void unloadAll() {
-        entities.clear();
-        EntityHub.getInstance().refreshEntitiesList();
     }
 
     /**

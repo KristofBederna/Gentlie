@@ -1,5 +1,7 @@
 package inf.elte.hu.gameengine_javafx.Misc;
 
+import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
+
 /**
  * Abstract base class for the game loop.
  * <br>
@@ -8,8 +10,8 @@ package inf.elte.hu.gameengine_javafx.Misc;
  * Subclasses must implement the {@link #update()} method to define the logic that should be executed on every frame.
  */
 public abstract class GameLoop extends Thread {
-    private boolean running;
-    private final Time time;
+    protected boolean running;
+    protected final Time time;
 
     /**
      * Constructs a new {@code GameLoop} instance.
@@ -19,7 +21,7 @@ public abstract class GameLoop extends Thread {
     public GameLoop() {
         this.running = false;
         this.time = Time.getInstance();
-        time.setFPSCap(Config.fpsCap);
+        time.setFPSCap(DisplayConfig.fpsCap);
     }
 
     /**
@@ -59,20 +61,28 @@ public abstract class GameLoop extends Thread {
 
             update();
 
-            if (time.isFPSCapEnabled()) {
-                long frameDuration = System.nanoTime() - frameStartTime;
-                long sleepTime = (1_000_000_000L / time.getFPSCap()) - frameDuration;
+            matchFrameRate(frameStartTime);
+        }
+    }
 
-                if (sleepTime > 0) {
-                    try {
-                        Thread.sleep(sleepTime / 1_000_000, (int) (sleepTime % 1_000_000));
-                    } catch (InterruptedException e) {
+    private void matchFrameRate(long frameStartTime) {
+        if (time.isFPSCapEnabled()) {
+            long frameDuration = System.nanoTime() - frameStartTime;
+            long sleepTime = (1_000_000_000L / time.getFPSCap()) - frameDuration;
 
-                    }
-                } else {
-                    Thread.yield();
-                }
+            determineSleepState(sleepTime);
+        }
+    }
+
+    private void determineSleepState(long sleepTime) {
+        if (sleepTime > 0) {
+            try {
+                Thread.sleep(sleepTime / 1_000_000, (int) (sleepTime % 1_000_000));
+            } catch (InterruptedException e) {
+
             }
+        } else {
+            Thread.yield();
         }
     }
 

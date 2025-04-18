@@ -4,7 +4,6 @@ import inf.elte.hu.gameengine_javafx.Components.PathfindingComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
-import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.StateComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
@@ -19,7 +18,7 @@ public class PathfindingSystem extends GameSystem {
     }
 
     @Override
-    protected void update() {
+    public void update() {
         var pathfinderEntities = EntityHub.getInstance().getEntitiesWithComponent(PathfindingComponent.class);
 
         for (var entity : pathfinderEntities) {
@@ -53,20 +52,10 @@ public class PathfindingSystem extends GameSystem {
                     AccelerationComponent accel = entity.getComponent(AccelerationComponent.class);
                     accel.getAcceleration().setDx(normDx * speed);
                     accel.getAcceleration().setDy(normDy * speed);
-
-                    StateComponent state = entity.getComponent(StateComponent.class);
-                    if (Math.abs(normDx) > Math.abs(normDy)) {
-                        state.setCurrentState(normDx > 0 ? "right" : "left");
-                    } else {
-                        state.setCurrentState(normDy > 0 ? "down" : "up");
-                    }
                 }
 
                 if (position.compareCoordinates(node)) {
                     pathfindingComponent.getPath().removeFirst();
-                    if (pathfindingComponent.getPath().isEmpty()) {
-                        entity.getComponent(StateComponent.class).setCurrentState("idle");
-                    }
                 }
             }
 

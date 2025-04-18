@@ -1,11 +1,12 @@
 package inf.elte.hu.gameengine_javafx;
 
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
-import inf.elte.hu.gameengine_javafx.Misc.Config;
+import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.GameLayer;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.SystemStartUp;
+import inf.elte.hu.gameengine_javafx.Misc.UtilityFunctions;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -29,18 +30,19 @@ public class Main extends Application {
         });
         systemStartUp.startUpSceneManagementSystem();
         SceneManagementSystem sceneManagementSystem = SystemHub.getInstance().getSystem(SceneManagementSystem.class);
+        sceneManagementSystem.start();
         sceneManagementSystem.setStage(stage);
-        stage.setFullScreen(Config.fullScreenMode);
+        stage.setFullScreen(DisplayConfig.fullScreenMode);
         stage.setFullScreenExitHint("");
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 
         BorderPane root = (BorderPane) sceneManagementSystem.getCurrentScene().getRoot();
 
-        GameCanvas gameCanvas = GameCanvas.createInstance(Config.resolution.first(), Config.resolution.second());
-        uiRoot uiRoot = inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot.getInstance();
+        GameCanvas gameCanvas = GameCanvas.createInstance(DisplayConfig.resolution.first(), DisplayConfig.resolution.second());
+        uiRoot UIRoot = uiRoot.getInstance();
         GameLayer gameLayer = GameLayer.getInstance();
-        gameLayer.getChildren().addAll(gameCanvas, uiRoot);
-        uiRoot.setFocusTraversable(true);
+        gameLayer.getChildren().addAll(gameCanvas, UIRoot);
+        UIRoot.setFocusTraversable(true);
 
         root.setCenter(gameLayer);
 
@@ -52,14 +54,14 @@ public class Main extends Application {
         Scene scene = SystemHub.getInstance().getSystem(SceneManagementSystem.class).getCurrentScene();
 
         // Set window title here
-        stage.setTitle(Config.windowTitle);
+        stage.setTitle(DisplayConfig.windowTitle);
 
         // Assigns the stage as the parent container of the scene
         stage.setScene(scene);
 
         // Define on close behaviour here
         stage.setOnCloseRequest(event -> {
-            System.exit(0);
+            UtilityFunctions.shutDownMethod();
         });
 
         // Makes the window visible

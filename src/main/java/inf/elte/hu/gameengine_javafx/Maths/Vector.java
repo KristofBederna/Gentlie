@@ -102,4 +102,12 @@ public class Vector {
             dy = deltaY / distance;
         }
     }
+
+    public boolean isZero() {
+        return dx == 0 && dy == 0;
+    }
+
+    public double magnitude() {
+        return Math.sqrt(dx * dx + dy * dy);
+    }
 }
