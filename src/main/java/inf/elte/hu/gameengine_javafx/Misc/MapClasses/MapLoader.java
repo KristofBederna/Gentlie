@@ -34,10 +34,13 @@ public class MapLoader {
 
     private static Tuple<Integer, Integer> readMapData(WorldEntity map, List<List<Integer>> data) {
         String filePath = map.getComponent(FilePathComponent.class).getFilePath();
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(
-                        Objects.requireNonNull(MapSaver.class.getResourceAsStream(filePath)))
-        )) {
+
+        try (BufferedReader reader = filePath.startsWith("/")
+                ? new BufferedReader(new InputStreamReader(
+                Objects.requireNonNull(MapSaver.class.getResourceAsStream(filePath)))
+        )
+                : new BufferedReader(new java.io.FileReader(filePath))) {
+
             String[] dims = reader.readLine().split(" ");
             int width = Integer.parseInt(dims[0]);
             int height = Integer.parseInt(dims[1]);
@@ -51,10 +54,11 @@ public class MapLoader {
                 }
                 data.add(row);
             }
+
             return new Tuple<>(width, height);
 
         } catch (IOException e) {
-            throw new RuntimeException("Error reading file", e);
+            throw new RuntimeException("Error reading map file from path: " + filePath, e);
         }
     }
 

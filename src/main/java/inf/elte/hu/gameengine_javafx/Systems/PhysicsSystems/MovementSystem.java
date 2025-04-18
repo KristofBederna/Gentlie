@@ -9,11 +9,11 @@ import inf.elte.hu.gameengine_javafx.Components.WorldComponents.WorldDataCompone
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
-import inf.elte.hu.gameengine_javafx.Entities.ParticleEntity;
 import inf.elte.hu.gameengine_javafx.Entities.TileEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.PhysicsConfig;
+import inf.elte.hu.gameengine_javafx.Misc.IgnoreFriction;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class MovementSystem extends GameSystem {
 
         TileEntity tile = getCurrentTile(entity);
 
-        if (!(entity instanceof ParticleEntity)) {
+        if (!IgnoreFriction.ignore.contains(entity.getClass())) {
             double[] frictionAdjusted = applyFriction(tile, newDx, newDy, getMass(entity));
             newDx = frictionAdjusted[0];
             newDy = frictionAdjusted[1];

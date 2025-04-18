@@ -81,7 +81,7 @@ public class SaveCreatorScene extends GameScene {
 
                             ButtonEntity saveButton = new ButtonEntity(
                                     folderName,
-                                    DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio,
+                                    DisplayConfig.resolution.first() / 2 - 100 * DisplayConfig.relativeWidthRatio,
                                     startY + i * gap,
                                     200 * DisplayConfig.relativeWidthRatio,
                                     80 * DisplayConfig.relativeHeightRatio,
@@ -102,7 +102,7 @@ public class SaveCreatorScene extends GameScene {
 
         ButtonEntity exit = new ButtonEntity(
                 "Back",
-                DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio,
+                DisplayConfig.resolution.first() / 2 - 100 * DisplayConfig.relativeWidthRatio,
                 DisplayConfig.resolution.second() / 2 + 350 * DisplayConfig.relativeHeightRatio,
                 200 * DisplayConfig.relativeWidthRatio,
                 80 * DisplayConfig.relativeHeightRatio,
@@ -115,23 +115,20 @@ public class SaveCreatorScene extends GameScene {
 
     private void startLoad(File saveFolder) {
         LabelEntity label = new LabelEntity("Are you sure you want to overwrite the save file at " + saveFolder.getName() + "?",
-                DisplayConfig.resolution.first() / 2 - 350 * DisplayConfig.relativeWidthRatio,
+                DisplayConfig.resolution.first() / 2 - 400 * DisplayConfig.relativeWidthRatio,
                 DisplayConfig.resolution.second() / 2 + 175 * DisplayConfig.relativeHeightRatio,
                 200 * DisplayConfig.relativeWidthRatio,
                 80 * DisplayConfig.relativeHeightRatio);
         ButtonEntity yes = new ButtonEntity("Yes",
-                DisplayConfig.resolution.first() / 2 - 175 * DisplayConfig.relativeWidthRatio,
+                DisplayConfig.resolution.first() / 2 - 225 * DisplayConfig.relativeWidthRatio,
                 DisplayConfig.resolution.second() / 2 + 265 * DisplayConfig.relativeHeightRatio,
                 200 * DisplayConfig.relativeWidthRatio,
                 80 * DisplayConfig.relativeHeightRatio,
                 () -> {
-                    // Project root
                     Path projectRoot = Paths.get(System.getProperty("user.dir"));
 
-                    // Full path of the save folder
                     Path savePath = saveFolder.toPath();
 
-                    // Try to relativize
                     Path relativePath = projectRoot.relativize(savePath);
 
                     PlayerStats.currentSave = relativePath.toString().replace("\\", "/");
@@ -143,7 +140,7 @@ public class SaveCreatorScene extends GameScene {
                     SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second(), new Point(10 * 100 + 100 / 2, 3 * 100)));
                 });
         ButtonEntity no = new ButtonEntity("No",
-                DisplayConfig.resolution.first() / 2 + 75 * DisplayConfig.relativeWidthRatio,
+                DisplayConfig.resolution.first() / 2 + 25 * DisplayConfig.relativeWidthRatio,
                 DisplayConfig.resolution.second() / 2 + 265 * DisplayConfig.relativeHeightRatio,
                 200 * DisplayConfig.relativeWidthRatio,
                 80 * DisplayConfig.relativeHeightRatio,

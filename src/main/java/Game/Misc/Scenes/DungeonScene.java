@@ -2,6 +2,7 @@ package Game.Misc.Scenes;
 
 import Game.Components.AttackBoxComponent;
 import Game.Components.HealthComponent;
+import Game.Entities.BigSnowBallEntity;
 import Game.Entities.EventTriggerEntity;
 import Game.Entities.Labels.EnemyLabel;
 import Game.Entities.Labels.EnterEnemyIslandLabel;
@@ -33,6 +34,7 @@ import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
 import inf.elte.hu.gameengine_javafx.Maths.Vector;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Direction;
+import inf.elte.hu.gameengine_javafx.Misc.IgnoreFriction;
 import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.MouseInputHandler;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
@@ -67,6 +69,9 @@ public class DungeonScene extends GameScene {
     public void setup() {
         MapConfig.wallTiles = List.of(0, 1, 3);
         MapConfig.setTileScale(2.0);
+
+        IgnoreFriction.ignore.add(SnowBallEntity.class);
+        IgnoreFriction.ignore.add(BigSnowBallEntity.class);
 
         new ResourceStartUp();
 

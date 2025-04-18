@@ -81,7 +81,7 @@ public class LoadSelectorScene extends GameScene {
 
                             ButtonEntity saveButton = new ButtonEntity(
                                     folderName,
-                                    DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio,
+                                    DisplayConfig.resolution.first() / 2 - 100 * DisplayConfig.relativeWidthRatio,
                                     startY + i * gap,
                                     200 * DisplayConfig.relativeWidthRatio,
                                     80 * DisplayConfig.relativeHeightRatio,
@@ -105,7 +105,7 @@ public class LoadSelectorScene extends GameScene {
 
         ButtonEntity exit = new ButtonEntity(
                 "Back",
-                DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio,
+                DisplayConfig.resolution.first() / 2 - 100 * DisplayConfig.relativeWidthRatio,
                 DisplayConfig.resolution.second() / 2 + 350 * DisplayConfig.relativeHeightRatio,
                 200 * DisplayConfig.relativeWidthRatio,
                 80 * DisplayConfig.relativeHeightRatio,
