@@ -15,12 +15,13 @@ public class GameSaverSystem extends GameSystem {
     }
 
     @Override
-    protected void update() {
+    public void update() {
         if (System.currentTimeMillis() - lastSaveTime < 500) {
             return;
         }
         GameSaver.saveEntityStats();
         GameSaver.saveShopPrices();
+        GameSaver.saveTime();
         if (SystemHub.getInstance().getSystem(SceneManagementSystem.class).getCurrentScene() instanceof DungeonScene) {
             GameSaver.saveDungeonState();
         }

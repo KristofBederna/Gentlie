@@ -141,6 +141,7 @@ public class BackgroundMusicSystem extends GameSystem {
                         currentClip.stop();
                     }
                     currentClip.setFramePosition(0);
+                    currentClip.close();
                 } catch (Exception e) {
                     System.err.println("Error cleaning up clip: " + e.getMessage());
                 } finally {

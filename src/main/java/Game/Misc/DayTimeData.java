@@ -7,4 +7,5 @@ public class DayTimeData {
     public static Daytime lastDayTime = Daytime.DAY;
 
     public static int periodsPassed = 0;
+    public static int lastUpdatedPeriod = 0;
 }

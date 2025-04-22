@@ -2,6 +2,7 @@ package Game.Misc;
 
 import Game.Entities.ChestEntity;
 import Game.Entities.PolarBearEntity;
+import Game.Misc.Enums.Daytime;
 import Game.Misc.Scenes.*;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
@@ -205,6 +206,41 @@ public class GameSaver {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    public static void saveTime() {
+        File file = new File(PlayerStats.currentSave + "/time.txt");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(PlayerStats.currentSave + "/time.txt"))) {
+            writer.write(DayTimeData.lastDayTime.toString());
+            writer.newLine();
+            writer.write(String.valueOf((int) DayTimeData.lastUpdate));
+            writer.newLine();
+            writer.write(String.valueOf(DayTimeData.periodsPassed));
+            writer.newLine();
+            writer.write(String.valueOf(DayTimeData.lastUpdatedPeriod));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void loadTime() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(PlayerStats.currentSave + "/time.txt"))) {
+            DayTimeData.lastDayTime = Daytime.valueOf(reader.readLine());
+            long lastUpdate = Long.parseLong(reader.readLine());
+            long diff = System.currentTimeMillis() - lastUpdate;
+            DayTimeData.lastUpdate = lastUpdate + diff;
+            DayTimeData.periodsPassed = Integer.parseInt(reader.readLine());
+            DayTimeData.lastUpdatedPeriod = Integer.parseInt(reader.readLine());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

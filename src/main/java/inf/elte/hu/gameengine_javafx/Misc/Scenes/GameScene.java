@@ -34,4 +34,6 @@ public abstract class GameScene extends Scene {
      * This method should be implemented to release resources or perform any necessary teardown before the scene is unloaded.
      */
     public abstract void breakdown();
+
+    protected abstract void systemStartUp();
 }

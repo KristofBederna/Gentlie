@@ -117,21 +117,20 @@ public class LoadSelectorScene extends GameScene {
     }
 
     private void startLoad(File saveFolder) {
-        // Project root
         Path projectRoot = Paths.get(System.getProperty("user.dir"));
 
-        // Full path of the save folder
         Path savePath = saveFolder.toPath();
 
-        // Try to relativize
         Path relativePath = projectRoot.relativize(savePath);
 
         PlayerStats.currentSave = relativePath.toString().replace("\\", "/");
         GameSaver.loadEntityStats();
         GameSaver.loadShopPrices();
+        GameSaver.loadTime();
     }
 
-    private void systemStartUp() {
+    @Override
+    protected void systemStartUp() {
         SystemHub systemHub = SystemHub.getInstance();
         systemHub.addSystem(ResourceSystem.class, new ResourceSystem(), 1);
         systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 2);

@@ -8,19 +8,18 @@ import java.util.Random;
 
 public class ShopPriceUpdateSystem extends GameSystem {
     private final Random rand = new Random();
-    private int lastUpdatedPeriod = 0;
 
     @Override
     public void start() {
         this.active = true;
-        int fullDaysPassed = (DayTimeData.periodsPassed / 2) - (lastUpdatedPeriod / 2);
+        int fullDaysPassed = (DayTimeData.periodsPassed / 2) - (DayTimeData.lastUpdatedPeriod / 2);
         System.out.println("Full Days Passed: " + fullDaysPassed);
 
         if (fullDaysPassed > 0) {
             for (int i = 0; i < fullDaysPassed; i++) {
                 runPriceUpdateCycle();
             }
-            lastUpdatedPeriod = DayTimeData.periodsPassed;
+            DayTimeData.lastUpdatedPeriod = DayTimeData.periodsPassed;
         }
     }
 

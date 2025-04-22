@@ -11,7 +11,6 @@ import Game.Misc.EventHandling.Events.EnterInnEvent;
 import Game.Misc.PlayerStats;
 import Game.Misc.UtilityFunctions;
 import Game.Systems.*;
-import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
@@ -24,7 +23,6 @@ import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Direction;
-import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.MouseInputHandler;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.ResourceStartUp;
@@ -41,7 +39,6 @@ import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.WorldLoaderSystem;
 import javafx.scene.Parent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.text.TextAlignment;
 
 import java.util.List;
@@ -74,7 +71,7 @@ public class HomeIslandScene extends GameScene {
 
         UtilityFunctions.setUpCamera(1920, 1080, 16, 16);
 
-        new SystemStartUp(this::SystemStartUp);
+        new SystemStartUp(this::systemStartUp);
 
         interactionSetup();
 
@@ -119,7 +116,8 @@ public class HomeIslandScene extends GameScene {
         new EventTriggerEntity(14 * MapConfig.scaledTileSize, 2.5 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, MapConfig.scaledTileSize / 2, new EnterEnemyIslandEvent(new Point(3 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize + MapConfig.scaledTileSize * 0.25 - 1)), new EnterEnemyIslandEventListener());
     }
 
-    private void SystemStartUp() {
+    @Override
+    protected void systemStartUp() {
         //Define systems to be started up here
         SystemHub systemHub = SystemHub.getInstance();
         systemHub.addSystem(MovementDeterminerSystem.class, new MovementDeterminerSystem(),0);
@@ -147,8 +145,6 @@ public class HomeIslandScene extends GameScene {
 
         UtilityFunctions.setUpLeftRightMovement(playerInteractiveComponent, player);
         UtilityFunctions.showSettingsMenu(playerInteractiveComponent);
-
-        playerInteractiveComponent.mapInput(MouseButton.PRIMARY, 100, () -> {player.getComponent(PositionComponent.class).setLocalX(MouseInputHandler.getInstance().getMouseX(), player); player.getComponent(PositionComponent.class).setLocalY(MouseInputHandler.getInstance().getMouseY(), player);});
     }
 
     @Override

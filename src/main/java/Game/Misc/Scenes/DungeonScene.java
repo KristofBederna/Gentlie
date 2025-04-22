@@ -15,7 +15,6 @@ import Game.Misc.EventHandling.Events.ExitDungeonEvent;
 import Game.Misc.PlayerStats;
 import Game.Misc.UtilityFunctions;
 import Game.Systems.*;
-import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
@@ -51,7 +50,6 @@ import inf.elte.hu.gameengine_javafx.Systems.RenderingSystems.ParticleSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
 import javafx.scene.Parent;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.text.TextAlignment;
 
@@ -81,7 +79,7 @@ public class DungeonScene extends GameScene {
 
         UtilityFunctions.setUpCamera(1920, 1080, 32, 32);
 
-        new SystemStartUp(this::SystemStartUp);
+        new SystemStartUp(this::systemStartUp);
 
         interactionSetup();
 
@@ -100,7 +98,8 @@ public class DungeonScene extends GameScene {
         enterEnemyIslandLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
     }
 
-    private void SystemStartUp() {
+    @Override
+    protected void systemStartUp() {
         //Define systems to be started up here
         SystemHub systemHub = SystemHub.getInstance();
         systemHub.addSystem(MovementDeterminerSystem.class, new MovementDeterminerSystem(), 0);
@@ -131,11 +130,6 @@ public class DungeonScene extends GameScene {
 
         UtilityFunctions.setUpMovement(playerInteractiveComponent, player);
         UtilityFunctions.showSettingsMenu(playerInteractiveComponent);
-
-        playerInteractiveComponent.mapInput(KeyCode.ENTER, 100, () -> {
-            player.getComponent(PositionComponent.class).setLocalX(MouseInputHandler.getInstance().getMouseX(), player);
-            player.getComponent(PositionComponent.class).setLocalY(MouseInputHandler.getInstance().getMouseY(), player);
-        });
 
         playerInteractiveComponent.mapInput(MouseButton.PRIMARY, PlayerStats.meleeCooldown, () -> {
             double playerX = player.getComponent(CentralMassComponent.class).getCentralX();

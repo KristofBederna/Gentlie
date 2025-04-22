@@ -13,7 +13,6 @@ import Game.Systems.CustomRenderSystem;
 import Game.Systems.EventTileSystem;
 import Game.Systems.GameSaverSystem;
 import Game.Systems.UserInterfaceSystem;
-import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
@@ -22,7 +21,6 @@ import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
-import inf.elte.hu.gameengine_javafx.Misc.InputHandlers.MouseInputHandler;
 import inf.elte.hu.gameengine_javafx.Misc.Scenes.GameScene;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.ResourceStartUp;
@@ -39,7 +37,6 @@ import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.ResourceSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.WorldLoaderSystem;
 import javafx.scene.Parent;
-import javafx.scene.input.MouseButton;
 
 import java.util.List;
 
@@ -63,7 +60,7 @@ public class HomeScene extends GameScene {
 
         UtilityFunctions.setUpCamera(1920, 1080, 16, 16);
 
-        new SystemStartUp(this::SystemStartUp);
+        new SystemStartUp(this::systemStartUp);
 
         interactionSetup();
 
@@ -81,7 +78,8 @@ public class HomeScene extends GameScene {
         new EventTriggerEntity(6 * MapConfig.scaledTileSize, 11 * MapConfig.scaledTileSize + MapConfig.scaledTileSize * 0.8, 3 * MapConfig.scaledTileSize, 0.2 * MapConfig.scaledTileSize, new ExitHomeEvent(), new ExitHomeEventListener());
     }
 
-    private void SystemStartUp() {
+    @Override
+    protected void systemStartUp() {
         //Define systems to be started up here
         SystemHub systemHub = SystemHub.getInstance();
         systemHub.addSystem(MovementDeterminerSystem.class, new MovementDeterminerSystem(),0);
@@ -107,8 +105,6 @@ public class HomeScene extends GameScene {
 
         UtilityFunctions.setUpMovement(playerInteractiveComponent, player);
         UtilityFunctions.showSettingsMenu(playerInteractiveComponent);
-
-        playerInteractiveComponent.mapInput(MouseButton.PRIMARY, 100, () -> {player.getComponent(PositionComponent.class).setLocalX(MouseInputHandler.getInstance().getMouseX(), player); player.getComponent(PositionComponent.class).setLocalY(MouseInputHandler.getInstance().getMouseY(), player);});
     }
 
     @Override

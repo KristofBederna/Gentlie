@@ -166,7 +166,8 @@ public class SaveCreatorScene extends GameScene {
         }
     }
 
-    private void systemStartUp() {
+    @Override
+    protected void systemStartUp() {
         SystemHub systemHub = SystemHub.getInstance();
         systemHub.addSystem(ResourceSystem.class, new ResourceSystem(), 1);
         systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 2);

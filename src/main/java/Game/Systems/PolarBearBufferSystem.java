@@ -9,10 +9,10 @@ public class PolarBearBufferSystem extends GameSystem {
     public void start() {
         this.active = true;
 
-        final double SCALING_FACTOR = 0.05;
-        final double MAX_RESISTANCE = 0.5;
+        final double SCALING_FACTOR = 0.03;
+        final double MAX_RESISTANCE = 0.85;
 
-        double newRangedResistance = EnemyStats.rangedResistance + SCALING_FACTOR * Math.log1p(PlayerStats.rangedKills);
+        double newRangedResistance = EnemyStats.rangedResistance + SCALING_FACTOR * Math.log(PlayerStats.rangedKills);
         newRangedResistance = Math.min(newRangedResistance, MAX_RESISTANCE);
 
         if (newRangedResistance < EnemyStats.rangedResistance) {
@@ -21,7 +21,7 @@ public class PolarBearBufferSystem extends GameSystem {
 
         EnemyStats.rangedResistance = newRangedResistance;
 
-        double newMeleeResistance = EnemyStats.meleeResistance + SCALING_FACTOR * Math.log1p(PlayerStats.meleeKills);
+        double newMeleeResistance = EnemyStats.meleeResistance + SCALING_FACTOR * Math.log(PlayerStats.meleeKills);
         newMeleeResistance = Math.min(newMeleeResistance, MAX_RESISTANCE);
 
         if (newMeleeResistance < EnemyStats.meleeResistance) {
@@ -32,6 +32,29 @@ public class PolarBearBufferSystem extends GameSystem {
 
         PlayerStats.totalMeleeKills += PlayerStats.meleeKills;
         PlayerStats.totalRangedKills += PlayerStats.rangedKills;
+
+        while (true) {
+            int periods = 0;
+            double health = EnemyStats.health;
+
+            while (health > 0) {
+                // Calculate DPS
+                health -= PlayerStats.meleeDamage * (1 - EnemyStats.meleeResistance) * (1000.0 / PlayerStats.meleeCooldown);
+                health -= PlayerStats.rangedDamage * (1 - EnemyStats.rangedResistance) * (1000.0 / PlayerStats.rangedCooldown);
+                periods++;
+            }
+
+            if (periods > 2) {
+                break; // Enemy survived 2 periods, done
+            }
+
+            // If not enough periods survived, buff the health and retry
+            EnemyStats.health += (PlayerStats.meleeDamage * (1 - EnemyStats.meleeResistance) +
+                    PlayerStats.rangedDamage * (1 - EnemyStats.rangedResistance)) / 2;
+
+            System.out.println("Buffed Health: " + EnemyStats.health);
+        }
+
 
         PlayerStats.rangedKills = 0;
         PlayerStats.meleeKills = 0;

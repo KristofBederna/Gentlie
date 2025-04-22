@@ -52,7 +52,8 @@ public class SettingsScene extends GameScene {
         exit.addStyleClass("main-menu-button");
     }
 
-    private void systemStartUp() {
+    @Override
+    protected void systemStartUp() {
         //Define systems to be started up here
         SystemHub systemHub = SystemHub.getInstance();
         systemHub.addSystem(ResourceSystem.class, new ResourceSystem(),1);

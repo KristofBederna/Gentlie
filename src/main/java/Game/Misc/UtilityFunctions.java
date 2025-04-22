@@ -200,13 +200,13 @@ public class UtilityFunctions {
     }
 
     public static void setUpLeftRightMovement(InteractiveComponent playerInteractiveComponent, PlayerEntity player) {
-        playerInteractiveComponent.mapInput(KeyCode.LEFT, 10, () -> UtilityFunctions.moveLeft(player), () -> UtilityFunctions.counterLeft(player));
-        playerInteractiveComponent.mapInput(KeyCode.RIGHT, 10, () -> UtilityFunctions.moveRight(player), () -> UtilityFunctions.counterRight(player));
+        playerInteractiveComponent.mapInput(KeyCode.A, 10, () -> inf.elte.hu.gameengine_javafx.Misc.UtilityFunctions.moveLeft(player), () -> inf.elte.hu.gameengine_javafx.Misc.UtilityFunctions.counterLeft(player));
+        playerInteractiveComponent.mapInput(KeyCode.D, 10, () -> inf.elte.hu.gameengine_javafx.Misc.UtilityFunctions.moveRight(player), () -> inf.elte.hu.gameengine_javafx.Misc.UtilityFunctions.counterRight(player));
     }
 
     public static void setUpDownUpMovement(InteractiveComponent playerInteractiveComponent, PlayerEntity player) {
-        playerInteractiveComponent.mapInput(KeyCode.UP, 10, () -> UtilityFunctions.moveUp(player), () -> UtilityFunctions.counterUp(player));
-        playerInteractiveComponent.mapInput(KeyCode.DOWN, 10, () -> UtilityFunctions.moveDown(player), () -> UtilityFunctions.counterDown(player));
+        playerInteractiveComponent.mapInput(KeyCode.W, 10, () -> inf.elte.hu.gameengine_javafx.Misc.UtilityFunctions.moveUp(player), () -> inf.elte.hu.gameengine_javafx.Misc.UtilityFunctions.counterUp(player));
+        playerInteractiveComponent.mapInput(KeyCode.S, 10, () -> inf.elte.hu.gameengine_javafx.Misc.UtilityFunctions.moveDown(player), () -> inf.elte.hu.gameengine_javafx.Misc.UtilityFunctions.counterDown(player));
     }
 
     public static void moveUp(Entity e) {

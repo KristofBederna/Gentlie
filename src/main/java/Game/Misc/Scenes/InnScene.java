@@ -59,7 +59,7 @@ public class InnScene extends GameScene {
 
         UtilityFunctions.setUpCamera(1920, 1080, 16, 16);
 
-        new SystemStartUp(this::SystemStartUp);
+        new SystemStartUp(this::systemStartUp);
 
         interactionSetup();
 
@@ -79,7 +79,8 @@ public class InnScene extends GameScene {
         new EventTriggerEntity(10 * MapConfig.scaledTileSize, 3 * MapConfig.scaledTileSize, MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, new OpenShopEvent(), new OpenShopEventListener());
     }
 
-    private void SystemStartUp() {
+    @Override
+    protected void systemStartUp() {
         //Define systems to be started up here
         SystemHub systemHub = SystemHub.getInstance();
         systemHub.addSystem(ShopPriceUpdateSystem.class, new ShopPriceUpdateSystem(), -1);
