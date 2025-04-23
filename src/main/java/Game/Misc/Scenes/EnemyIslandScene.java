@@ -88,8 +88,7 @@ public class EnemyIslandScene extends GameScene {
         new IglooEntity(6 * MapConfig.scaledTileSize, MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize);
         new ShipEntity(0, 1.5 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize);
 
-        new ParticleEmitterEntity(0, -300, new ParticleEntity(0, 0, 20, 20, "/assets/images/snowflake.png", 3000), Direction.RIGHT, 1, 60);
-        new ParticleEmitterEntity(2400, -300, new ParticleEntity(0, 0, 20, 20, "/assets/images/snowflake.png", 3000), Direction.LEFT, 1, 60);
+        new ParticleEmitterEntity(1200, -1500, new ParticleEntity(0, 0, 20, 20, "/assets/images/snowflake.png", 3000), Direction.DOWN, 1, 60);
 
         DungeonLabel dungeonLabel = new DungeonLabel("Press 'E' to enter the dungeon", 6 * MapConfig.scaledTileSize, 3 * MapConfig.scaledTileSize, MapConfig.scaledTileSize * 0.75, MapConfig.scaledTileSize * 0.75);
         dungeonLabel.removeFromUI();

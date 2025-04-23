@@ -120,36 +120,26 @@ public class ParticleSystem extends GameSystem {
 
     private Vector applyVelocityBoost(Vector base, Direction direction) {
         Random random = new Random();
-        double deltaTime = Time.getInstance().getDeltaTime();
-
-        double angle;
-
-        switch (direction) {
-            case LEFT:
+        double angle = switch (direction) {
+            case LEFT ->
                 // 135° to 225° (3π/4 to 5π/4)
-                angle = random.nextDouble(3 * Math.PI / 4, 5 * Math.PI / 4);
-                break;
-            case RIGHT:
+                    random.nextDouble(3 * Math.PI / 4, 5 * Math.PI / 4);
+            case RIGHT ->
                 // -45° to 45° (-π/4 to π/4)
-                angle = random.nextDouble(-Math.PI / 4, Math.PI / 4);
-                break;
-            case UP:
+                    random.nextDouble(-Math.PI / 4, Math.PI / 4);
+            case UP ->
                 // 225° to 315° (5π/4 to 7π/4)
-                angle = random.nextDouble(5 * Math.PI / 4, 7 * Math.PI / 4);
-                break;
-            case DOWN:
+                    random.nextDouble(5 * Math.PI / 4, 7 * Math.PI / 4);
+            case DOWN ->
                 // 45° to 135° (π/4 to 3π/4)
-                angle = random.nextDouble(Math.PI / 4, 3 * Math.PI / 4);
-                break;
-            default:
-                angle = random.nextDouble(0, Math.PI * 2);
-                break;
-        }
+                    random.nextDouble(Math.PI / 4, 3 * Math.PI / 4);
+            default -> random.nextDouble(0, Math.PI * 2);
+        };
 
 
         double boostMagnitude = random.nextDouble(0, 20);
-        double boostDx = Math.cos(angle) * boostMagnitude * deltaTime;
-        double boostDy = Math.sin(angle) * boostMagnitude * deltaTime;
+        double boostDx = Math.cos(angle) * boostMagnitude;
+        double boostDy = Math.sin(angle) * boostMagnitude;
 
         return new Vector(base.getDx() + boostDx, base.getDy() + boostDy);
     }

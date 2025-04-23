@@ -3,14 +3,21 @@ package Game.Systems;
 import Game.Entities.Labels.*;
 import Game.Entities.PolarBearEntity;
 import Game.Misc.PlayerStats;
+import Game.Misc.Scenes.DungeonScene;
+import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.TimeComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.TextComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
+import inf.elte.hu.gameengine_javafx.Core.SystemHub;
+import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.TextEntity;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
+import inf.elte.hu.gameengine_javafx.Misc.Tuple;
+import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
 import javafx.application.Platform;
 import javafx.scene.Node;
+import javafx.scene.input.MouseButton;
 
 public class UserInterfaceSystem extends GameSystem {
     private double lastGold = PlayerStats.gold;
@@ -67,6 +74,15 @@ public class UserInterfaceSystem extends GameSystem {
                     lastEnemies = size;
                 });
             }
+        }
+        if (SystemHub.getInstance().getSystem(SceneManagementSystem.class).getCurrentScene() instanceof DungeonScene) {
+            PlayerEntity player = (PlayerEntity) EntityHub.getInstance().getEntitiesWithType(PlayerEntity.class).getFirst();
+            var meleeAttackLabel = EntityHub.getInstance().getEntitiesWithType(MeleeAttackLabel.class).getFirst();
+            var rangedAttackLabel = EntityHub.getInstance().getEntitiesWithType(RangedAttackLabel.class).getFirst();
+            Platform.runLater(() -> {
+                ((TextEntity) meleeAttackLabel).getTextNode().setText(String.valueOf(Math.max(0, PlayerStats.meleeCooldown + (player.getComponent(InteractiveComponent.class).getLastTimeCalled(new Tuple<>(null, MouseButton.PRIMARY)).first() - System.currentTimeMillis()))));
+                ((TextEntity) rangedAttackLabel).getTextNode().setText(String.valueOf(Math.max(0, PlayerStats.rangedCooldown + (player.getComponent(InteractiveComponent.class).getLastTimeCalled(new Tuple<>(null, MouseButton.SECONDARY)).first() - System.currentTimeMillis()))));
+            });
         }
         if (goldLabel != null && healthLabel != null) {
             if (PlayerStats.gold != lastGold) {

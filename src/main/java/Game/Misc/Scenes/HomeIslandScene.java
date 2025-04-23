@@ -94,9 +94,7 @@ public class HomeIslandScene extends GameScene {
         new ShipEntity(14 * MapConfig.scaledTileSize, 1.5 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize);
         new InnEntity(2 * MapConfig.scaledTileSize, MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize);
 
-        new ParticleEmitterEntity(0, -300, new ParticleEntity(0, 0, 20, 20, "/assets/images/snowflake.png", 3000), Direction.RIGHT, 1, 60);
-        new ParticleEmitterEntity(2400, -300, new ParticleEntity(0, 0, 20, 20, "/assets/images/snowflake.png", 3000), Direction.LEFT, 1, 60);
-
+        new ParticleEmitterEntity(1200, -1500, new ParticleEntity(0, 0, 20, 20, "/assets/images/snowflake.png", 3000), Direction.DOWN, 1, 60);
 
         EnterHomeLabel homeLabel = new EnterHomeLabel("Press 'E' to enter your home", 6 * MapConfig.scaledTileSize, 3 * MapConfig.scaledTileSize, MapConfig.scaledTileSize * 0.75, MapConfig.scaledTileSize * 0.75);
         homeLabel.removeFromUI();

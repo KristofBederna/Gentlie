@@ -57,6 +57,10 @@ public class InteractiveComponent extends Component {
         return lastTimeCalled;
     }
 
+    public Tuple<Long, Long> getLastTimeCalled(Tuple<KeyCode, MouseButton> button) {
+        return lastTimeCalled.get(button);
+    }
+
     public Runnable getMouseMoveAction() {
         return mouseMoveAction;
     }
