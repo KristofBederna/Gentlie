@@ -69,12 +69,11 @@ public class ShopPriceUpdateSystem extends GameSystem {
             int newPrice;
             if (isSpiked[i]) {
                 newPrice = (int) (avg * rand.nextDouble(0.95, 1.05));
-                System.out.println("RESET SPIKE: " + newPrice);
             } else if (rand.nextDouble() <= 0.05) {
                 newPrice = (int) (prices[i] * rand.nextDouble(8.5, 10.0));
-                System.out.println("SPIKED PRICE: " + newPrice);
             } else if (rand.nextBoolean()) {
                 newPrice = (int) (prices[i] * rand.nextDouble(0.8, 1.2));
+                newPrice = Math.max(50, newPrice);
             } else {
                 newPrice = prices[i];
             }
