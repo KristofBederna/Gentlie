@@ -9,10 +9,7 @@ import Game.Misc.EventHandling.EventListeners.ExitHomeEventListener;
 import Game.Misc.EventHandling.Events.ExitHomeEvent;
 import Game.Misc.PlayerStats;
 import Game.Misc.UtilityFunctions;
-import Game.Systems.CustomRenderSystem;
-import Game.Systems.EventTileSystem;
-import Game.Systems.GameSaverSystem;
-import Game.Systems.UserInterfaceSystem;
+import Game.Systems.*;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
@@ -97,6 +94,7 @@ public class HomeScene extends GameScene {
         systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 13);
         systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 14);
         systemHub.addSystem(GameSaverSystem.class, new GameSaverSystem(), 15);
+        systemHub.addSystem(SoundEffectAdderSystem.class, new SoundEffectAdderSystem(), 16);
     }
 
     private void interactionSetup() {

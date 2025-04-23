@@ -99,6 +99,7 @@ public class InnScene extends GameScene {
         systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 12);
         systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 13);
         systemHub.addSystem(GameSaverSystem.class, new GameSaverSystem(), 14);
+        systemHub.addSystem(SoundEffectAdderSystem.class, new SoundEffectAdderSystem(), 15);
     }
 
     private void interactionSetup() {

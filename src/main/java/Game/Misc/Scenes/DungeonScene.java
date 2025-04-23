@@ -113,14 +113,15 @@ public class DungeonScene extends GameScene {
         systemHub.addSystem(ResourceSystem.class, new ResourceSystem(), 9);
         systemHub.addSystem(CustomCameraSystem.class, new CustomCameraSystem(), 10);
         systemHub.addSystem(CustomCollisionSystem.class, new CustomCollisionSystem(), 11);
-        systemHub.addSystem(SoundSystem.class, new SoundSystem(), 12);
-        systemHub.addSystem(DungeonGeneratorSystem.class, new DungeonGeneratorSystem(2, 2), 13);
-        systemHub.addSystem(PolarBearSpawnerSystem.class, new PolarBearSpawnerSystem(), 14);
-        systemHub.addSystem(AttackSystem.class, new AttackSystem(), 15);
-        systemHub.addSystem(RemoveDeadObjectSystem.class, new RemoveDeadObjectSystem(), 16);
-        systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 17);
-        systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 18);
-        systemHub.addSystem(GameSaverSystem.class, new GameSaverSystem(), 19);
+        systemHub.addSystem(SoundSystem.class, new SoundSystem(), 13);
+        systemHub.addSystem(DungeonGeneratorSystem.class, new DungeonGeneratorSystem(2, 2), 14);
+        systemHub.addSystem(PolarBearSpawnerSystem.class, new PolarBearSpawnerSystem(), 15);
+        systemHub.addSystem(AttackSystem.class, new AttackSystem(), 16);
+        systemHub.addSystem(RemoveDeadObjectSystem.class, new RemoveDeadObjectSystem(), 17);
+        systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 18);
+        systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 19);
+        systemHub.addSystem(GameSaverSystem.class, new GameSaverSystem(), 20);
+        systemHub.addSystem(SoundEffectAdderSystem.class, new SoundEffectAdderSystem(), 12);
     }
 
     private void interactionSetup() {

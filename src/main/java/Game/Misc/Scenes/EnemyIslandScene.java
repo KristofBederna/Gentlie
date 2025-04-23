@@ -123,6 +123,7 @@ public class EnemyIslandScene extends GameScene {
         systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 14);
         systemHub.addSystem(PolarBearBufferSystem.class, new PolarBearBufferSystem(), 15);
         systemHub.addSystem(GameSaverSystem.class, new GameSaverSystem(), 16);
+        systemHub.addSystem(SoundEffectAdderSystem.class, new SoundEffectAdderSystem(), 17);
     }
 
     private void interactionSetup() {

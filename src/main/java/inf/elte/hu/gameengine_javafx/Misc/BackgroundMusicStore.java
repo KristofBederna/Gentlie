@@ -13,6 +13,10 @@ public class BackgroundMusicStore {
         return instance;
     }
 
+    public static void resetInstance() {
+        instance = null;
+    }
+
     public List<BackgroundMusic> getBackgroundMusics() {
         return backgroundMusics;
     }

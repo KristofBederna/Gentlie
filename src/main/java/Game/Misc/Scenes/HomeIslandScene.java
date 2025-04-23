@@ -135,6 +135,7 @@ public class HomeIslandScene extends GameScene {
         systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 14);
         systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 15);
         systemHub.addSystem(GameSaverSystem.class, new GameSaverSystem(), 16);
+        systemHub.addSystem(SoundEffectAdderSystem.class, new SoundEffectAdderSystem(), 17);
     }
 
     private void interactionSetup() {

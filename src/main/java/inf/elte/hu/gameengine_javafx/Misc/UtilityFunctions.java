@@ -84,6 +84,8 @@ public class UtilityFunctions {
         ResourceHub.resetInstance();
         uiRoot.getInstance().unloadAll();
         GameCanvas.getInstance().getGraphicsContext2D().clearRect(0, 0, GameCanvas.getInstance().getWidth(), GameCanvas.getInstance().getHeight());
+        SoundEffectStore.resetInstance();
+        BackgroundMusicStore.resetInstance();
         System.gc();
     }
 

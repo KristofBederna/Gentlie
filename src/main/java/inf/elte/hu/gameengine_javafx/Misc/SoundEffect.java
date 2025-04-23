@@ -11,6 +11,7 @@ public class SoundEffect {
     private double maxDistance;
     private boolean allowLooping;
     private boolean alreadyPlayed;
+    private long started;
 
     public SoundEffect(Entity owner, String path, String identifier, float maxVolume, float minVolume, double maxDistance, boolean allowLooping) {
         this.owner = owner;
@@ -21,8 +22,6 @@ public class SoundEffect {
         this.maxDistance = maxDistance;
         this.allowLooping = allowLooping;
         this.alreadyPlayed = false;
-
-        SoundEffectStore.getInstance().add(this);
     }
 
     public Entity getOwner() {
@@ -54,5 +53,13 @@ public class SoundEffect {
     }
     public void setAlreadyPlayed(boolean alreadyPlayed) {
         this.alreadyPlayed = alreadyPlayed;
+    }
+
+    public long getStarted() {
+        return started;
+    }
+
+    public void setStarted() {
+        started = System.currentTimeMillis();
     }
 }

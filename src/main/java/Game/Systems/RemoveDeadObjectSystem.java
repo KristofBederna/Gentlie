@@ -21,6 +21,7 @@ import inf.elte.hu.gameengine_javafx.Maths.Geometry.NSidedShape;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Direction;
+import inf.elte.hu.gameengine_javafx.Misc.SoundEffectStore;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -49,6 +50,8 @@ public class RemoveDeadObjectSystem extends GameSystem {
             }
         }
         for (var entity : dead) {
+            SoundEffectStore.getInstance().getSoundEffects().removeIf(e -> e.getOwner() == entity);
+
             if (entity instanceof PlayerEntity) {
                 Random rand = new Random();
                 SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second(), new Point(10 * 100 + 100 / 2, 3 * 100)));
