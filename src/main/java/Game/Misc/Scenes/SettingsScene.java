@@ -47,7 +47,7 @@ public class SettingsScene extends GameScene {
 
     private void declareEntities() {
         UtilityFunctions.showDetailedSettingsMenuWithoutBack();
-        ButtonEntity exit = new ButtonEntity("Back", DisplayConfig.resolution.first() / 2 - 100 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 + 350 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 80 * DisplayConfig.relativeHeightRatio, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new MainScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second())));
+        ButtonEntity exit = new ButtonEntity("Back", DisplayConfig.resolution.first() / 2 - 100, DisplayConfig.resolution.second() / 2 + 350, 200, 80, () -> SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new MainScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second())));
 
         exit.addStyleClass("main-menu-button");
     }

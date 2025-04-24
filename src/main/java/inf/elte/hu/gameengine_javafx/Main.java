@@ -35,6 +35,7 @@ public class Main extends Application {
         stage.setFullScreen(DisplayConfig.fullScreenMode);
         stage.setFullScreenExitHint("");
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        stage.setResizable(false);
 
         BorderPane root = (BorderPane) sceneManagementSystem.getCurrentScene().getRoot();
 

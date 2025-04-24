@@ -46,8 +46,8 @@ public class LoadSelectorScene extends GameScene {
     }
 
     private void declareEntities() {
-        double startY = 150 * DisplayConfig.relativeHeightRatio;
-        double gap = 100 * DisplayConfig.relativeHeightRatio;
+        double startY = 150;
+        double gap = 100;
 
         File saveDir = new File(System.getProperty("user.dir"), "savefiles");
 
@@ -81,10 +81,10 @@ public class LoadSelectorScene extends GameScene {
 
                             ButtonEntity saveButton = new ButtonEntity(
                                     folderName,
-                                    DisplayConfig.resolution.first() / 2 - 100 * DisplayConfig.relativeWidthRatio,
+                                    DisplayConfig.resolution.first() / 2 - 100,
                                     startY + i * gap,
-                                    200 * DisplayConfig.relativeWidthRatio,
-                                    80 * DisplayConfig.relativeHeightRatio,
+                                    200,
+                                    80,
                                     () -> startLoad(folder)
                             );
                             if (folder.listFiles() == null || folder.listFiles().length == 0) {
@@ -105,10 +105,10 @@ public class LoadSelectorScene extends GameScene {
 
         ButtonEntity exit = new ButtonEntity(
                 "Back",
-                DisplayConfig.resolution.first() / 2 - 100 * DisplayConfig.relativeWidthRatio,
-                DisplayConfig.resolution.second() / 2 + 350 * DisplayConfig.relativeHeightRatio,
-                200 * DisplayConfig.relativeWidthRatio,
-                80 * DisplayConfig.relativeHeightRatio,
+                DisplayConfig.resolution.first() / 2 - 100,
+                DisplayConfig.resolution.second() / 2 + 350,
+                200,
+                80,
                 () -> SystemHub.getInstance()
                         .getSystem(SceneManagementSystem.class)
                         .requestSceneChange(new MainScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second()))

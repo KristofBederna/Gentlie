@@ -47,8 +47,8 @@ public class SaveCreatorScene extends GameScene {
     }
 
     private void declareEntities() {
-        double startY = 150 * DisplayConfig.relativeHeightRatio;
-        double gap = 100 * DisplayConfig.relativeHeightRatio;
+        double startY = 150;
+        double gap = 100;
 
         File saveDir = new File(System.getProperty("user.dir"), "savefiles");
 
@@ -81,10 +81,10 @@ public class SaveCreatorScene extends GameScene {
 
                             ButtonEntity saveButton = new ButtonEntity(
                                     folderName,
-                                    DisplayConfig.resolution.first() / 2 - 100 * DisplayConfig.relativeWidthRatio,
+                                    DisplayConfig.resolution.first() / 2 - 100,
                                     startY + i * gap,
-                                    200 * DisplayConfig.relativeWidthRatio,
-                                    80 * DisplayConfig.relativeHeightRatio,
+                                    200,
+                                    80,
                                     () -> startLoad(folder)
                             );
                             saveButton.addStyleClass("main-menu-button");
@@ -102,10 +102,10 @@ public class SaveCreatorScene extends GameScene {
 
         ButtonEntity exit = new ButtonEntity(
                 "Back",
-                DisplayConfig.resolution.first() / 2 - 100 * DisplayConfig.relativeWidthRatio,
-                DisplayConfig.resolution.second() / 2 + 350 * DisplayConfig.relativeHeightRatio,
-                200 * DisplayConfig.relativeWidthRatio,
-                80 * DisplayConfig.relativeHeightRatio,
+                DisplayConfig.resolution.first() / 2 - 100,
+                DisplayConfig.resolution.second() / 2 + 350,
+                200,
+                80,
                 () -> SystemHub.getInstance()
                         .getSystem(SceneManagementSystem.class)
                         .requestSceneChange(new MainScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second()))
@@ -115,15 +115,15 @@ public class SaveCreatorScene extends GameScene {
 
     private void startLoad(File saveFolder) {
         LabelEntity label = new LabelEntity("Are you sure you want to overwrite the save file at " + saveFolder.getName() + "?",
-                DisplayConfig.resolution.first() / 2 - 400 * DisplayConfig.relativeWidthRatio,
-                DisplayConfig.resolution.second() / 2 + 175 * DisplayConfig.relativeHeightRatio,
-                200 * DisplayConfig.relativeWidthRatio,
-                80 * DisplayConfig.relativeHeightRatio);
+                DisplayConfig.resolution.first() / 2 - 400,
+                DisplayConfig.resolution.second() / 2 + 175,
+                200,
+                80);
         ButtonEntity yes = new ButtonEntity("Yes",
-                DisplayConfig.resolution.first() / 2 - 225 * DisplayConfig.relativeWidthRatio,
-                DisplayConfig.resolution.second() / 2 + 265 * DisplayConfig.relativeHeightRatio,
-                200 * DisplayConfig.relativeWidthRatio,
-                80 * DisplayConfig.relativeHeightRatio,
+                DisplayConfig.resolution.first() / 2 - 225,
+                DisplayConfig.resolution.second() / 2 + 265,
+                200,
+                80,
                 () -> {
                     Path projectRoot = Paths.get(System.getProperty("user.dir"));
 
@@ -140,10 +140,10 @@ public class SaveCreatorScene extends GameScene {
                     SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second(), new Point(10 * 100 + 100 / 2, 3 * 100)));
                 });
         ButtonEntity no = new ButtonEntity("No",
-                DisplayConfig.resolution.first() / 2 + 25 * DisplayConfig.relativeWidthRatio,
-                DisplayConfig.resolution.second() / 2 + 265 * DisplayConfig.relativeHeightRatio,
-                200 * DisplayConfig.relativeWidthRatio,
-                80 * DisplayConfig.relativeHeightRatio,
+                DisplayConfig.resolution.first() / 2 + 25,
+                DisplayConfig.resolution.second() / 2 + 265,
+                200,
+                80,
                 () -> {
                     SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new SaveCreatorScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second()));
                 });

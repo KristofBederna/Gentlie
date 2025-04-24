@@ -1,9 +1,11 @@
 package inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners;
 
+import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListener;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.ResolutionChangeEvent;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
+import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
 
 public class ResolutionChangeEventListener implements EventListener<ResolutionChangeEvent> {
     @Override
@@ -16,7 +18,7 @@ public class ResolutionChangeEventListener implements EventListener<ResolutionCh
         canvas.setWidth(event.getWidth());
         canvas.setHeight(event.getHeight());
         DisplayConfig.setRelativeAspectRatio();
-//        SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(SystemHub.getInstance().getSystem(SceneManagementSystem.class).getCurrentScene());
+        SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(SystemHub.getInstance().getSystem(SceneManagementSystem.class).getCurrentScene());
     }
 
     @Override

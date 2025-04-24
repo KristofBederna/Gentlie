@@ -7,9 +7,9 @@ public class SliderComponent extends UIComponent<Slider> {
     public SliderComponent(double x, double y, double width, double height, double min, double max, double initialValue) {
         super(x, y, width, height);
         this.uiElement = new Slider(min, max, initialValue);
-        uiElement.setLayoutX(x);
-        uiElement.setLayoutY(y);
-        uiElement.setPrefSize(width, height);
+        uiElement.setLayoutX(this.x);
+        uiElement.setLayoutY(this.y);
+        uiElement.setPrefSize(this.width, this.height);
     }
 
     public double getValue() {

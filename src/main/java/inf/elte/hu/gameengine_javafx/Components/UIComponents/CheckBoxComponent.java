@@ -7,8 +7,8 @@ public class CheckBoxComponent extends UIComponent<CheckBox> {
     public CheckBoxComponent(String text, double x, double y, double width, double height) {
         super(x, y, width, height);
         this.uiElement = new CheckBox(text);
-        uiElement.setLayoutX(x);
-        uiElement.setLayoutY(y);
+        uiElement.setLayoutX(this.x);
+        uiElement.setLayoutY(this.y);
     }
 
     public boolean isSelected() {

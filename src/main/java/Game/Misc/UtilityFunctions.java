@@ -4,37 +4,36 @@ import Game.Misc.Scenes.MainScene;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
-import inf.elte.hu.gameengine_javafx.Components.UIComponents.*;
+import inf.elte.hu.gameengine_javafx.Components.UIComponents.ButtonComponent;
+import inf.elte.hu.gameengine_javafx.Components.UIComponents.CheckBoxComponent;
+import inf.elte.hu.gameengine_javafx.Components.UIComponents.LabelComponent;
+import inf.elte.hu.gameengine_javafx.Components.UIComponents.SliderComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
-import inf.elte.hu.gameengine_javafx.Entities.UIEntities.*;
+import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
+import inf.elte.hu.gameengine_javafx.Entities.UIEntities.CheckBoxEntity;
+import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
+import inf.elte.hu.gameengine_javafx.Entities.UIEntities.SliderEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusicStore;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.ResourceConfig;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners.FullScreenToggleEventListener;
-import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners.ResolutionChangeEventListener;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.FullScreenToggleEvent;
-import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.ResolutionChangeEvent;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
 import inf.elte.hu.gameengine_javafx.Misc.SoundEffectStore;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
-import inf.elte.hu.gameengine_javafx.Misc.Tuple;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -46,10 +45,10 @@ public class UtilityFunctions {
         menu.setAlignment(Pos.CENTER);
 
         ButtonEntity start = new ButtonEntity("Back to main menu",
-                DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio,
-                DisplayConfig.resolution.second() / 2 - 150 * DisplayConfig.relativeHeightRatio,
-                200 * DisplayConfig.relativeWidthRatio,
-                80 * DisplayConfig.relativeHeightRatio,
+                DisplayConfig.resolution.first() / 2 - 50,
+                DisplayConfig.resolution.second() / 2 - 150,
+                200,
+                80,
                 () -> {
                     uiRoot.getInstance().unload(menu);
                     SystemHub.getInstance().getSystem(SceneManagementSystem.class)
@@ -58,20 +57,20 @@ public class UtilityFunctions {
                 });
 
         ButtonEntity settings = new ButtonEntity("Settings",
-                DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio,
-                DisplayConfig.resolution.second() / 2 - 50 * DisplayConfig.relativeHeightRatio,
-                200 * DisplayConfig.relativeWidthRatio,
-                80 * DisplayConfig.relativeHeightRatio,
+                DisplayConfig.resolution.first() / 2 - 50,
+                DisplayConfig.resolution.second() / 2 - 50,
+                200,
+                80,
                 () -> {
                     uiRoot.getInstance().unload(menu);
                     showDetailedSettingsMenu();
                 });
 
         ButtonEntity exit = new ButtonEntity("Back",
-                DisplayConfig.resolution.first() / 2 - 50 * DisplayConfig.relativeWidthRatio,
-                DisplayConfig.resolution.second() / 2 + 50 * DisplayConfig.relativeHeightRatio,
-                200 * DisplayConfig.relativeWidthRatio,
-                80 * DisplayConfig.relativeHeightRatio,
+                DisplayConfig.resolution.first() / 2 - 50,
+                DisplayConfig.resolution.second() / 2 + 50,
+                200,
+                80,
                 () -> {
                     uiRoot.getInstance().unload(menu);
                     Time.getInstance().setTimeScale(1.0);
@@ -100,55 +99,21 @@ public class UtilityFunctions {
     public static void showDetailedSettingsMenu() {
         VBox menu = new VBox(20);
         menu.setAlignment(Pos.CENTER);
-        LabelEntity label = new LabelEntity("Settings", DisplayConfig.resolution.first() / 2 - 20 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 250 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0);
+        LabelEntity label = new LabelEntity("Settings", DisplayConfig.resolution.first() / 2 - 20, DisplayConfig.resolution.second() / 2 - 250, 200, 0);
 
-        LabelEntity soundLabel = new LabelEntity("Master volume: ", DisplayConfig.resolution.first() / 2 - 200 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 150 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0);
-        SliderEntity sound = new SliderEntity(DisplayConfig.resolution.first() / 2 - 20 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 150 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0, 0.0f, 1.0f, ResourceConfig.masterVolume);
+        LabelEntity soundLabel = new LabelEntity("Master volume: ", DisplayConfig.resolution.first() / 2 - 200, DisplayConfig.resolution.second() / 2 - 150, 200, 0);
+        SliderEntity sound = new SliderEntity(DisplayConfig.resolution.first() / 2 - 20, DisplayConfig.resolution.second() / 2 - 150, 200, 0, 0.0f, 1.0f, ResourceConfig.masterVolume);
         sound.getComponent(SliderComponent.class).getUIElement().valueProperty().addListener((obs, oldVal, newVal) -> {
             ResourceConfig.masterVolume = newVal.floatValue();
         });
 
-        LabelEntity musicLabel = new LabelEntity("Music volume: ", DisplayConfig.resolution.first() / 2 - 200 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 100 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0);
-        SliderEntity music = new SliderEntity(DisplayConfig.resolution.first() / 2 - 20 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 100 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0, 0.0f, 1.0f, ResourceConfig.backgroundMusicVolume);
+        LabelEntity musicLabel = new LabelEntity("Music volume: ", DisplayConfig.resolution.first() / 2 - 200, DisplayConfig.resolution.second() / 2 - 100, 200, 0);
+        SliderEntity music = new SliderEntity(DisplayConfig.resolution.first() / 2 - 20, DisplayConfig.resolution.second() / 2 - 100, 200, 0, 0.0f, 1.0f, ResourceConfig.backgroundMusicVolume);
         music.getComponent(SliderComponent.class).getUIElement().valueProperty().addListener((obs, oldVal, newVal) -> {
             ResourceConfig.backgroundMusicVolume = newVal.floatValue();
         });
-
-        ObservableList<Tuple<Double, Double>> options = FXCollections.observableArrayList(
-                new Tuple<>(600.0, 800.0),
-                new Tuple<>(1024.0, 768.0),
-                new Tuple<>(1280.0, 720.0),
-                new Tuple<>(1440.0, 900.0),
-                new Tuple<>(1920.0, 1080.0),
-                new Tuple<>(2560.0, 1440.0)
-        );
-        LabelEntity resolutionLabel = new LabelEntity("Resolution: ", DisplayConfig.resolution.first() / 2 - 200 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 50 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0);
-        ComboBoxEntity<Tuple<Double, Double>> resolution = new ComboBoxEntity<>(new ComboBoxComponent<>(DisplayConfig.resolution.first() / 2 - 20 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 50 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0, options));
-        ComboBox<Tuple<Double, Double>> comboBox = (ComboBox<Tuple<Double, Double>>) resolution.getComponent(ComboBoxComponent.class).getUIElement();
-        comboBox.setValue(DisplayConfig.resolution);
-        comboBox.setCellFactory(cb -> new ListCell<>() {
-            @Override
-            protected void updateItem(Tuple<Double, Double> item, boolean empty) {
-                super.updateItem(item, empty);
-                setText((empty || item == null) ? null : item.first().intValue() + "x" + item.second().intValue());
-            }
-        });
-        comboBox.setButtonCell(new ListCell<>() {
-            @Override
-            protected void updateItem(Tuple<Double, Double> item, boolean empty) {
-                super.updateItem(item, empty);
-                setText((empty || item == null) ? null : item.first().intValue() + "x" + item.second().intValue());
-            }
-        });
-        comboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null) {
-                DisplayConfig.resolution = new Tuple<>(newVal.first(), newVal.second());
-                new ResolutionChangeEventListener().onEvent(new ResolutionChangeEvent(newVal.first(), newVal.second()));
-            }
-        });
-
-        LabelEntity fullScreenLabel = new LabelEntity("Fullscreen mode: ", DisplayConfig.resolution.first() / 2 - 200 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2, 200 * DisplayConfig.relativeWidthRatio, 0);
-        CheckBoxEntity fullscreen = new CheckBoxEntity("", DisplayConfig.resolution.first() / 2 - 20 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2, 200 * DisplayConfig.relativeWidthRatio, 0);
+        LabelEntity fullScreenLabel = new LabelEntity("Fullscreen mode: ", DisplayConfig.resolution.first() / 2 - 200, DisplayConfig.resolution.second() / 2, 200, 0);
+        CheckBoxEntity fullscreen = new CheckBoxEntity("", DisplayConfig.resolution.first() / 2 - 20, DisplayConfig.resolution.second() / 2, 200, 0);
         CheckBox checkBox = fullscreen.getComponent(CheckBoxComponent.class).getUIElement();
         checkBox.setSelected(DisplayConfig.fullScreenMode);
         checkBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
@@ -165,10 +130,10 @@ public class UtilityFunctions {
 
         ButtonEntity back = new ButtonEntity(
                 "Back",
-                DisplayConfig.resolution.first() / 2 - 100 * DisplayConfig.relativeWidthRatio,
-                DisplayConfig.resolution.second() / 2 + 350 * DisplayConfig.relativeHeightRatio,
-                200 * DisplayConfig.relativeWidthRatio,
-                80 * DisplayConfig.relativeHeightRatio,
+                DisplayConfig.resolution.first() / 2 - 100,
+                DisplayConfig.resolution.second() / 2 + 350,
+                200,
+                80,
                 () -> {
                     uiRoot.getInstance().unload(menu);
                     createSettingsMenu();
@@ -182,8 +147,6 @@ public class UtilityFunctions {
                     sound.getComponent(SliderComponent.class).getNode(),
                     musicLabel.getComponent(LabelComponent.class).getNode(),
                     music.getComponent(SliderComponent.class).getNode(),
-                    resolutionLabel.getComponent(LabelComponent.class).getNode(),
-                    resolution.getComponent(ComboBoxComponent.class).getNode(),
                     fullScreenLabel.getComponent(LabelComponent.class).getNode(),
                     fullscreen.getComponent(CheckBoxComponent.class).getNode(),
                     back.getComponent(ButtonComponent.class).getNode()
@@ -269,55 +232,21 @@ public class UtilityFunctions {
     }
 
     public static void showDetailedSettingsMenuWithoutBack() {
-        LabelEntity label = new LabelEntity("Settings", DisplayConfig.resolution.first() / 2 - 20 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 250 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0);
+        LabelEntity label = new LabelEntity("Settings", DisplayConfig.resolution.first() / 2 - 20, DisplayConfig.resolution.second() / 2 - 250, 200, 0);
 
-        LabelEntity soundLabel = new LabelEntity("Master volume: ", DisplayConfig.resolution.first() / 2 - 200 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 150 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0);
-        SliderEntity sound = new SliderEntity(DisplayConfig.resolution.first() / 2 - 20 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 150 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0, 0.0f, 1.0f, ResourceConfig.masterVolume);
+        LabelEntity soundLabel = new LabelEntity("Master volume: ", DisplayConfig.resolution.first() / 2 - 200, DisplayConfig.resolution.second() / 2 - 150, 200, 0);
+        SliderEntity sound = new SliderEntity(DisplayConfig.resolution.first() / 2 - 20, DisplayConfig.resolution.second() / 2 - 150, 200, 0, 0.0f, 1.0f, ResourceConfig.masterVolume);
         sound.getComponent(SliderComponent.class).getUIElement().valueProperty().addListener((obs, oldVal, newVal) -> {
             ResourceConfig.masterVolume = newVal.floatValue();
         });
 
-        LabelEntity musicLabel = new LabelEntity("Music volume: ", DisplayConfig.resolution.first() / 2 - 200 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 100 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0);
-        SliderEntity music = new SliderEntity(DisplayConfig.resolution.first() / 2 - 20 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 100 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0, 0.0f, 1.0f, ResourceConfig.backgroundMusicVolume);
+        LabelEntity musicLabel = new LabelEntity("Music volume: ", DisplayConfig.resolution.first() / 2 - 200, DisplayConfig.resolution.second() / 2 - 100, 200, 0);
+        SliderEntity music = new SliderEntity(DisplayConfig.resolution.first() / 2 - 20, DisplayConfig.resolution.second() / 2 - 100, 200, 0, 0.0f, 1.0f, ResourceConfig.backgroundMusicVolume);
         music.getComponent(SliderComponent.class).getUIElement().valueProperty().addListener((obs, oldVal, newVal) -> {
             ResourceConfig.backgroundMusicVolume = newVal.floatValue();
         });
-
-        ObservableList<Tuple<Double, Double>> options = FXCollections.observableArrayList(
-                new Tuple<>(600.0, 800.0),
-                new Tuple<>(1024.0, 768.0),
-                new Tuple<>(1280.0, 720.0),
-                new Tuple<>(1440.0, 900.0),
-                new Tuple<>(1920.0, 1080.0),
-                new Tuple<>(2560.0, 1440.0)
-        );
-        LabelEntity resolutionLabel = new LabelEntity("Resolution: ", DisplayConfig.resolution.first() / 2 - 200 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 50 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0);
-        ComboBoxEntity<Tuple<Double, Double>> resolution = new ComboBoxEntity<>(new ComboBoxComponent<>(DisplayConfig.resolution.first() / 2 - 20 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2 - 50 * DisplayConfig.relativeHeightRatio, 200 * DisplayConfig.relativeWidthRatio, 0, options));
-        ComboBox<Tuple<Double, Double>> comboBox = (ComboBox<Tuple<Double, Double>>) resolution.getComponent(ComboBoxComponent.class).getUIElement();
-        comboBox.setValue(DisplayConfig.resolution);
-        comboBox.setCellFactory(cb -> new ListCell<>() {
-            @Override
-            protected void updateItem(Tuple<Double, Double> item, boolean empty) {
-                super.updateItem(item, empty);
-                setText((empty || item == null) ? null : item.first().intValue() + "x" + item.second().intValue());
-            }
-        });
-        comboBox.setButtonCell(new ListCell<>() {
-            @Override
-            protected void updateItem(Tuple<Double, Double> item, boolean empty) {
-                super.updateItem(item, empty);
-                setText((empty || item == null) ? null : item.first().intValue() + "x" + item.second().intValue());
-            }
-        });
-        comboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null) {
-                DisplayConfig.resolution = new Tuple<>(newVal.first(), newVal.second());
-                new ResolutionChangeEventListener().onEvent(new ResolutionChangeEvent(newVal.first(), newVal.second()));
-            }
-        });
-
-        LabelEntity fullScreenLabel = new LabelEntity("Fullscreen mode: ", DisplayConfig.resolution.first() / 2 - 200 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2, 200 * DisplayConfig.relativeWidthRatio, 0);
-        CheckBoxEntity fullscreen = new CheckBoxEntity("", DisplayConfig.resolution.first() / 2 - 20 * DisplayConfig.relativeWidthRatio, DisplayConfig.resolution.second() / 2, 200 * DisplayConfig.relativeWidthRatio, 0);
+        LabelEntity fullScreenLabel = new LabelEntity("Fullscreen mode: ", DisplayConfig.resolution.first() / 2 - 200, DisplayConfig.resolution.second() / 2 - 50, 200, 0);
+        CheckBoxEntity fullscreen = new CheckBoxEntity("", DisplayConfig.resolution.first() / 2 - 20, DisplayConfig.resolution.second() / 2 - 50, 200, 0);
         CheckBox checkBox = fullscreen.getComponent(CheckBoxComponent.class).getUIElement();
         checkBox.setSelected(DisplayConfig.fullScreenMode);
         checkBox.selectedProperty().addListener((obs, oldVal, newVal) -> {

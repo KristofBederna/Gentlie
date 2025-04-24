@@ -11,10 +11,10 @@ public class TextComponent extends UIComponent<StackPane> {
 
         Text text = new Text(textContent);
         StackPane textWrapper = new StackPane(text);
-        textWrapper.setMinWidth(width);
-        textWrapper.setMinHeight(height);
-        textWrapper.setLayoutX(x - uiRoot.getInstance().getLayoutX());
-        textWrapper.setLayoutY(y - uiRoot.getInstance().getLayoutY());
+        textWrapper.setMinWidth(this.width);
+        textWrapper.setMinHeight(this.height);
+        textWrapper.setLayoutX(this.x - uiRoot.getInstance().getLayoutX());
+        textWrapper.setLayoutY(this.y - uiRoot.getInstance().getLayoutY());
 
         this.uiElement = textWrapper;
     }
