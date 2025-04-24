@@ -16,7 +16,7 @@ public class ChestEntity extends Entity {
         this.getComponent(PositionComponent.class).setLocal(new Point(x - width / 2, y - height / 2), this);
         this.addComponent(new DimensionComponent(width, height));
         this.addComponent(new CentralMassComponent(x, y));
-        this.addComponent(new ImageComponent("/assets/images/Campfire/Campfire_1.png", width, height));
+        this.addComponent(new ImageComponent("/assets/images/box.png", width, height));
         this.addComponent(new ZIndexComponent(2));
         this.addComponent(new HealthComponent(1));
         this.addComponent(new HitBoxComponent(new Rectangle(new Point(x - width / 2, y - height / 2), width, height).getPoints()));

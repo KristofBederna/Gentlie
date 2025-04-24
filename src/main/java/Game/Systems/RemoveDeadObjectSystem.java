@@ -21,6 +21,7 @@ import inf.elte.hu.gameengine_javafx.Maths.Geometry.NSidedShape;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Direction;
+import inf.elte.hu.gameengine_javafx.Misc.SoundEffect;
 import inf.elte.hu.gameengine_javafx.Misc.SoundEffectStore;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
 import javafx.scene.layout.BorderPane;
@@ -63,8 +64,7 @@ public class RemoveDeadObjectSystem extends GameSystem {
             if (entity instanceof PolarBearEntity) {
                 Random rand = new Random();
                 int gold = rand.nextInt(10, 25);
-                PlayerStats.gold += gold;
-                new GoldGainedLabel(String.valueOf(gold), entity.getComponent(CentralMassComponent.class).getCentralX(), entity.getComponent(CentralMassComponent.class).getCentralY() - 50, 100, 100);
+                handleGoldGained(entity, gold);
 
                 switch (entity.getComponent(HealthComponent.class).getCauseOfDeath()) {
                     case RANGED:
@@ -78,8 +78,7 @@ public class RemoveDeadObjectSystem extends GameSystem {
             if (entity instanceof ChestEntity) {
                 Random rand = new Random();
                 int gold = rand.nextInt(25, 50);
-                PlayerStats.gold += gold;
-                new GoldGainedLabel(String.valueOf(gold), entity.getComponent(CentralMassComponent.class).getCentralX(), entity.getComponent(CentralMassComponent.class).getCentralY() - 50, 100, 100);
+                handleGoldGained(entity, gold);
                 CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
                 new ParticleEmitterEntity(
                         pos.getCentralX(), pos.getCentralY(),
@@ -110,5 +109,11 @@ public class RemoveDeadObjectSystem extends GameSystem {
                 );
             }
         }
+    }
+
+    private void handleGoldGained(Entity entity, int gold) {
+        PlayerStats.gold += gold;
+        SoundEffectStore.getInstance().add(new SoundEffect(entity, "/assets/sound/sfx/goldGained.wav", "gold_" + entity.getId(), 0.6f, 0.0f, 1000, false));
+        new GoldGainedLabel(String.valueOf(gold), entity.getComponent(CentralMassComponent.class).getCentralX(), entity.getComponent(CentralMassComponent.class).getCentralY() - 50, 100, 100);
     }
 }

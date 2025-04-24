@@ -94,7 +94,7 @@ public class HomeScene extends GameScene {
         systemHub.addSystem(WorldLoaderSystem.class, new WorldLoaderSystem(), 13);
         systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 14);
         systemHub.addSystem(GameSaverSystem.class, new GameSaverSystem(), 15);
-        systemHub.addSystem(SoundEffectAdderSystem.class, new SoundEffectAdderSystem(), 16);
+        systemHub.addSystem(StepSoundEffectSystem.class, new StepSoundEffectSystem(), 16);
     }
 
     private void interactionSetup() {

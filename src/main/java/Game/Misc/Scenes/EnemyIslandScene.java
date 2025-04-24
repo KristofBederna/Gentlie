@@ -85,7 +85,7 @@ public class EnemyIslandScene extends GameScene {
         new WaterEntity();
         new SkyBoxEntity();
 
-        new IglooEntity(6 * MapConfig.scaledTileSize, MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize);
+        new MountainEntity(5 * MapConfig.scaledTileSize, -2 * MapConfig.scaledTileSize, 5 * MapConfig.scaledTileSize, 5 * MapConfig.scaledTileSize);
         new ShipEntity(0, 1.5 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize);
 
         new ParticleEmitterEntity(1200, -1500, new ParticleEntity(0, 0, 20, 20, "/assets/images/snowflake.png", 3000), Direction.DOWN, 1, 60);
@@ -98,7 +98,7 @@ public class EnemyIslandScene extends GameScene {
         goHomeLabel.removeFromUI();
         goHomeLabel.getComponent(LabelComponent.class).getUIElement().setTextAlignment(TextAlignment.CENTER);
 
-        new EventTriggerEntity(7 * MapConfig.scaledTileSize - MapConfig.scaledTileSize * 0.25 - 1, 2 * MapConfig.scaledTileSize + MapConfig.scaledTileSize * 0.25 - 1, MapConfig.scaledTileSize * 0.75, MapConfig.scaledTileSize * 0.75, new EnterDungeonEvent(), new EnterDungeonEventListener());
+        new EventTriggerEntity(7.5 * MapConfig.scaledTileSize - MapConfig.scaledTileSize * 0.25 - 1, 2 * MapConfig.scaledTileSize + MapConfig.scaledTileSize * 0.25 - 1, MapConfig.scaledTileSize * 0.75, MapConfig.scaledTileSize * 0.75, new EnterDungeonEvent(), new EnterDungeonEventListener());
         new EventTriggerEntity(2 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize + MapConfig.scaledTileSize / 2, MapConfig.scaledTileSize / 2, MapConfig.scaledTileSize / 2, new GoHomeEvent(), new GoHomeEventListener());
     }
 
@@ -123,7 +123,7 @@ public class EnemyIslandScene extends GameScene {
         systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 14);
         systemHub.addSystem(PolarBearBufferSystem.class, new PolarBearBufferSystem(), 15);
         systemHub.addSystem(GameSaverSystem.class, new GameSaverSystem(), 16);
-        systemHub.addSystem(SoundEffectAdderSystem.class, new SoundEffectAdderSystem(), 17);
+        systemHub.addSystem(StepSoundEffectSystem.class, new StepSoundEffectSystem(), 17);
     }
 
     private void interactionSetup() {

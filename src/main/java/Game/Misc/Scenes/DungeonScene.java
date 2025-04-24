@@ -121,7 +121,7 @@ public class DungeonScene extends GameScene {
         systemHub.addSystem(UserInterfaceSystem.class, new UserInterfaceSystem(), 18);
         systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 19);
         systemHub.addSystem(GameSaverSystem.class, new GameSaverSystem(), 20);
-        systemHub.addSystem(SoundEffectAdderSystem.class, new SoundEffectAdderSystem(), 12);
+        systemHub.addSystem(StepSoundEffectSystem.class, new StepSoundEffectSystem(), 12);
     }
 
     private void interactionSetup() {

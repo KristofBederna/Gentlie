@@ -22,6 +22,8 @@ import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Shape;
 import inf.elte.hu.gameengine_javafx.Maths.Vector;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
+import inf.elte.hu.gameengine_javafx.Misc.SoundEffect;
+import inf.elte.hu.gameengine_javafx.Misc.SoundEffectStore;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
 
 import java.util.Random;
@@ -121,6 +123,7 @@ public class PolarBearAttackSystem extends GameSystem {
 
                         if (bear.getComponent(AttackBoxComponent.class) == null) {
                             bear.addComponent(new AttackBoxComponent(attackBox.getPoints(), 100));
+                            SoundEffectStore.getInstance().add(new SoundEffect(bear, "/assets/sound/sfx/roar.wav", "roar_" + bear.getId(), 0.4f, 0.0f, 1000, false));
                             bear.getComponent(VelocityComponent.class).stopMovement();
                         }
 

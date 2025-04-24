@@ -8,7 +8,7 @@ import inf.elte.hu.gameengine_javafx.Misc.SoundEffectStore;
 
 import java.util.Objects;
 
-public class SoundEffectAdderSystem extends GameSystem {
+public class StepSoundEffectSystem extends GameSystem {
     @Override
     public void start() {
         this.active = true;

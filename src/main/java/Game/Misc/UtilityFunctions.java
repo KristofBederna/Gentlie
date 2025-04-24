@@ -31,6 +31,7 @@ import inf.elte.hu.gameengine_javafx.Misc.SoundEffectStore;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
+import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
@@ -216,6 +217,9 @@ public class UtilityFunctions {
     }
 
     public static void defaultBreakdownMethod() {
+        if (SystemHub.getInstance().getSystem(SoundSystem.class) != null) {
+            SystemHub.getInstance().getSystem(SoundSystem.class).stopAllTracks();
+        }
         EntityHub.getInstance().unloadAll();
         EntityHub.resetInstance();
         CameraEntity.resetInstance();

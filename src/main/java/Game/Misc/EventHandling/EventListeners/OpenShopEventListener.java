@@ -1,6 +1,7 @@
 package Game.Misc.EventHandling.EventListeners;
 
 import Game.Components.ShopItemInfoComponent;
+import Game.Entities.BartenderPenguinEntity;
 import Game.Entities.ShopItemEntity;
 import Game.Misc.EventHandling.Events.OpenShopEvent;
 import Game.Misc.PlayerStats;
@@ -10,6 +11,8 @@ import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListener;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
+import inf.elte.hu.gameengine_javafx.Misc.SoundEffect;
+import inf.elte.hu.gameengine_javafx.Misc.SoundEffectStore;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -50,6 +53,8 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
             }
             PlayerStats.health = PlayerStats.health + 30;
             PlayerStats.gold -= ShopItemPrices.Health;
+            BartenderPenguinEntity penguin = (BartenderPenguinEntity) EntityHub.getInstance().getEntitiesWithType(BartenderPenguinEntity.class).getFirst();
+            SoundEffectStore.getInstance().add(new SoundEffect(penguin, "/assets/sound/sfx/goldGained.wav", "gold_" + penguin.getId(), 0.6f, 0.0f, 1000, false));
             ShopItemPrices.Health = (int) (ShopItemPrices.Health * rand.nextDouble(1.0, 1.05));
         });
         new ShopItemEntity("Melee damage", "Increase your melee damage by 10 points.(currently: " + PlayerStats.meleeDamage + ")", ShopItemPrices.MeleeDamage, () -> {
@@ -59,6 +64,8 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
             }
             PlayerStats.meleeDamage = PlayerStats.meleeDamage + 10;
             PlayerStats.gold -= ShopItemPrices.MeleeDamage;
+            BartenderPenguinEntity penguin = (BartenderPenguinEntity) EntityHub.getInstance().getEntitiesWithType(BartenderPenguinEntity.class).getFirst();
+            SoundEffectStore.getInstance().add(new SoundEffect(penguin, "/assets/sound/sfx/goldGained.wav", "gold_" + penguin.getId(), 0.6f, 0.0f, 1000, false));
             ShopItemPrices.MeleeDamage = (int) (ShopItemPrices.MeleeDamage * rand.nextDouble(1.0, 1.05));
         });
         new ShopItemEntity("Ranged damage", "Increase your ranged damage by 10 points.(currently: " + PlayerStats.rangedDamage + ")", ShopItemPrices.RangedDamage, () -> {
@@ -68,6 +75,8 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
             }
             PlayerStats.rangedDamage = PlayerStats.rangedDamage + 10;
             PlayerStats.gold -= ShopItemPrices.RangedDamage;
+            BartenderPenguinEntity penguin = (BartenderPenguinEntity) EntityHub.getInstance().getEntitiesWithType(BartenderPenguinEntity.class).getFirst();
+            SoundEffectStore.getInstance().add(new SoundEffect(penguin, "/assets/sound/sfx/goldGained.wav", "gold_" + penguin.getId(), 0.6f, 0.0f, 1000, false));
             ShopItemPrices.RangedDamage = (int) (ShopItemPrices.RangedDamage * rand.nextDouble(1.0, 1.05));
         });
         new ShopItemEntity("Melee speed", "Decrease your melee cooldown by 5%(Up to 75% of base, currently: " + PlayerStats.meleeCooldown + ")", ShopItemPrices.MeleeSpeed, () -> {
@@ -76,6 +85,8 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
             }
             PlayerStats.meleeCooldown = Math.max(500L, (long) (PlayerStats.meleeCooldown * 0.95));
             PlayerStats.gold -= ShopItemPrices.MeleeSpeed;
+            BartenderPenguinEntity penguin = (BartenderPenguinEntity) EntityHub.getInstance().getEntitiesWithType(BartenderPenguinEntity.class).getFirst();
+            SoundEffectStore.getInstance().add(new SoundEffect(penguin, "/assets/sound/sfx/goldGained.wav", "gold_" + penguin.getId(), 0.6f, 0.0f, 1000, false));
             ShopItemPrices.MeleeSpeed = (int) (ShopItemPrices.MeleeSpeed * rand.nextDouble(1.0, 1.05));
         });
         new ShopItemEntity("Ranged speed", "Decrease your ranged cooldown by 5%(Up to 75% of base, currently: " + PlayerStats.rangedCooldown + ")", ShopItemPrices.RangedSpeed, () -> {
@@ -84,6 +95,8 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
             }
             PlayerStats.rangedCooldown = Math.max(750L, (long) (PlayerStats.rangedCooldown * 0.95));
             PlayerStats.gold -= ShopItemPrices.RangedSpeed;
+            BartenderPenguinEntity penguin = (BartenderPenguinEntity) EntityHub.getInstance().getEntitiesWithType(BartenderPenguinEntity.class).getFirst();
+            SoundEffectStore.getInstance().add(new SoundEffect(penguin, "/assets/sound/sfx/goldGained.wav", "gold_" + penguin.getId(), 0.6f, 0.0f, 1000, false));
             ShopItemPrices.RangedSpeed = (int) (ShopItemPrices.RangedSpeed * rand.nextDouble(1.0, 1.05));
         });
         new ShopItemEntity("Melee resistance", "Increase your resistance to melee attacks by 5%(Up to 75% of base, currently: " + PlayerStats.meleeResistance * 100 + "%)", ShopItemPrices.MeleeResistance, () -> {
@@ -92,6 +105,8 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
             }
             PlayerStats.meleeResistance = Math.min(PlayerStats.meleeResistance + 0.05, 0.75);
             PlayerStats.gold -= ShopItemPrices.MeleeResistance;
+            BartenderPenguinEntity penguin = (BartenderPenguinEntity) EntityHub.getInstance().getEntitiesWithType(BartenderPenguinEntity.class).getFirst();
+            SoundEffectStore.getInstance().add(new SoundEffect(penguin, "/assets/sound/sfx/goldGained.wav", "gold_" + penguin.getId(), 0.6f, 0.0f, 1000, false));
             ShopItemPrices.MeleeResistance = (int) (ShopItemPrices.MeleeResistance * rand.nextDouble(1.0, 1.05));
         });
         new ShopItemEntity("Ranged resistance", "Increase your resistance to ranged attacks by 5%(Up to 75% of base, currently: " + PlayerStats.rangedResistance * 100 + "%)", ShopItemPrices.RangedResistance, () -> {
@@ -100,6 +115,8 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
             }
             PlayerStats.rangedResistance = Math.min(PlayerStats.rangedResistance + 0.05, 0.75);
             PlayerStats.gold -= ShopItemPrices.RangedResistance;
+            BartenderPenguinEntity penguin = (BartenderPenguinEntity) EntityHub.getInstance().getEntitiesWithType(BartenderPenguinEntity.class).getFirst();
+            SoundEffectStore.getInstance().add(new SoundEffect(penguin, "/assets/sound/sfx/goldGained.wav", "gold_" + penguin.getId(), 0.6f, 0.0f, 1000, false));
             ShopItemPrices.RangedResistance = (int) (ShopItemPrices.RangedResistance * rand.nextDouble(1.0, 1.05));
         });
     }

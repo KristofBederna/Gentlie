@@ -11,9 +11,7 @@ import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ZIndexCompon
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
-import inf.elte.hu.gameengine_javafx.Misc.AnimationFrame;
-import inf.elte.hu.gameengine_javafx.Misc.AnimationStateMachine;
-import inf.elte.hu.gameengine_javafx.Misc.Time;
+import inf.elte.hu.gameengine_javafx.Misc.*;
 
 import java.util.List;
 
@@ -39,6 +37,7 @@ public class CampfireEntity extends Entity {
                 }
             }
         }));
+        SoundEffectStore.getInstance().add(new SoundEffect(this, "/assets/sound/sfx/fire.wav", "fire_" + this.getId(), 0.7f, 0.0f, 1000, true));
 
         addToManager();
     }
