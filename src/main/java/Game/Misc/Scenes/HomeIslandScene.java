@@ -91,8 +91,8 @@ public class HomeIslandScene extends GameScene {
         new SkyBoxEntity();
 
         new IglooEntity(6 * MapConfig.scaledTileSize, MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize);
-        new IglooEntity(8.5 * MapConfig.scaledTileSize, MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize);
-        new IglooEntity(11 * MapConfig.scaledTileSize, MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize);
+        new IglooEntity(8.5 * MapConfig.scaledTileSize, 0.5*MapConfig.scaledTileSize, 2.5 * MapConfig.scaledTileSize, 2.5 * MapConfig.scaledTileSize);
+        new IglooEntity(11.5 * MapConfig.scaledTileSize, 1.5*MapConfig.scaledTileSize, 1.5 * MapConfig.scaledTileSize, 1.5 * MapConfig.scaledTileSize);
         new ShipEntity(14 * MapConfig.scaledTileSize, 1.5 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize);
         new InnEntity(2 * MapConfig.scaledTileSize, MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize, 2 * MapConfig.scaledTileSize);
 
