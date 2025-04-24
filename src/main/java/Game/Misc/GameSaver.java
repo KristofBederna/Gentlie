@@ -164,48 +164,39 @@ public class GameSaver {
     public static void saveDungeonState() {
         var PolarBears = EntityHub.getInstance().getEntitiesWithType(PolarBearEntity.class);
         var Chests = EntityHub.getInstance().getEntitiesWithType(ChestEntity.class);
-        if (PolarBears.isEmpty()) {
-            File map = new File(PlayerStats.currentSave + "/lastMapGenerated.txt");
-            if (map.exists())
-                map.delete();
-            File entities = new File(PlayerStats.currentSave + "/dungeonEntities.txt");
-            if (entities.exists())
-                entities.delete();
-        } else {
-            File file = new File(PlayerStats.currentSave + "/dungeonEntities.txt");
-            if (!file.exists()) {
-                try {
-                    file.createNewFile();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(PlayerStats.currentSave + "/dungeonEntities.txt"))) {
-                writer.write("PolarBears\n");
-                for (Entity polarBear : PolarBears) {
-                    PositionComponent pos = polarBear.getComponent(PositionComponent.class);
-                    double x = pos.getGlobalX();
-                    double y = pos.getGlobalY();
-
-                    writer.write(x + " " + y);
-
-                    writer.newLine();
-                }
-                writer.write("Chests\n");
-                for (int i = 0; i < Chests.size(); i++) {
-                    Entity chest = Chests.get(i);
-                    CentralMassComponent pos = chest.getComponent(CentralMassComponent.class);
-                    double x = pos.getCentralX();
-                    double y = pos.getCentralY();
-                    writer.write(x + " " + y);
-                    if (i < Chests.size() - 1) {
-                        writer.newLine();
-                    }
-                }
+        File file = new File(PlayerStats.currentSave + "/dungeonEntities.txt");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(PlayerStats.currentSave + "/dungeonEntities.txt"))) {
+            writer.write("PolarBears\n");
+            for (Entity polarBear : PolarBears) {
+                PositionComponent pos = polarBear.getComponent(PositionComponent.class);
+                double x = pos.getGlobalX();
+                double y = pos.getGlobalY();
+
+                writer.write(x + " " + y);
+
+                writer.newLine();
+            }
+            writer.write("Chests\n");
+            for (int i = 0; i < Chests.size(); i++) {
+                Entity chest = Chests.get(i);
+                CentralMassComponent pos = chest.getComponent(CentralMassComponent.class);
+                double x = pos.getCentralX();
+                double y = pos.getCentralY();
+                writer.write(x + " " + y);
+                if (i < Chests.size() - 1) {
+                    writer.newLine();
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
