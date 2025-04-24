@@ -80,8 +80,8 @@ public class UserInterfaceSystem extends GameSystem {
             var meleeAttackLabel = EntityHub.getInstance().getEntitiesWithType(MeleeAttackLabel.class).getFirst();
             var rangedAttackLabel = EntityHub.getInstance().getEntitiesWithType(RangedAttackLabel.class).getFirst();
             Platform.runLater(() -> {
-                ((TextEntity) meleeAttackLabel).getTextNode().setText(String.valueOf(Math.max(0, PlayerStats.meleeCooldown + (player.getComponent(InteractiveComponent.class).getLastTimeCalled(new Tuple<>(null, MouseButton.PRIMARY)).first() - System.currentTimeMillis()))));
-                ((TextEntity) rangedAttackLabel).getTextNode().setText(String.valueOf(Math.max(0, PlayerStats.rangedCooldown + (player.getComponent(InteractiveComponent.class).getLastTimeCalled(new Tuple<>(null, MouseButton.SECONDARY)).first() - System.currentTimeMillis()))));
+                ((TextEntity) meleeAttackLabel).getTextNode().setText(String.valueOf(Math.max(0, player.getComponent(InteractiveComponent.class).getLastTimeCalled(new Tuple<>(null, MouseButton.PRIMARY)).second() == 20 ? 0 : PlayerStats.meleeCooldown + (player.getComponent(InteractiveComponent.class).getLastTimeCalled(new Tuple<>(null, MouseButton.PRIMARY)).first() - System.currentTimeMillis()))));
+                ((TextEntity) rangedAttackLabel).getTextNode().setText(String.valueOf(Math.max(0, player.getComponent(InteractiveComponent.class).getLastTimeCalled(new Tuple<>(null, MouseButton.SECONDARY)).second() == 20 ? 0 : PlayerStats.rangedCooldown + (player.getComponent(InteractiveComponent.class).getLastTimeCalled(new Tuple<>(null, MouseButton.SECONDARY)).first() - System.currentTimeMillis()))));
             });
         }
         if (goldLabel != null && healthLabel != null) {

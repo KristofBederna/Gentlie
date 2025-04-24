@@ -21,12 +21,12 @@ import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
 import inf.elte.hu.gameengine_javafx.Core.ResourceManager;
 import inf.elte.hu.gameengine_javafx.Entities.*;
-import inf.elte.hu.gameengine_javafx.Maths.Geometry.Line;
-import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
-import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
+import inf.elte.hu.gameengine_javafx.Maths.Geometry.*;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
+import inf.elte.hu.gameengine_javafx.Misc.Direction;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -182,7 +182,17 @@ public class CustomRenderSystem extends GameSystem {
         }
 
         gc.drawImage(img, renderX * DisplayConfig.relativeWidthRatio, renderY * DisplayConfig.relativeHeightRatio, width * DisplayConfig.relativeWidthRatio, height * DisplayConfig.relativeHeightRatio);
-
+        if (entity.getComponent(AttackBoxComponent.class) != null) {
+            ComplexShape pos = entity.getComponent(AttackBoxComponent.class).getAttackBox();
+            DimensionComponent dim = entity.getComponent(DimensionComponent.class);
+            new ParticleEmitterEntity(
+                    pos.getPoints().getFirst().getX()+dim.getWidth()/2, pos.getPoints().getFirst().getY()+dim.getHeight()/2,
+                    new ParticleEntity(pos.getPoints().getFirst().getX()+dim.getWidth()/2, pos.getPoints().getFirst().getY()+dim.getHeight()/2, 15, 15,
+                            new NSidedShape(new Point(pos.getPoints().getFirst().getX()+dim.getWidth()/2, pos.getPoints().getFirst().getY()+dim.getHeight()/2), 5, 32),
+                            Color.GRAY, Color.BLACK, dim.getWidth()/2),
+                    Direction.ALL, 1, 10000000
+            );
+        }
         if (DisplayConfig.renderDebugMode) {
             renderHitBox(entity, gc);
             renderAttackBox(entity, gc);

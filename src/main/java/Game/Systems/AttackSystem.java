@@ -24,7 +24,10 @@ public class AttackSystem extends GameSystem {
     protected void update() {
         var attackers = EntityHub.getInstance().getEntitiesWithComponent(AttackBoxComponent.class);
         var entities = EntityHub.getInstance().getEntitiesWithComponent(HealthComponent.class);
-        entities.removeIf(e -> e instanceof SnowBallEntity || e.getComponent(HitBoxComponent.class) == null);
+        entities.removeIf(e -> {
+            if(e == null) {return false;}
+            return e instanceof SnowBallEntity || e.getComponent(HitBoxComponent.class) == null;
+        });
         for (var entity : attackers) {
             for (var otherEntity : entities) {
                 if (entity.equals(otherEntity)) {
