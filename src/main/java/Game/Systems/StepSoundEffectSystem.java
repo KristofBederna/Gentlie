@@ -18,6 +18,9 @@ public class StepSoundEffectSystem extends GameSystem {
     protected void update() {
         var entities = EntityHub.getInstance().getEntitiesWithComponent(StateComponent.class);
         for (var entity : entities) {
+            if (entity == null) {
+                continue;
+            }
             if (!Objects.equals(entity.getComponent(StateComponent.class).getCurrentState(), "idle")) {
                 SoundEffect soundEffect = new SoundEffect(entity, "/assets/sound/sfx/steps.wav", "steps_" + entity.getId(), 0.3f, 0.0f, 1000, true);
                 if (SoundEffectStore.getInstance().contains(soundEffect))
