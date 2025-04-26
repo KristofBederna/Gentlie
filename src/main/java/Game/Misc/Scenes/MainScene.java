@@ -1,7 +1,7 @@
 package Game.Misc.Scenes;
 
+import Game.Entities.ImageUIEntity;
 import Game.Misc.UtilityFunctions;
-import Game.Systems.CustomRenderSystem;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.ButtonEntity;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
@@ -58,7 +58,10 @@ public class MainScene extends GameScene {
         continueGame.addStyleClass("main-menu-button");
         settings.addStyleClass("main-menu-button");
         exit.addStyleClass("main-menu-button");
-        label.addStyleClass("main-menu-label");
+        label.addStyleClass("title");
+
+        ImageUIEntity hat = new ImageUIEntity("/assets/images/hat.png", DisplayConfig.resolution.first() / 2 - 90, DisplayConfig.resolution.second() / 2 - 285, 64, 64);
+        hat.addStyleClass("hat");
     }
 
     private void loadBackgroundMusic() {
@@ -77,7 +80,6 @@ public class MainScene extends GameScene {
         if (systemHub.getSystem(BackgroundMusicSystem.class) == null) {
             systemHub.addSystem(BackgroundMusicSystem.class, new BackgroundMusicSystem(), 2);
         }
-        systemHub.addSystem(CustomRenderSystem.class, new CustomRenderSystem(), 3);
     }
 
     @Override

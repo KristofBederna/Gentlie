@@ -24,6 +24,9 @@ public class EventTileSystem extends GameSystem {
         var player = EntityHub.getInstance().getEntitiesWithComponent(PlayerComponent.class);
 
         for (var event : events) {
+            if (event == null) {
+                continue;
+            }
             eventManager.registerListener(event.getComponent(EventComponent.class).getEvent().getClass(), event.getComponent(EventComponent.class).getEventHandler());
             if (Shape.intersect(event.getComponent(ShapeComponent.class).getShape(), player.getFirst().getComponent(HitBoxComponent.class).getHitBox())) {
                 if (event.getComponent(EventComponent.class).getEvent() instanceof OpenShopEvent && event.getComponent(isInsideEventComponent.class).isInside()) {

@@ -25,6 +25,9 @@ public class MovementDeterminerSystem extends GameSystem {
     }
 
     private void processEntity(Entity entity) {
+        if (entity == null) {
+            return;
+        }
         VelocityComponent velocityComponent = entity.getComponent(VelocityComponent.class);
         Vector velocity = velocityComponent.getVelocity();
         StateComponent stateComponent = entity.getComponent(StateComponent.class);

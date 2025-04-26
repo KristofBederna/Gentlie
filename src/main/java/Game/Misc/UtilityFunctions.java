@@ -77,6 +77,10 @@ public class UtilityFunctions {
                     Time.getInstance().setTimeScale(1.0);
                 });
 
+        start.addStyleClass("in-game-button");
+        settings.addStyleClass("in-game-button");
+        exit.addStyleClass("in-game-button");
+
         Platform.runLater(() -> {
             menu.setPrefSize(DisplayConfig.resolution.first(), DisplayConfig.resolution.second());
             menu.getChildren().addAll(
@@ -141,6 +145,12 @@ public class UtilityFunctions {
                 }
         );
 
+        label.addStyleClass("title");
+        soundLabel.addStyleClass("main-menu-label");
+        musicLabel.addStyleClass("main-menu-label");
+        fullScreenLabel.addStyleClass("main-menu-label");
+        back.addStyleClass("in-game-button");
+        menu.setStyle("-fx-background-color: rgba(72,71,71,0.2)");
         Platform.runLater(() -> {
             menu.getChildren().addAll(
                     label.getComponent(LabelComponent.class).getNode(),
@@ -237,19 +247,21 @@ public class UtilityFunctions {
 
     public static void showDetailedSettingsMenuWithoutBack() {
         LabelEntity label = new LabelEntity("Settings", DisplayConfig.resolution.first() / 2 - 20, DisplayConfig.resolution.second() / 2 - 250, 200, 0);
-
+        label.addStyleClass("main-menu-label");
         LabelEntity soundLabel = new LabelEntity("Master volume: ", DisplayConfig.resolution.first() / 2 - 200, DisplayConfig.resolution.second() / 2 - 150, 200, 0);
         SliderEntity sound = new SliderEntity(DisplayConfig.resolution.first() / 2 - 20, DisplayConfig.resolution.second() / 2 - 150, 200, 0, 0.0f, 1.0f, ResourceConfig.masterVolume);
         sound.getComponent(SliderComponent.class).getUIElement().valueProperty().addListener((obs, oldVal, newVal) -> {
             ResourceConfig.masterVolume = newVal.floatValue();
         });
-
+        soundLabel.addStyleClass("main-menu-label");
         LabelEntity musicLabel = new LabelEntity("Music volume: ", DisplayConfig.resolution.first() / 2 - 200, DisplayConfig.resolution.second() / 2 - 100, 200, 0);
         SliderEntity music = new SliderEntity(DisplayConfig.resolution.first() / 2 - 20, DisplayConfig.resolution.second() / 2 - 100, 200, 0, 0.0f, 1.0f, ResourceConfig.backgroundMusicVolume);
         music.getComponent(SliderComponent.class).getUIElement().valueProperty().addListener((obs, oldVal, newVal) -> {
             ResourceConfig.backgroundMusicVolume = newVal.floatValue();
         });
+        musicLabel.addStyleClass("main-menu-label");
         LabelEntity fullScreenLabel = new LabelEntity("Fullscreen mode: ", DisplayConfig.resolution.first() / 2 - 200, DisplayConfig.resolution.second() / 2 - 50, 200, 0);
+        fullScreenLabel.addStyleClass("main-menu-label");
         CheckBoxEntity fullscreen = new CheckBoxEntity("", DisplayConfig.resolution.first() / 2 - 20, DisplayConfig.resolution.second() / 2 - 50, 200, 0);
         CheckBox checkBox = fullscreen.getComponent(CheckBoxComponent.class).getUIElement();
         checkBox.setSelected(DisplayConfig.fullScreenMode);

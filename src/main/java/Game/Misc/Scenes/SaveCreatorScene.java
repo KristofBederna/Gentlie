@@ -147,7 +147,7 @@ public class SaveCreatorScene extends GameScene {
                 () -> {
                     SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new SaveCreatorScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second()));
                 });
-        label.addStyleClass("main-menu-label");
+        label.addStyleClass("title");
         yes.addStyleClass("main-menu-button");
         no.addStyleClass("main-menu-button");
     }
