@@ -86,7 +86,7 @@ public class DungeonScene extends GameScene {
     private void declareEntities() {
         PlayerEntity player = new PlayerEntity(spawn.getX(), spawn.getY(), "idle", "/assets/images/Gentlie/Gentlie_Down_Idle.png", MapConfig.scaledTileSize * 0.8 * 0.55, MapConfig.scaledTileSize * 0.8);
         player.addComponent(new HealthComponent(PlayerStats.health));
-        new EventTriggerEntity(0, MapConfig.scaledTileSize, MapConfig.scaledTileSize, MapConfig.scaledTileSize * 3, new ExitDungeonEvent(new Point(4 * 150, 2 * 150 + 150 * 0.25 - 1)), new ExitDungeonEventListener());
+        new EventTriggerEntity(0, MapConfig.scaledTileSize, MapConfig.scaledTileSize + MapConfig.scaledTileSize * 0.25, MapConfig.scaledTileSize * 3, new ExitDungeonEvent(new Point(4 * 150, 2 * 150 + 150 * 0.25 - 1)), new ExitDungeonEventListener());
         new EnemyLabel(String.valueOf(EntityHub.getInstance().getEntitiesWithType(PolarBearEntity.class).size()), 100, 300, 100, 100);
         new GoldLabel(String.valueOf(PlayerStats.gold), 100, 100, 100, 100);
         new HealthLabel(String.format("%.0f", PlayerStats.health), 100, 200, 100, 100);
