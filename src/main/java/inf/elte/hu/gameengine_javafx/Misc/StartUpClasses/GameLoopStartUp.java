@@ -50,10 +50,20 @@ public class GameLoopStartUp {
         return gameLoop;
     }
 
+    /**
+     * Start the game loop.
+     * <br>
+     * This method starts the execution of the game loop when called.
+     */
     public static void startGameLoop() {
         gameLoop.startLoop();
     }
 
+    /**
+     * Restart the game loop.
+     * <br>
+     * This method restarts the execution of the game loop when called.
+     */
     public static void restartLoop() {
         gameLoop.setRunning(true);
     }

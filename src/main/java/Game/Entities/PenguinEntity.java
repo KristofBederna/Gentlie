@@ -16,8 +16,8 @@ import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ImageCompone
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ZIndexComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
-import inf.elte.hu.gameengine_javafx.Misc.AnimationFrame;
-import inf.elte.hu.gameengine_javafx.Misc.AnimationStateMachine;
+import inf.elte.hu.gameengine_javafx.Misc.Animation.AnimationFrame;
+import inf.elte.hu.gameengine_javafx.Misc.Animation.AnimationStateMachine;
 import inf.elte.hu.gameengine_javafx.Misc.Direction;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
 

@@ -37,11 +37,6 @@ public class MapMeshComponent extends Component {
         mapCoordinates.add(meshRow);
     }
 
-    @Override
-    public String getStatus() {
-        return "";
-    }
-
     public void addToRow(int rowNum, List<Point> meshRow) {
         if (mapCoordinates.size() <= rowNum) {
             addRow(meshRow);

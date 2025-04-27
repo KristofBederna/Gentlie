@@ -43,9 +43,4 @@ public class MaxDistanceFromOriginComponent extends Component {
 
         return distance > maxDistance;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

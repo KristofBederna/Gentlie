@@ -13,7 +13,7 @@ import java.util.Map;
  * It provides methods for managing and retrieving chunks, as well as accessing specific elements within those chunks.
  */
 public class World {
-    private Map<Tuple<Integer, Integer>, Chunk> chunks = new HashMap<>();
+    private final Map<Tuple<Integer, Integer>, Chunk> chunks = new HashMap<>();
     private Map<Tuple<Integer, Integer>, Chunk> savedChunks = new HashMap<>();
 
     /**
@@ -111,6 +111,12 @@ public class World {
         return null;
     }
 
+    /**
+     * Retrieves the tile element at the specified world coordinates as a {@code Point} object, inside the cache.
+     *
+     * @param point the {@code Point} object representing the world coordinates
+     * @return the {@code TileEntity} at the specified point, or {@code null} if not found
+     */
     public TileEntity getElementAtSaved(Point point) {
         int tileX = Math.floorDiv((int) point.getX(), (int) MapConfig.scaledTileSize);
         int tileY = Math.floorDiv((int) point.getY(), (int) MapConfig.scaledTileSize);
@@ -128,6 +134,12 @@ public class World {
         return null;
     }
 
+    /**
+     * Sets the tile element at the specified world coordinates as a {@code Point} object.
+     *
+     * @param point the {@code Point} object representing the world coordinates
+     * @param value the value of the tile saved
+     */
     public void setElementAt(Point point, int value) {
         int tileX = Math.floorDiv((int) point.getX(), (int) MapConfig.scaledTileSize);
         int tileY = Math.floorDiv((int) point.getY(), (int) MapConfig.scaledTileSize);
@@ -144,6 +156,12 @@ public class World {
         }
     }
 
+    /**
+     * Sets the tile element at the specified world coordinates as a {@code Point} object, inside the cache.
+     *
+     * @param point the {@code Point} object representing the world coordinates
+     * @param value the value of the tile saved
+     */
     public void setElementAtSaved(Point point, int value) {
         int tileX = Math.floorDiv((int) point.getX(), (int) MapConfig.scaledTileSize);
         int tileY = Math.floorDiv((int) point.getY(), (int) MapConfig.scaledTileSize);

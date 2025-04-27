@@ -12,8 +12,8 @@ import javafx.scene.layout.StackPane;
  */
 public class GameLayer extends StackPane {
     private static GameLayer instance;
-    private GameCanvas canvas;
-    private uiRoot UI;
+    private final GameCanvas canvas;
+    private final uiRoot UI;
 
     /**
      * Private constructor to prevent external instantiation. Initializes the game layer

@@ -22,11 +22,6 @@ public class AccelerationComponent extends Component {
         this.acceleration = acceleration;
     }
 
-    @Override
-    public String getStatus() {
-        return "";
-    }
-
     public void stopMovement() {
         this.acceleration = new Vector(0, 0);
     }

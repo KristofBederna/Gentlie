@@ -7,7 +7,7 @@ import java.util.HashMap;
  * It allows adding, retrieving, and reverse-mapping tile values to file paths for tiles in the game.
  */
 public class TileLoader {
-    private static HashMap<Integer, String> tilePaths = new HashMap<>();
+    private static final HashMap<Integer, String> tilePaths = new HashMap<>();
 
     /**
      * Adds a new tile path to the map, associating the given tile value with its corresponding file path.

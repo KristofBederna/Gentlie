@@ -9,7 +9,7 @@ import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
-import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.InfiniteWorldLoaderSystem;
+import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.MapLoaderSystems.InfiniteWorldLoaderSystem;
 
 /**
  * The CameraSystem class is responsible for updating the position of the camera in the game world.
@@ -54,9 +54,18 @@ public class CameraSystem extends GameSystem {
         updateCameraPosition(playerPos, playerImg, cameraEntity);
     }
 
+    /**
+     * Updates the world boundary in case it is set to 0, 0 (after f.e a bad load).
+     */
     private void updateWorldBoundary() {
         CameraEntity camera = CameraEntity.getInstance();
         WorldEntity world = WorldEntity.getInstance();
+        if (camera == null) {
+            return;
+        }
+        if (world == null) {
+            return;
+        }
         if (camera.getComponent(WorldDimensionComponent.class).getWorldHeight() == 0 || camera.getComponent(WorldDimensionComponent.class).getWorldWidth() == 0) {
             camera.getComponent(WorldDimensionComponent.class).setWorldHeight(world.getComponent(WorldDimensionComponent.class).getWorldHeight() * MapConfig.scaledTileSize);
             camera.getComponent(WorldDimensionComponent.class).setWorldWidth(world.getComponent(WorldDimensionComponent.class).getWorldWidth() * MapConfig.scaledTileSize);

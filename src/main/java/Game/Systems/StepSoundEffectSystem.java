@@ -3,8 +3,8 @@ package Game.Systems;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.StateComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
-import inf.elte.hu.gameengine_javafx.Misc.SoundEffect;
-import inf.elte.hu.gameengine_javafx.Misc.SoundEffectStore;
+import inf.elte.hu.gameengine_javafx.Misc.Sound.SoundEffect;
+import inf.elte.hu.gameengine_javafx.Misc.Sound.SoundEffectStore;
 
 import java.util.Objects;
 

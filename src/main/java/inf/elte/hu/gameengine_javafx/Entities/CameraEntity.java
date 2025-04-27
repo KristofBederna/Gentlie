@@ -52,12 +52,18 @@ public class CameraEntity extends Entity {
         this.getComponent(PositionComponent.class).setLocalPosition(x, y, this);
     }
 
+    /**
+     * Sets the position based on the edges of the world, so that the camera doesn't run off the edge.
+     */
     public void setClampedPosition(double x, double y) {
         double clampedX = calculateClampedX(x);
         double clampedY = calculateClampedY(y);
         this.getComponent(PositionComponent.class).setLocalPosition(clampedX, clampedY, this);
     }
 
+    /**
+     * Moves the UI root to match the position of the camera, so that the drawn out UI elements are in the correct position.
+     */
     public void moveUIRootToMatch(double x, double y) {
         Platform.runLater(() -> {
             double clampedX = calculateClampedX(x);
@@ -84,6 +90,15 @@ public class CameraEntity extends Entity {
         this.getComponent(DimensionComponent.class).setHeight(height);
     }
 
+    /**
+     * Returns whether and entity is inside the camera's viewport.
+     *
+     * @param entityX      X cooridnate of the entity.
+     * @param entityY      Y coordinate of the entity.
+     * @param entityWidth  Width of the entity.
+     * @param entityHeight Height of the entity.
+     * @return {@code True} if the entity is inside(even 1 pixel), {@code False} if not.
+     */
     public boolean isPositionInsideViewport(double entityX, double entityY, double entityWidth, double entityHeight) {
         double renderX = getRenderX(entityX);
         double renderY = getRenderY(entityY);
@@ -92,6 +107,10 @@ public class CameraEntity extends Entity {
                 renderY + entityHeight >= 0 && renderY <= this.getComponent(DimensionComponent.class).getHeight();
     }
 
+    /**
+     * @param entityY The entity's Y coordinate.
+     * @return The entity's rendering position(Y coordinate).
+     */
     public static double getRenderY(double entityY) {
         CameraEntity cameraEntity = CameraEntity.getInstance();
         if (cameraEntity == null) {
@@ -100,6 +119,10 @@ public class CameraEntity extends Entity {
         return entityY - cameraEntity.getComponent(PositionComponent.class).getGlobalY();
     }
 
+    /**
+     * @param entityX The entity's X coordinate.
+     * @return The entity's rendering position(X coordinate).
+     */
     public static double getRenderX(double entityX) {
         CameraEntity cameraEntity = CameraEntity.getInstance();
         if (cameraEntity == null) {
@@ -108,6 +131,10 @@ public class CameraEntity extends Entity {
         return entityX - cameraEntity.getComponent(PositionComponent.class).getGlobalX();
     }
 
+    /**
+     * Attaches the camera to the entity.
+     * @param entity The entity to attach the camera to.
+     */
     public void attachTo(Entity entity) {
         this.getComponent(ParentComponent.class).removeAllChildren();
         this.getComponent(ParentComponent.class).addChild(entity);

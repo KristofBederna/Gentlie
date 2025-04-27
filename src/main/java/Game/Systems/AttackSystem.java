@@ -7,7 +7,7 @@ import Game.Entities.SnowBallEntity;
 import Game.Misc.CauseOfDeath;
 import Game.Misc.EnemyStats;
 import Game.Misc.PlayerStats;
-import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
+import inf.elte.hu.gameengine_javafx.Components.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;

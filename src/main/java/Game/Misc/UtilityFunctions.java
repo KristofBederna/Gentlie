@@ -1,6 +1,7 @@
 package Game.Misc;
 
 import Game.Misc.Scenes.MainScene;
+import Game.Systems.GameSaverSystem;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
@@ -19,7 +20,6 @@ import inf.elte.hu.gameengine_javafx.Entities.UIEntities.CheckBoxEntity;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.LabelEntity;
 import inf.elte.hu.gameengine_javafx.Entities.UIEntities.SliderEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
-import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusicStore;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.ResourceConfig;
@@ -27,11 +27,11 @@ import inf.elte.hu.gameengine_javafx.Misc.EventHandling.EventListeners.FullScree
 import inf.elte.hu.gameengine_javafx.Misc.EventHandling.Events.FullScreenToggleEvent;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
-import inf.elte.hu.gameengine_javafx.Misc.SoundEffectStore;
+import inf.elte.hu.gameengine_javafx.Misc.Sound.SoundEffectStore;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
-import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystem;
+import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystems.SoundSystem;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
@@ -227,6 +227,9 @@ public class UtilityFunctions {
     }
 
     public static void defaultBreakdownMethod() {
+        if (SystemHub.getInstance().getSystem(GameSaverSystem.class) != null) {
+            SystemHub.getInstance().getSystem(GameSaverSystem.class).manualSave();
+        }
         if (SystemHub.getInstance().getSystem(SoundSystem.class) != null) {
             SystemHub.getInstance().getSystem(SoundSystem.class).stopAllTracks();
         }
@@ -241,7 +244,6 @@ public class UtilityFunctions {
         uiRoot.getInstance().unloadAll();
         GameCanvas.getInstance().getGraphicsContext2D().clearRect(0, 0, GameCanvas.getInstance().getWidth(), GameCanvas.getInstance().getHeight());
         SoundEffectStore.resetInstance();
-        BackgroundMusicStore.resetInstance();
         System.gc();
     }
 

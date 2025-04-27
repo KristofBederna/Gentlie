@@ -1,4 +1,6 @@
-package inf.elte.hu.gameengine_javafx.Misc;
+package inf.elte.hu.gameengine_javafx.Misc.Animation;
+
+import inf.elte.hu.gameengine_javafx.Misc.Tuple;
 
 public class AnimationFrame {
     private Tuple<String, Integer> frame;

@@ -45,10 +45,4 @@ public class WorldDataComponent extends Component {
     public void clear() {
         world.clear();
     }
-
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

@@ -18,9 +18,4 @@ public class TextComponent extends UIComponent<StackPane> {
 
         this.uiElement = textWrapper;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

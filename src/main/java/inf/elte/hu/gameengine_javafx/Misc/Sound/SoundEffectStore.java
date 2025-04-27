@@ -1,4 +1,4 @@
-package inf.elte.hu.gameengine_javafx.Misc;
+package inf.elte.hu.gameengine_javafx.Misc.Sound;
 
 
 import java.util.ArrayList;
@@ -6,8 +6,8 @@ import java.util.List;
 
 public class SoundEffectStore {
     private static SoundEffectStore instance;
-    private List<SoundEffect> soundEffects = new ArrayList<>();
-    private List<SoundEffect> runningSoundEffects = new ArrayList<>();
+    private final List<SoundEffect> soundEffects = new ArrayList<>();
+    private final List<SoundEffect> runningSoundEffects = new ArrayList<>();
 
     public static SoundEffectStore getInstance() {
         if (instance == null) instance = new SoundEffectStore();

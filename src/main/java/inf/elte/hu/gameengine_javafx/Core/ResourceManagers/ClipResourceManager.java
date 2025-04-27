@@ -7,6 +7,10 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * A resource manager for Clip resources, the manager loads the clip with the file path of the key, opens it and sets it to the beginning, then returns the clip.
+ * Clips are unmodifiable, unremarkable and if two entities share the same .wav file they need to be handled as bytearrays(as seen in the {@code SoundSystem}).
+ */
 public class ClipResourceManager extends ResourceManager<Clip> {
     public ClipResourceManager() {
         super(key -> {

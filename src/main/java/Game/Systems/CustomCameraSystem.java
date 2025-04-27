@@ -9,7 +9,7 @@ import inf.elte.hu.gameengine_javafx.Core.SystemHub;
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
-import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.InfiniteWorldLoaderSystem;
+import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.MapLoaderSystems.InfiniteWorldLoaderSystem;
 
 /**
  * The CameraSystem class is responsible for updating the position of the camera in the game world.

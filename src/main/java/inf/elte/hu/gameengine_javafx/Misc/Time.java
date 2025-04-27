@@ -14,7 +14,7 @@ public class Time {
     private double deltaTime;
     private double unscaledDeltaTime;
     private double timeScale = 1.0;
-    private long startTime;
+    private final long startTime;
 
     private boolean fpsCapEnabled = false;
     private int fpsCap = 60;

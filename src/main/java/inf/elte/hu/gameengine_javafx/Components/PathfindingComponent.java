@@ -62,11 +62,6 @@ public class PathfindingComponent extends Component {
         this.end = null;
     }
 
-    @Override
-    public String getStatus() {
-        return "";
-    }
-
     public void setEnd(Point point) {
         end = point;
     }

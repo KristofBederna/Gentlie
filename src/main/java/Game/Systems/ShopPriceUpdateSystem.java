@@ -13,7 +13,6 @@ public class ShopPriceUpdateSystem extends GameSystem {
     public void start() {
         this.active = true;
         int fullDaysPassed = (DayTimeData.periodsPassed / 2) - (DayTimeData.lastUpdatedPeriod / 2);
-        System.out.println("Full Days Passed: " + fullDaysPassed);
 
         if (fullDaysPassed > 0) {
             for (int i = 0; i < fullDaysPassed; i++) {

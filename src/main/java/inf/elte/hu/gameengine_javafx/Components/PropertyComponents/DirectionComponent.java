@@ -17,9 +17,4 @@ public class DirectionComponent extends Component {
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

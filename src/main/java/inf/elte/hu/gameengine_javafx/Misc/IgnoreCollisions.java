@@ -19,10 +19,18 @@ public class IgnoreCollisions {
         return instance;
     }
 
+    /**
+     * @return The map holding the rules of collisions. Can be used to add or remove rules.
+     */
     public Map<Class<? extends Entity>, ArrayList<Class<? extends Entity>>> getCollisionRules() {
         return collisionRules;
     }
 
+    /**
+     * Checks whether entity a and entity b can make a collision with each other.
+     *
+     * @return {@code True} if they can not collide, {@code False} if they can collide.
+     */
     public static boolean shouldIgnoreCollision(Entity a, Entity b) {
         IgnoreCollisions ignore = IgnoreCollisions.getInstance();
         Class<Entity> aClass = (Class<Entity>) a.getClass();

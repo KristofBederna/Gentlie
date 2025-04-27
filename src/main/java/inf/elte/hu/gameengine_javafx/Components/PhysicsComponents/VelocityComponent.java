@@ -47,10 +47,4 @@ public class VelocityComponent extends Component {
     public void stopMovement() {
         velocity = new Vector(0, 0);
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
-
 }

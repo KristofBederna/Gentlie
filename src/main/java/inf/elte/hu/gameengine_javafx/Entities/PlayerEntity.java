@@ -1,7 +1,7 @@
 package inf.elte.hu.gameengine_javafx.Entities;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
-import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
+import inf.elte.hu.gameengine_javafx.Components.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.DragComponent;
@@ -15,8 +15,8 @@ import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ZIndexCompon
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
-import inf.elte.hu.gameengine_javafx.Misc.AnimationFrame;
-import inf.elte.hu.gameengine_javafx.Misc.AnimationStateMachine;
+import inf.elte.hu.gameengine_javafx.Misc.Animation.AnimationFrame;
+import inf.elte.hu.gameengine_javafx.Misc.Animation.AnimationStateMachine;
 import inf.elte.hu.gameengine_javafx.Misc.Direction;
 import inf.elte.hu.gameengine_javafx.Misc.Time;
 

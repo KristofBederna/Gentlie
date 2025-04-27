@@ -30,9 +30,4 @@ public class TimeComponent extends Component {
     public void setLastOccurrence(long lastOccurrence) {
         this.lastOccurrence = lastOccurrence;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

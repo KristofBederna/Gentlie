@@ -16,9 +16,4 @@ public class ZIndexComponent extends Component {
     public void setZ_index(int z_index) {
         this.z_index = z_index;
     }
-
-    @Override
-    public String getStatus() {
-        return this.getClass().getSimpleName() + ": (" + z_index + ")";
-    }
 }

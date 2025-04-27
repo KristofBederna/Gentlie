@@ -21,9 +21,4 @@ public class ImageViewComponent extends UIComponent<StackPane> {
 
         this.uiElement = imagePane;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

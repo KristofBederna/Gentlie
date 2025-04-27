@@ -1,7 +1,7 @@
-package inf.elte.hu.gameengine_javafx.Systems.ResourceSystems;
+package inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.MapLoaderSystems;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
-import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
+import inf.elte.hu.gameengine_javafx.Components.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.MapMeshComponent;
@@ -82,7 +82,7 @@ public class InfiniteWorldLoaderSystem extends GameSystem {
         unloadFarChunks(worldData, playerChunkX, playerChunkY);
     }
 
-    private Set<Tuple<Double, Double>> addedTileCoordinates = new HashSet<>();
+    private final Set<Tuple<Double, Double>> addedTileCoordinates = new HashSet<>();
 
     /**
      * Adds tiles to the world mesh, ensuring that tiles are not added multiple times.

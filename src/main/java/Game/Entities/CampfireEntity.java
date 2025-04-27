@@ -1,7 +1,7 @@
 package Game.Entities;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
-import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
+import inf.elte.hu.gameengine_javafx.Components.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
 import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.AnimationComponent;
@@ -11,7 +11,11 @@ import inf.elte.hu.gameengine_javafx.Components.RenderingComponents.ZIndexCompon
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Rectangle;
-import inf.elte.hu.gameengine_javafx.Misc.*;
+import inf.elte.hu.gameengine_javafx.Misc.Animation.AnimationFrame;
+import inf.elte.hu.gameengine_javafx.Misc.Animation.AnimationStateMachine;
+import inf.elte.hu.gameengine_javafx.Misc.Sound.SoundEffect;
+import inf.elte.hu.gameengine_javafx.Misc.Sound.SoundEffectStore;
+import inf.elte.hu.gameengine_javafx.Misc.Time;
 
 import java.util.List;
 

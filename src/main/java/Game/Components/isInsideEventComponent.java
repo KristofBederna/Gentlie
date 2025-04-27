@@ -19,9 +19,4 @@ public class isInsideEventComponent extends Component {
     public Entity getEntityInside() {
         return entity;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

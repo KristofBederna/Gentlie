@@ -8,9 +8,9 @@ public class TextFieldComponent extends UIComponent<TextField> {
         super(x, y, width, height);
         this.uiElement = new TextField();
         this.uiElement.setText(text);
-        uiElement.setLayoutX(this.x);
-        uiElement.setLayoutY(this.y);
-        uiElement.setPrefSize(this.width, this.height);
+        uiElement.setLayoutX(x);
+        uiElement.setLayoutY(y);
+        uiElement.setPrefSize(width, height);
     }
 
     public String getText() {
@@ -19,10 +19,5 @@ public class TextFieldComponent extends UIComponent<TextField> {
 
     public void setText(String text) {
         uiElement.setText(text);
-    }
-
-    @Override
-    public String getStatus() {
-        return "";
     }
 }

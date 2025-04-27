@@ -1,6 +1,5 @@
 package inf.elte.hu.gameengine_javafx.Maths.Geometry;
 
-
 import inf.elte.hu.gameengine_javafx.Entities.CameraEntity;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.DisplayConfig;
 import javafx.scene.canvas.GraphicsContext;
@@ -9,12 +8,23 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a regular polygon (N-sided shape).
+ * Provides functionality for rendering, rotating, and moving the shape.
+ */
 public class NSidedShape extends Shape {
     private Point center;
-    private double radius;
-    private int segments;
+    private final double radius;
+    private final int segments;
     private double rotation = 0;
 
+    /**
+     * Constructs an NSidedShape with a given center, radius, and number of segments.
+     *
+     * @param center   the center point of the shape
+     * @param radius   the distance from center to each vertex
+     * @param segments the number of sides/vertices
+     */
     public NSidedShape(Point center, double radius, int segments) {
         this.center = center;
         this.radius = radius;
@@ -23,6 +33,11 @@ public class NSidedShape extends Shape {
         generateApproximation();
     }
 
+    /**
+     * Constructs a copy of another NSidedShape.
+     *
+     * @param hitBox the shape to copy
+     */
     public NSidedShape(NSidedShape hitBox) {
         this.center = hitBox.center;
         this.radius = hitBox.radius;
@@ -31,6 +46,14 @@ public class NSidedShape extends Shape {
         this.points = new ArrayList<>(hitBox.points);
     }
 
+    /**
+     * Constructs an NSidedShape with a given center, side length, number of segments, and initial rotation.
+     *
+     * @param center the center point of the shape
+     * @param sideLength the length of each side
+     * @param segments the number of sides/vertices
+     * @param rotation initial rotation in degrees
+     */
     public NSidedShape(Point center, double sideLength, int segments, int rotation) {
         this.center = center;
         this.radius = sideLength / 2;
@@ -41,10 +64,11 @@ public class NSidedShape extends Shape {
         rotate(rotation);
     }
 
-
+    /**
+     * Generates the points approximating the N-sided shape based on the current parameters.
+     */
     private void generateApproximation() {
         points.clear();
-
         for (int i = 0; i < this.segments; i++) {
             createPoint(i);
         }
@@ -52,6 +76,11 @@ public class NSidedShape extends Shape {
         rotate(rotation);
     }
 
+    /**
+     * Creates a single point at the given segment index.
+     *
+     * @param i the segment index
+     */
     private void createPoint(int i) {
         double angle = 2 * Math.PI * i / this.segments;
         double x = center.getX() + radius * Math.cos(angle);
@@ -59,15 +88,25 @@ public class NSidedShape extends Shape {
         points.add(new Point(x, y));
     }
 
+    /**
+     * Rotates the shape by the specified number of degrees.
+     *
+     * @param degrees the degrees to rotate
+     */
     public void rotate(double degrees) {
         double angle = Math.toRadians(degrees);
-
         for (int i = 0; i < points.size(); i++) {
             rotatePoint(i, angle);
         }
         updateEdges();
     }
 
+    /**
+     * Rotates a single point around the center.
+     *
+     * @param i the index of the point
+     * @param angle the angle in radians
+     */
     private void rotatePoint(int i, double angle) {
         Point p = points.get(i);
 
@@ -80,7 +119,9 @@ public class NSidedShape extends Shape {
         points.set(i, new Point(rotatedX + center.getX(), rotatedY + center.getY()));
     }
 
-
+    /**
+     * Updates the edges of the shape based on the current points.
+     */
     public void updateEdges() {
         this.edges = new ArrayList<>();
         for (int i = 0; i < points.size(); i++) {
@@ -90,21 +131,36 @@ public class NSidedShape extends Shape {
         }
     }
 
-
+    /**
+     * Renders the shape outline with a specified color.
+     *
+     * @param gc the GraphicsContext to draw on
+     * @param color the stroke color
+     */
     public void render(GraphicsContext gc, Color color) {
         gc.setStroke(color);
         gc.setLineWidth(2);
-
         renderShape(gc);
     }
 
+    /**
+     * Renders the shape outline with a specified color and stroke width.
+     *
+     * @param gc the GraphicsContext to draw on
+     * @param color the stroke color
+     * @param strokeWidth the width of the stroke
+     */
     public void render(GraphicsContext gc, Color color, double strokeWidth) {
         gc.setStroke(color);
         gc.setLineWidth(strokeWidth);
-
         renderShape(gc);
     }
 
+    /**
+     * Renders the shape's outline.
+     *
+     * @param gc the GraphicsContext to draw on
+     */
     private void renderShape(GraphicsContext gc) {
         updateEdgesForShape();
 
@@ -125,7 +181,12 @@ public class NSidedShape extends Shape {
         }
     }
 
-
+    /**
+     * Renders the filled shape with a specified color.
+     *
+     * @param gc the GraphicsContext to draw on
+     * @param color the fill color
+     */
     public void renderFill(GraphicsContext gc, Color color) {
         updateEdgesForShape();
 
@@ -141,6 +202,9 @@ public class NSidedShape extends Shape {
         gc.fillPolygon(xPoints, yPoints, points.size());
     }
 
+    /**
+     * Ensures edges are updated before rendering if necessary.
+     */
     private void updateEdgesForShape() {
         if (points.isEmpty()) {
             generateApproximation();
@@ -148,6 +212,14 @@ public class NSidedShape extends Shape {
         }
     }
 
+    /**
+     * Renders the shape with a fill and an outer stroke.
+     *
+     * @param gc the GraphicsContext to draw on
+     * @param fillColor the fill color
+     * @param strokeColor the stroke color
+     * @param outerStrokeWidth the width of the outer stroke
+     */
     public void renderFillWithStroke(GraphicsContext gc, Color fillColor, Color strokeColor, double outerStrokeWidth) {
         updateEdgesForShape();
 
@@ -167,23 +239,35 @@ public class NSidedShape extends Shape {
         gc.strokePolygon(xPoints, yPoints, points.size());
     }
 
-
-
-
+    /**
+     * Moves the shape to a new center point.
+     *
+     * @param newPoint the new center point
+     */
     public void moveTo(Point newPoint) {
         center = newPoint;
         generateApproximation();
         updateEdges();
     }
 
+    /**
+     * Translates the shape by a specified amount along the x and y axes.
+     *
+     * @param x amount to translate along the x-axis
+     * @param y amount to translate along the y-axis
+     */
     public void translate(double x, double y) {
         center.translate(x, y);
         generateApproximation();
         updateEdges();
     }
 
+    /**
+     * Gets the center point of the shape.
+     *
+     * @return the center point
+     */
     public Point getCenter() {
         return center;
     }
 }
-

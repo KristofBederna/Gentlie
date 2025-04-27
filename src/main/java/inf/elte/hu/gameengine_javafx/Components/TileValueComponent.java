@@ -16,9 +16,4 @@ public class TileValueComponent extends Component {
     public void setTileValue(int tileValue) {
         this.tileValue = tileValue;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

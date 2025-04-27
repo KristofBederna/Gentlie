@@ -1,11 +1,11 @@
-package inf.elte.hu.gameengine_javafx.Misc;
+package inf.elte.hu.gameengine_javafx.Misc.Sound;
 
 public class BackgroundMusic {
-    private String path;
-    private String identifier;
-    private float maxVolume;
-    private float minVolume;
-    private boolean allowLooping;
+    private final String path;
+    private final String identifier;
+    private final float maxVolume;
+    private final float minVolume;
+    private final boolean allowLooping;
     private boolean alreadyPlayed;
 
     public BackgroundMusic(String path, String identifier, float maxVolume, float minVolume, boolean allowLooping) {

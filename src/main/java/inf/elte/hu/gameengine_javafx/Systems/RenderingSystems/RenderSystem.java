@@ -1,7 +1,7 @@
 package inf.elte.hu.gameengine_javafx.Systems.RenderingSystems;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
-import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
+import inf.elte.hu.gameengine_javafx.Components.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PathfindingComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
@@ -116,6 +116,9 @@ public class RenderSystem extends GameSystem {
      */
     private void processEntities(List<Entity> sortedEntities, GraphicsContext gc) {
         for (Entity entity : sortedEntities) {
+            if (entity == null) {
+                continue;
+            }
             PositionComponent position = entity.getComponent(PositionComponent.class);
             ImageComponent imgComponent = entity.getComponent(ImageComponent.class);
 
@@ -138,6 +141,9 @@ public class RenderSystem extends GameSystem {
      */
     private void renderParticles(GraphicsContext gc) {
         for (Entity entity : EntityHub.getInstance().getEntitiesWithType(ParticleEntity.class)) {
+            if (entity == null) {
+                continue;
+            }
             ((ParticleEntity) entity).alignShapeWithEntity(entity);
             ((ParticleEntity) entity).render(gc);
         }

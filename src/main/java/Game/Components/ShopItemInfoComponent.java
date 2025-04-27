@@ -3,10 +3,10 @@ package Game.Components;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Component;
 
 public class ShopItemInfoComponent extends Component {
-    private String itemName;
-    private String itemDescription;
+    private final String itemName;
+    private final String itemDescription;
     private double price;
-    private Runnable onBuy;
+    private final Runnable onBuy;
 
     public ShopItemInfoComponent(String itemName, String itemDescription, double price, Runnable onBuy) {
         this.itemName = itemName;
@@ -33,10 +33,5 @@ public class ShopItemInfoComponent extends Component {
 
     public Runnable getOnBuy() {
         return onBuy;
-    }
-
-    @Override
-    public String getStatus() {
-        return "";
     }
 }

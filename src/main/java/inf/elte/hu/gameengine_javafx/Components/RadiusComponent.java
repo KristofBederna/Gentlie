@@ -16,9 +16,4 @@ public class RadiusComponent extends Component {
     public void setRadius(double radius) {
         this.radius = radius;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

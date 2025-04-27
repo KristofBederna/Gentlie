@@ -51,12 +51,22 @@ public class EntityManager<T extends Entity> {
         EntityHub.getInstance().refreshEntitiesList();
     }
 
+    /**
+     * Adds the entity to the component caches of the {@code EntityHub}.
+     *
+     * @param entity The entity to be added to the caches.
+     * @param <T>    Class of the entity.
+     */
     private <T extends Entity> void addIdToComponentCaches(T entity) {
         for (Class<? extends Component> componentClass : entity.getAllComponents().keySet()) {
             EntityHub.getInstance().getComponentCache().computeIfAbsent(componentClass, k -> new HashSet<>()).add(entity.getId());
         }
     }
 
+    /**
+     * Removes the entity with the id from the manager.
+     * @param id The ID of the entity.
+     */
     public void unload(int id) {
         entities.remove(id);
     }

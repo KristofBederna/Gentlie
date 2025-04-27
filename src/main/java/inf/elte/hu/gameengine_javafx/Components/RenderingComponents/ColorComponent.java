@@ -25,11 +25,6 @@ public class ColorComponent extends Component {
         this.color = color;
     }
 
-    @Override
-    public String getStatus() {
-        return "";
-    }
-
     public Color getStroke() {
         return stroke;
     }

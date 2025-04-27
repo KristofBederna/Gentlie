@@ -44,6 +44,12 @@ public class ResourceManager<T> {
         return loadThenGet(key);
     }
 
+    /**
+     * Loads a resource if it hadn't been loaded before, then returns the resource.
+     *
+     * @param key unique identifier of the resource.
+     * @return The loaded resource
+     */
     private T loadThenGet(String key) {
         T resource = loader.apply(key);
 
@@ -56,6 +62,12 @@ public class ResourceManager<T> {
         return resource;
     }
 
+    /**
+     * Returns whether a resource manager is containing a certain key.
+     *
+     * @param key unique identifier of the resource.
+     * @return {@code True} if contains, {@code False} if not.
+     */
     private boolean contains(String key) {
         if (resources.containsKey(key)) {
             lastAccessed.put(key, System.currentTimeMillis());

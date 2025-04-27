@@ -19,9 +19,4 @@ public class MassComponent extends Component {
     public void setMass(double mass) {
         this.mass = mass;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

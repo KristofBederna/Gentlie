@@ -1,4 +1,4 @@
-package inf.elte.hu.gameengine_javafx.Systems.ResourceSystems;
+package inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.MapLoaderSystems;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
@@ -21,8 +21,8 @@ import java.util.Set;
  * It handles the initial map data loading, the chunk-based map division, and dynamically loads and unloads tiles based on the camera's viewport.
  */
 public class WorldLoaderSystem extends GameSystem {
-    private int width = (int) WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldWidth();
-    private int height = (int) WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldHeight();
+    private final int width = (int) WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldWidth();
+    private final int height = (int) WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldHeight();
 
     /**
      * Starts the system, loading the world map data from the file and dividing the map into chunks.

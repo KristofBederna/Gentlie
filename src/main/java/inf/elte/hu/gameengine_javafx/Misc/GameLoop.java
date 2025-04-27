@@ -65,6 +65,11 @@ public abstract class GameLoop extends Thread {
         }
     }
 
+    /**
+     * Tries to sleep the execution thread the right amount of time to match the expected frame rate.
+     *
+     * @param frameStartTime The start time of the frame.
+     */
     private void matchFrameRate(long frameStartTime) {
         if (time.isFPSCapEnabled()) {
             long frameDuration = System.nanoTime() - frameStartTime;
@@ -74,6 +79,10 @@ public abstract class GameLoop extends Thread {
         }
     }
 
+    /**
+     * Determines if the thread needs to sleep and for how long.
+     * @param sleepTime
+     */
     private void determineSleepState(long sleepTime) {
         if (sleepTime > 0) {
             try {

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class AttackBoxComponent extends Component {
     private ComplexShape attackBox;
-    private long startTime;
+    private final long startTime;
     private long duration;
     private boolean hasDamaged = false;
 
@@ -50,10 +50,5 @@ public class AttackBoxComponent extends Component {
 
     public boolean hasDamaged() {
         return hasDamaged;
-    }
-
-    @Override
-    public String getStatus() {
-        return "";
     }
 }

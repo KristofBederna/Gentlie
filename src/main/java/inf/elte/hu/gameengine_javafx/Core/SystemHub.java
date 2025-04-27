@@ -1,8 +1,8 @@
 package inf.elte.hu.gameengine_javafx.Core;
 
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
-import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.BackgroundMusicSystem;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
+import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystems.BackgroundMusicSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +40,9 @@ public class SystemHub {
         return instance;
     }
 
+    /**
+     * Resets the instance of the singleton.
+     */
     public static void resetInstance() {
         instance = new SystemHub();
     }
@@ -59,7 +62,7 @@ public class SystemHub {
     }
 
     /**
-     * Removes a system from the SystemHub.
+     * Removes a system from the {@code SystemHub}.
      *
      * @param systemClass the class type of the system to unload
      * @param <T>         the type of the system
@@ -109,6 +112,9 @@ public class SystemHub {
         }
     }
 
+    /**
+     * Aborts every system that is not kept between scenes.
+     */
     private void abortIfNotKept() {
         SceneManagementSystem sceneManagementSystem = getSystem(SceneManagementSystem.class);
         BackgroundMusicSystem backgroundMusicSystem = getSystem(BackgroundMusicSystem.class);
@@ -118,6 +124,9 @@ public class SystemHub {
         resetSystemPriorities();
     }
 
+    /**
+     * Aborts systems in a reversed order, so that they are shut down in a logical order.
+     */
     private void abortReversed(SceneManagementSystem sceneManagementSystem, BackgroundMusicSystem backgroundMusicSystem) {
         for (GameSystem system : getAllSystemsInPriorityOrder().reversed()) {
             if (system == sceneManagementSystem || system == backgroundMusicSystem) {
@@ -127,12 +136,18 @@ public class SystemHub {
         }
     }
 
+    /**
+     * Resets the {@code systems} map then adds the essential systems back to it.
+     */
     private void resetSystems(BackgroundMusicSystem backgroundMusicSystem, SceneManagementSystem sceneManagementSystem) {
         systems.clear();
         systems.put(998, backgroundMusicSystem);
         systems.put(999, sceneManagementSystem);
     }
 
+    /**
+     * Resets the {@code systemPriorities} map then adds the essential systems back to it.
+     */
     private void resetSystemPriorities() {
         systemPriorities.clear();
         systemPriorities.put(BackgroundMusicSystem.class, 998);

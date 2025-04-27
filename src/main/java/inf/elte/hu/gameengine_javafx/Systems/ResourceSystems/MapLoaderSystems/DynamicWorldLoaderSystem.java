@@ -1,7 +1,7 @@
-package inf.elte.hu.gameengine_javafx.Systems.ResourceSystems;
+package inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.MapLoaderSystems;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
-import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
+import inf.elte.hu.gameengine_javafx.Components.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
 import inf.elte.hu.gameengine_javafx.Components.WorldComponents.MapMeshComponent;
@@ -25,8 +25,8 @@ import java.util.*;
  * based on the player's position in the game world.
  */
 public class DynamicWorldLoaderSystem extends GameSystem {
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
 
     /**
      * Constructor to initialize the system with the specified world dimensions.

@@ -26,9 +26,4 @@ public class DimensionComponent extends Component {
     public void setHeight(double height) {
         this.height = height;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

@@ -15,9 +15,4 @@ public class PlayerComponent extends Component {
         }
         return instance;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

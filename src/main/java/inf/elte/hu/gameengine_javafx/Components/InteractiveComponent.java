@@ -73,33 +73,6 @@ public class InteractiveComponent extends Component {
         return scrollAction;
     }
 
-
-    @Override
-    public String getStatus() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("---").append(this.getClass().getSimpleName()).append("---\n");
-
-        for (Map.Entry<KeyCode, Tuple<Runnable, Runnable>> entry : keyInputMapping.entrySet()) {
-            sb.append("Key: ").append(entry.getKey())
-                    .append(", Action: ").append(entry.getValue().first())
-                    .append(", CounterAction: ").append(entry.getValue().second())
-                    .append("\n");
-        }
-
-        for (Map.Entry<MouseButton, Tuple<Runnable, Runnable>> entry : mouseInputMapping.entrySet()) {
-            sb.append("Mouse Button: ").append(entry.getKey())
-                    .append(", Action: ").append(entry.getValue().first())
-                    .append(", CounterAction: ").append(entry.getValue().second())
-                    .append("\n");
-        }
-
-        if (mouseMoveAction != null) {
-            sb.append("Mouse Move Action: ").append(mouseMoveAction).append("\n");
-        }
-
-        return sb.toString();
-    }
-
     public void clearMappings() {
         keyInputMapping.clear();
         mouseInputMapping.clear();

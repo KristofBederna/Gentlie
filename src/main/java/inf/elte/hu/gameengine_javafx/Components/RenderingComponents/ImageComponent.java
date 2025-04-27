@@ -41,11 +41,6 @@ public class ImageComponent extends Component {
         this.width = width;
     }
 
-    @Override
-    public String getStatus() {
-        return (this.getClass().getSimpleName() + ": Image Path: " + imagePath + ", Width: " + width + ", Height: " + height);
-    }
-
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
         this.height = MapConfig.scaledTileSize;

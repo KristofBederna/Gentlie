@@ -32,6 +32,9 @@ public class ResourceHub {
         return instance;
     }
 
+    /**
+     * Resets the instance of the singleton.
+     */
     public static void resetInstance() {
         instance = null;
     }

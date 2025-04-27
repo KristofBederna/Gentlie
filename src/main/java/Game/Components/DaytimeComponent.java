@@ -17,9 +17,4 @@ public class DaytimeComponent extends Component {
     public void setDaytime(Daytime daytime) {
         this.daytime = daytime;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

@@ -54,6 +54,11 @@ public class ParticleEntity extends Entity {
         }
     }
 
+    /**
+     * Aligns the shape of the particle with its position.
+     *
+     * @param entity The entity to be aligned to.
+     */
     public void alignShapeWithEntity(Entity entity) {
         if (getComponent(ShapeComponent.class) == null) {
             return;
@@ -76,6 +81,11 @@ public class ParticleEntity extends Entity {
         }
     }
 
+    /**
+     * Creates a hard(deep) copy of the entity.
+     * @param entity A ParticleEntity to be copied.
+     * @return The copy of the entity.
+     */
     public static ParticleEntity hardCopySelf(Entity entity) {
         PositionComponent pos = entity.getComponent(PositionComponent.class);
         DimensionComponent dim = entity.getComponent(DimensionComponent.class);

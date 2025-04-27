@@ -8,7 +8,7 @@ import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Misc.Direction;
 
 public class ParticleEmitterEntity extends Entity {
-    private int amount;
+    private final int amount;
     ParticleEntity mock;
 
     public ParticleEmitterEntity(double x, double y, ParticleEntity particleEntity, Direction direction, int amount, long timeBetweenSpawns) {
@@ -31,12 +31,18 @@ public class ParticleEmitterEntity extends Entity {
         addToManager();
     }
 
+    /**
+     * Creates the particles of the emitter.
+     */
     public void createParticles(ParticleEntity particleEntity, int amount, ParentComponent parent) {
         for (int i = 0; i < amount; i++) {
             createCopy(particleEntity, parent);
         }
     }
 
+    /**
+     * Creates and adds the new copies of the mock entity into its own parent component.
+     */
     private void createCopy(ParticleEntity particleEntity, ParentComponent parent) {
         ParticleEntity copy = ParticleEntity.hardCopySelf(particleEntity);
         if (copy == null) {

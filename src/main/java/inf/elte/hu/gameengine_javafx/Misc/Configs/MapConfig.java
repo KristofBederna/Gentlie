@@ -3,6 +3,9 @@ package inf.elte.hu.gameengine_javafx.Misc.Configs;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Config class holding global static variables needed for the map, map generation and tiles.
+ */
 public class MapConfig {
     private static final int tileSize = 100;
     private static double tileScale = 1.0;

@@ -3,8 +3,8 @@ package Game.Components;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Component;
 
 public class AttackTimeOutComponent extends Component {
-    private long duration;
-    private long startTime;
+    private final long duration;
+    private final long startTime;
 
     public AttackTimeOutComponent(long duration) {
         this.duration = duration;
@@ -17,10 +17,5 @@ public class AttackTimeOutComponent extends Component {
 
     public long getStartTime() {
         return startTime;
-    }
-
-    @Override
-    public String getStatus() {
-        return "";
     }
 }

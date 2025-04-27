@@ -16,9 +16,4 @@ public class FilePathComponent extends Component {
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

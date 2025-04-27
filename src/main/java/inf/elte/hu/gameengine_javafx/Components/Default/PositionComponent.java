@@ -82,9 +82,4 @@ public class PositionComponent extends Component {
         }
         this.global.setCoordinates(this.local.getCoordinates());
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

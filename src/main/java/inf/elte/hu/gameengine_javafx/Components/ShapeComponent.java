@@ -5,7 +5,7 @@ import inf.elte.hu.gameengine_javafx.Maths.Geometry.Shape;
 
 public class ShapeComponent<T extends Shape> extends Component {
     private T shape;
-    private Class type;
+    private Class<?> type;
 
     public ShapeComponent(T shape) {
         this.shape = shape;
@@ -20,16 +20,11 @@ public class ShapeComponent<T extends Shape> extends Component {
         this.shape = shape;
     }
 
-    public Class getType() {
+    public Class<?> getType() {
         return type;
     }
 
-    public void setType(Class type) {
+    public void setType(Class<?> type) {
         this.type = type;
-    }
-
-    @Override
-    public String getStatus() {
-        return "";
     }
 }

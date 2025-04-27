@@ -19,9 +19,4 @@ public class FrictionComponent extends Component {
     public void setFriction(double friction) {
         this.friction = friction;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

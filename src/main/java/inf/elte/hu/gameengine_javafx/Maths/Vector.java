@@ -103,10 +103,16 @@ public class Vector {
         }
     }
 
+    /**
+     * @return {@code True} if both dx and dy are 0, {@code False} otherwise.
+     */
     public boolean isZero() {
         return dx == 0 && dy == 0;
     }
 
+    /**
+     * @return The magnitude of the vector.
+     */
     public double magnitude() {
         return Math.sqrt(dx * dx + dy * dy);
     }

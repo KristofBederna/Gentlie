@@ -27,6 +27,11 @@ public class KeyboardInputHandler {
         scene.setOnKeyReleased(this::keyReleased);
     }
 
+    /**
+     * Constructor for test cases.
+     *
+     * @param test
+     */
     private KeyboardInputHandler(boolean test) {
 
     }
@@ -44,6 +49,11 @@ public class KeyboardInputHandler {
         return instance;
     }
 
+    /**
+     * Instance creation for test cases.
+     * @param test
+     * @return
+     */
     public static KeyboardInputHandler getInstance(boolean test) {
         if (instance == null) {
             instance = new KeyboardInputHandler(test);

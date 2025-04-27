@@ -57,9 +57,4 @@ public class TileSetComponent extends Component {
     public TileLoader getTileLoader() {
         return tileLoader;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

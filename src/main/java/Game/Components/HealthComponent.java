@@ -47,9 +47,4 @@ public class HealthComponent extends Component {
     public boolean isAlive() {
         return health > 0;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

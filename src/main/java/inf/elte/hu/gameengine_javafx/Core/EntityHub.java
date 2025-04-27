@@ -127,6 +127,9 @@ public class EntityHub {
             entities.clear();
             for (EntityManager<?> entityManager : entityManagers.values()) {
                 for(Entity entity : entityManager.getEntities().values()) {
+                    if (entity == null) {
+                        continue;
+                    }
                     entities.put(entity.getId(), entity);
                 }
             }
@@ -156,7 +159,7 @@ public class EntityHub {
 
             DimensionComponent dimension = entity.getComponent(DimensionComponent.class);
             if (dimension == null) continue;
-
+            if (cameraEntity == null) continue;
             if (cameraEntity.isPositionInsideViewport(
                     position.getGlobalX(),
                     position.getGlobalY(),
@@ -216,12 +219,20 @@ public class EntityHub {
     }
 
     public void removeEntity(Entity entity) {
+        if (entity == null) return;
         entities.remove(entity.getId());
-        for(Set<Integer> componentIds : componentCache.values()) {
-            if (componentIds.contains(entity.getId())) {
-                componentIds.removeIf(entityId -> entityId == entity.getId());
+
+        for (Set<Integer> componentIds : componentCache.values()) {
+            Iterator<Integer> iterator = componentIds.iterator();
+            while (iterator.hasNext()) {
+                Integer componentId = iterator.next();
+                if (componentId.equals(entity.getId())) {
+                    iterator.remove();
+                }
             }
         }
+
         getEntityManager(entity.getClass()).unload(entity.getId());
     }
+
 }

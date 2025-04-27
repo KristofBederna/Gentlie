@@ -27,4 +27,12 @@ public class GameSaverSystem extends GameSystem {
         }
         lastSaveTime = System.currentTimeMillis();
     }
+
+    public void manualSave() {
+        GameSaver.saveEntityStats();
+        GameSaver.saveShopPrices();
+        if (SystemHub.getInstance().getSystem(SceneManagementSystem.class).getCurrentScene() instanceof DungeonScene) {
+            GameSaver.saveDungeonState();
+        }
+    }
 }

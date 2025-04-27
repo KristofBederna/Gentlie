@@ -81,10 +81,4 @@ public class ParentComponent extends Component {
     public void removeAllChildren() {
         this.children.clear();
     }
-
-    @Override
-    public String getStatus() {
-        return this.getClass().getSimpleName() + " Parent: " + (this.parent != null ? this.parent.getId() : "None")
-                + " Children: " + children.size();
-    }
 }

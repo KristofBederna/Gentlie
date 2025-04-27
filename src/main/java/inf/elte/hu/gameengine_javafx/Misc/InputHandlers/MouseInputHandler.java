@@ -39,6 +39,11 @@ public class MouseInputHandler {
         scene.setOnScroll(this::mouseScrolled);
     }
 
+    /**
+     * Constructor for test cases.
+     *
+     * @param test
+     */
     private MouseInputHandler(boolean test) {
 
     }
@@ -56,6 +61,11 @@ public class MouseInputHandler {
         return instance;
     }
 
+    /**
+     * Instance creation for test cases.
+     * @param test
+     * @return
+     */
     public static MouseInputHandler getInstance(boolean test) {
         if (instance == null) {
             instance = new MouseInputHandler(test);
@@ -97,11 +107,8 @@ public class MouseInputHandler {
      */
     private void mouseMoved(MouseEvent event) {
         CameraEntity camera = CameraEntity.getInstance();
-
-        if (camera == null) {
+        if (camera == null)
             return;
-        }
-
         mouseX = event.getX() + camera.getComponent(PositionComponent.class).getGlobalX();
         mouseY = event.getY() + camera.getComponent(PositionComponent.class).getGlobalY();
     }

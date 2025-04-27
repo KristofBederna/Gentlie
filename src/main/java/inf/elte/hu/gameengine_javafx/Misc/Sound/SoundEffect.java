@@ -1,15 +1,15 @@
-package inf.elte.hu.gameengine_javafx.Misc;
+package inf.elte.hu.gameengine_javafx.Misc.Sound;
 
 import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 
 public class SoundEffect {
-    private Entity owner;
-    private String path;
-    private String identifier;
-    private float maxVolume;
-    private float minVolume;
-    private double maxDistance;
-    private boolean allowLooping;
+    private final Entity owner;
+    private final String path;
+    private final String identifier;
+    private final float maxVolume;
+    private final float minVolume;
+    private final double maxDistance;
+    private final boolean allowLooping;
     private boolean alreadyPlayed;
     private long started;
 

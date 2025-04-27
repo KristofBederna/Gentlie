@@ -5,6 +5,9 @@ import javafx.scene.image.Image;
 
 import java.io.InputStream;
 
+/**
+ * A resource manager for Image resources, the manager loads the image with the file path of the key.
+ */
 public class ImageResourceManager extends ResourceManager<Image> {
     public ImageResourceManager() {
         super(key -> {

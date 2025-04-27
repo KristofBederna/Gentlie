@@ -81,7 +81,12 @@ public class Point {
         gc.strokeOval(x - radius, y - radius, radius * 2, radius * 2);
     }
 
-
+    /**
+     * Compares the coordinates of this point with another, allowing a fixed delta of 10 units.
+     *
+     * @param other the other point
+     * @return true if the points are within 10 units, false otherwise
+     */
     public boolean compareCoordinates(Point other) {
         if (other == null) {
             return false;
@@ -89,6 +94,13 @@ public class Point {
         return Math.abs(this.getX() - other.getX()) < 10 && Math.abs(this.getY() - other.getY()) < 10;
     }
 
+    /**
+     * Compares the coordinates of this point with another, allowing a custom delta.
+     *
+     * @param other the other point
+     * @param delta the maximum allowed difference
+     * @return true if the points are within the specified delta, false otherwise
+     */
     public boolean compareCoordinates(Point other, double delta) {
         if (other == null) {
             return false;

@@ -13,6 +13,7 @@ import inf.elte.hu.gameengine_javafx.Entities.WorldEntity;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
 import inf.elte.hu.gameengine_javafx.Misc.Layers.uiRoot;
+import inf.elte.hu.gameengine_javafx.Misc.Sound.SoundEffectStore;
 import inf.elte.hu.gameengine_javafx.Misc.StartUpClasses.GameLoopStartUp;
 import javafx.scene.input.KeyCode;
 
@@ -85,7 +86,6 @@ public class UtilityFunctions {
         uiRoot.getInstance().unloadAll();
         GameCanvas.getInstance().getGraphicsContext2D().clearRect(0, 0, GameCanvas.getInstance().getWidth(), GameCanvas.getInstance().getHeight());
         SoundEffectStore.resetInstance();
-        BackgroundMusicStore.resetInstance();
         System.gc();
     }
 

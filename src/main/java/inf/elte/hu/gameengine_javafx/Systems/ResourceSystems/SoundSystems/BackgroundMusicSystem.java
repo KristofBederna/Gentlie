@@ -1,10 +1,10 @@
-package inf.elte.hu.gameengine_javafx.Systems.ResourceSystems;
+package inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SoundSystems;
 
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.ResourceHub;
-import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusic;
-import inf.elte.hu.gameengine_javafx.Misc.BackgroundMusicStore;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.ResourceConfig;
+import inf.elte.hu.gameengine_javafx.Misc.Sound.BackgroundMusic;
+import inf.elte.hu.gameengine_javafx.Misc.Sound.BackgroundMusicStore;
 
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;

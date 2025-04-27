@@ -30,11 +30,6 @@ public class CentralMassComponent extends Component {
         this.central = central;
     }
 
-    @Override
-    public String getStatus() {
-        return "";
-    }
-
     public Point getCentral() {
         return central;
     }

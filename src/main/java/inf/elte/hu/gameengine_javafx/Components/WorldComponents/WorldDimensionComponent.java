@@ -28,9 +28,4 @@ public class WorldDimensionComponent extends Component {
     public void setWorldHeight(double worldHeight) {
         this.worldHeight = worldHeight;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

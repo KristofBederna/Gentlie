@@ -3,7 +3,7 @@ package Game.Systems;
 import Game.Components.EventComponent;
 import Game.Components.isInsideEventComponent;
 import Game.Misc.EventHandling.Events.OpenShopEvent;
-import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
+import inf.elte.hu.gameengine_javafx.Components.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.PlayerComponent;
 import inf.elte.hu.gameengine_javafx.Components.ShapeComponent;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;

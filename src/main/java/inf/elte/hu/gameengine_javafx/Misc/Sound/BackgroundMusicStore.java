@@ -1,4 +1,4 @@
-package inf.elte.hu.gameengine_javafx.Misc;
+package inf.elte.hu.gameengine_javafx.Misc.Sound;
 
 
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.List;
 
 public class BackgroundMusicStore {
     private static BackgroundMusicStore instance;
-    private List<BackgroundMusic> backgroundMusics = new ArrayList<>();
+    private final List<BackgroundMusic> backgroundMusics = new ArrayList<>();
 
     public static BackgroundMusicStore getInstance() {
         if (instance == null) instance = new BackgroundMusicStore();

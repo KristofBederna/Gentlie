@@ -8,6 +8,11 @@ import inf.elte.hu.gameengine_javafx.Misc.Layers.GameCanvas;
 import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSystem;
 
 public class ResolutionChangeEventListener implements EventListener<ResolutionChangeEvent> {
+    /**
+     * Sets the Canvas's width and height, updates the relative aspect ratios and refreshes the scene.
+     *
+     * @param event The event instance to be processed.
+     */
     @Override
     public void onEvent(ResolutionChangeEvent event) {
         GameCanvas canvas = GameCanvas.getInstance();

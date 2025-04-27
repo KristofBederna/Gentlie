@@ -7,7 +7,7 @@ import Game.Entities.PolarBearSpawner;
 import Game.Misc.PlayerStats;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.FilePathComponent;
-import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
+import inf.elte.hu.gameengine_javafx.Components.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
 import inf.elte.hu.gameengine_javafx.Components.TileValueComponent;
@@ -39,8 +39,8 @@ import java.util.*;
  * based on the player's position in the game world.
  */
 public class DungeonGeneratorSystem extends GameSystem {
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
 
     /**
      * Constructor to initialize the system with the specified world dimensions.
@@ -371,7 +371,7 @@ public class DungeonGeneratorSystem extends GameSystem {
         for (int row = 0; row < worldHeight; row++) {
             List<Point> meshRow = new ArrayList<>();
             for (int col = 0; col < worldWidth; col++) {
-                TileEntity entity = map.getComponent(WorldDataComponent.class).getMapData().getElementAt(new Point(col * MapConfig.scaledTileSize + (double) MapConfig.scaledTileSize / 2, row * MapConfig.scaledTileSize + (double) MapConfig.scaledTileSize / 2));
+                TileEntity entity = map.getComponent(WorldDataComponent.class).getMapData().getElementAt(new Point(col * MapConfig.scaledTileSize + MapConfig.scaledTileSize / 2, row * MapConfig.scaledTileSize + MapConfig.scaledTileSize / 2));
                 if (entity.getComponent(HitBoxComponent.class) == null) {
                     meshRow.add(entity.getComponent(CentralMassComponent.class).getCentral());
                 } else {

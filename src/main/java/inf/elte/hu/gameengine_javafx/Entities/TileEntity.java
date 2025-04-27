@@ -1,7 +1,7 @@
 package inf.elte.hu.gameengine_javafx.Entities;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
-import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
+import inf.elte.hu.gameengine_javafx.Components.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.FrictionComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.DimensionComponent;
@@ -45,6 +45,11 @@ public class TileEntity extends Entity {
         EntityHub.getInstance().getComponentCache().get(HitBoxComponent.class).add(this.getId());
     }
 
+    /**
+     * Changes the tile's integer value, useful for updating tiles.
+     *
+     * @param value The new value of the tile.
+     */
     public void changeValues(int value) {
         this.getComponent(TileValueComponent.class).setTileValue(value);
         this.getComponent(ImageComponent.class).setImagePath("/assets/tiles/"+ TileLoader.getTilePath(value)+".png");

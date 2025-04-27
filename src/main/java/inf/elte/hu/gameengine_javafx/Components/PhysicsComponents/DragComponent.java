@@ -19,9 +19,4 @@ public class DragComponent extends Component {
     public void setDrag(double drag) {
         this.drag = drag;
     }
-
-    @Override
-    public String getStatus() {
-        return "";
-    }
 }

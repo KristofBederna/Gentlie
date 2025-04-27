@@ -16,9 +16,4 @@ public class StateComponent extends Component {
     public void setCurrentState(String currentState) {
         this.currentState = currentState;
     }
-
-    @Override
-    public String getStatus() {
-        return (this.getClass().getSimpleName() + ": " + currentState);
-    }
 }

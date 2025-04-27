@@ -43,7 +43,13 @@ public class uiRoot extends Pane {
         Platform.runLater(() -> this.getChildren().clear());
     }
 
+    /**
+     * Clears a Node from the UI root.This method is executed asynchronously
+     * on the JavaFX application thread using {@link Platform#runLater(Runnable)}.
+     *
+     * @param element the Node to be removed.
+     */
     public void unload(Node element) {
-        this.getChildren().remove(element);
+        Platform.runLater(() -> this.getChildren().remove(element));
     }
 }

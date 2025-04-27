@@ -1,7 +1,7 @@
 package inf.elte.hu.gameengine_javafx.Systems.PhysicsSystems;
 
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
-import inf.elte.hu.gameengine_javafx.Components.HitBoxComponents.HitBoxComponent;
+import inf.elte.hu.gameengine_javafx.Components.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.AccelerationComponent;
 import inf.elte.hu.gameengine_javafx.Components.PhysicsComponents.VelocityComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
@@ -61,6 +61,9 @@ public class CollisionSystem extends GameSystem {
      */
     private void processEntities(List<Entity> filteredEntities, List<Entity> hitBoxes) {
         for (Entity entity : filteredEntities) {
+            if (entity == null) {
+                continue;
+            }
             processEntity(hitBoxes, entity);
         }
     }

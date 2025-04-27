@@ -76,7 +76,7 @@ public abstract class Entity {
     /**
      * Prints every Component's simple name, held by this Entity, onto the Console.
      */
-    public void showComponents() {
+    public void printComponents() {
         for (Component component : components.values()) {
             System.out.println(component.getClass().getSimpleName());
         }

@@ -21,6 +21,9 @@ import java.util.Objects;
 
 public class MapLoader {
 
+    /**
+     * Loads the map based on the current data within the WorldEntity.
+     */
     public static void loadMap() {
         WorldEntity map = WorldEntity.getInstance();
         if (map == null) return;
@@ -32,6 +35,13 @@ public class MapLoader {
         createChunks(data, dimensions, map);
     }
 
+    /**
+     * Gathers a 3D array of integers from a text file using a BufferReader, either from the Resources or from the file path.
+     *
+     * @param map  The world entity to be loaded.
+     * @param data The 3D array of integer data.
+     * @return The dimensions of the 3D array.
+     */
     private static Tuple<Integer, Integer> readMapData(WorldEntity map, List<List<Integer>> data) {
         String filePath = map.getComponent(FilePathComponent.class).getFilePath();
 
@@ -68,6 +78,12 @@ public class MapLoader {
         dimComp.setWorldHeight(dimensions.second());
     }
 
+    /**
+     * Creates the chunks of the map.
+     * @param data The integer data to load into the chunks.
+     * @param dimensions The dimensions of the map.
+     * @param map The map entity.
+     */
     private static void createChunks(List<List<Integer>> data, Tuple<Integer, Integer> dimensions, WorldEntity map) {
         int width = dimensions.first();
         int height = dimensions.second();
@@ -81,6 +97,15 @@ public class MapLoader {
         }
     }
 
+    /**
+     * Creates a chunk at the specified coordinate.
+     * @param chunkX The chunk's X location on the chunk grid.
+     * @param chunkY The chunk's Y location on the chunk grid.
+     * @param data The integer data to load into the chunks.
+     * @param map The map entity.
+     * @param width The width of the map.
+     * @param height The height of the map.
+     */
     private static void createChunkAt(int chunkX, int chunkY, List<List<Integer>> data, WorldEntity map, int width, int height) {
         Tuple<Integer, Integer> coordinates = new Tuple<>(chunkX, chunkY);
         Chunk chunkTiles = new Chunk();
@@ -109,6 +134,13 @@ public class MapLoader {
         map.getComponent(WorldDataComponent.class).getMapData().getSavedChunks().putIfAbsent(coordinates, chunkTiles);
     }
 
+    /**
+     * Creates a new TileEntity at the specified spot.
+     * @param value The integer value of the tile.
+     * @param x The X position of the tile.
+     * @param y The Y position of the tile.
+     * @return The created tile.
+     */
     private static TileEntity createTileEntity(int value, int x, int y) {
         String name = TileLoader.getTilePath(value);
         if (name == null) {

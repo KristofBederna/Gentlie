@@ -1,5 +1,8 @@
 package inf.elte.hu.gameengine_javafx.Misc.Configs;
 
+/**
+ * Config class holding global static variables needed for physics and mathematical calculations.
+ */
 public class PhysicsConfig {
     public static double EPSILON = 1e-9;
 

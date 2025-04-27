@@ -1,4 +1,6 @@
-package inf.elte.hu.gameengine_javafx.Misc;
+package inf.elte.hu.gameengine_javafx.Misc.Animation;
+
+import inf.elte.hu.gameengine_javafx.Misc.Time;
 
 import java.util.List;
 
@@ -17,16 +19,27 @@ public class AnimationController {
         this.elapsedTime = 0;
     }
 
+    /**
+     * Runs checks if enough time had passed for a frame to be switched.
+     *
+     * @return The image needed for the next frame.
+     */
     public String getNextFrame() {
         updateElapsedTime();
         advanceFrameIfNeeded();
         return getCurrentFrameImage();
     }
 
+    /**
+     * Updates the elapsed time by adding deltaTime to itself.
+     */
     private void updateElapsedTime() {
         elapsedTime += Time.getInstance().getDeltaTime();
     }
 
+    /**
+     * If enough time passed the frame gets advanced.
+     */
     private void advanceFrameIfNeeded() {
         double frameDuration = getCurrentFrameDuration();
         if (elapsedTime >= frameDuration) {
@@ -35,11 +48,17 @@ public class AnimationController {
         }
     }
 
+    /**
+     * @return How many frames the current image needs to be shown.
+     */
     private double getCurrentFrameDuration() {
         int fps = Time.getInstance().getFPS();
         return (double) frames.get(currentFrame).getFrame().second() / fps;
     }
 
+    /**
+     * Swaps the frame out with the next frame in the list. When at the end, jump to the beginning.
+     */
     private void advanceFrame() {
         currentFrame = (currentFrame + 1) % frames.size();
     }
