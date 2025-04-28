@@ -35,5 +35,8 @@ public abstract class GameScene extends Scene {
      */
     public abstract void breakdown();
 
+    /**
+     * Abstract method for calling every system to be started up.
+     */
     protected abstract void systemStartUp();
 }
