@@ -20,16 +20,25 @@ import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
 
+/**
+ * System responsible for handling the user interface updates, including health, gold, enemy count, and cooldowns.
+ */
 public class UserInterfaceSystem extends GameSystem {
     private double lastGold = PlayerStats.gold;
     private double lastHealth = PlayerStats.health;
     private int lastEnemies = 0;
 
+    /**
+     * Starts the UserInterfaceSystem and sets it as active.
+     */
     @Override
     public void start() {
         this.active = true;
     }
 
+    /**
+     * Updates the user interface by handling damage labels, gold labels, health labels, cooldowns, and enemy labels.
+     */
     @Override
     protected void update() {
         var damageLabels = EntityHub.getInstance().getEntitiesWithType(DamageLabel.class);
@@ -53,6 +62,12 @@ public class UserInterfaceSystem extends GameSystem {
         handleStatisticsLabels(goldLabel, healthLabel);
     }
 
+    /**
+     * Handles the updates for statistics labels such as gold and health.
+     *
+     * @param goldLabel   the gold label entity to update
+     * @param healthLabel the health label entity to update
+     */
     private void handleStatisticsLabels(Entity goldLabel, Entity healthLabel) {
         if (goldLabel != null && healthLabel != null) {
             if (PlayerStats.gold != lastGold) {
@@ -70,6 +85,9 @@ public class UserInterfaceSystem extends GameSystem {
         }
     }
 
+    /**
+     * Displays the cooldowns for melee and ranged attacks if the current scene is a DungeonScene.
+     */
     private void showCooldowns() {
         if (SystemHub.getInstance().getSystem(SceneManagementSystem.class).getCurrentScene() instanceof DungeonScene) {
             PlayerEntity player = (PlayerEntity) EntityHub.getInstance().getEntitiesWithType(PlayerEntity.class).getFirst();
@@ -82,6 +100,9 @@ public class UserInterfaceSystem extends GameSystem {
         }
     }
 
+    /**
+     * Handles the update of the enemies label based on the number of enemies present in the game.
+     */
     private void handleEnemiesLabel() {
         if (!EntityHub.getInstance().getEntitiesWithType(EnemyLabel.class).isEmpty()) {
             var enemiesLabel = EntityHub.getInstance().getEntitiesWithType(EnemyLabel.class).getFirst();
@@ -96,6 +117,10 @@ public class UserInterfaceSystem extends GameSystem {
         }
     }
 
+    /**
+     * Handles the removal of labels after a specified time interval.
+     * @param entity the entity whose label should be removed
+     */
     private void handleLabels(Entity entity) {
         long currentTime = System.currentTimeMillis();
         long lastOccurrence = entity.getComponent(TimeComponent.class).getLastOccurrence();
@@ -106,6 +131,10 @@ public class UserInterfaceSystem extends GameSystem {
         }
     }
 
+    /**
+     * Removes the label of the specified entity from the user interface.
+     * @param entity the entity whose label will be removed
+     */
     private void removeLabel(Entity entity) {
         Platform.runLater(() -> {
             Node uiElement = entity.getComponent(TextComponent.class).getNode();

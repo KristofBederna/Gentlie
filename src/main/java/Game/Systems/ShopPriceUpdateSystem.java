@@ -6,9 +6,15 @@ import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 
 import java.util.Random;
 
+/**
+ * System that updates shop prices over time based on certain conditions.
+ */
 public class ShopPriceUpdateSystem extends GameSystem {
     private final Random rand = new Random();
 
+    /**
+     * Starts the price update cycle if enough time has passed.
+     */
     @Override
     public void start() {
         this.active = true;
@@ -27,6 +33,9 @@ public class ShopPriceUpdateSystem extends GameSystem {
 
     }
 
+    /**
+     * Runs a price update cycle that adjusts the prices based on certain conditions.
+     */
     private void runPriceUpdateCycle() {
         int[] prices = {
                 ShopItemPrices.Health,
@@ -70,6 +79,11 @@ public class ShopPriceUpdateSystem extends GameSystem {
         updatePrices(prices);
     }
 
+    /**
+     * Updates the static shop prices with the newly calculated prices.
+     *
+     * @param prices the array containing updated prices
+     */
     private void updatePrices(int[] prices) {
         ShopItemPrices.Health = prices[0];
         ShopItemPrices.MeleeDamage = prices[1];
@@ -80,6 +94,13 @@ public class ShopPriceUpdateSystem extends GameSystem {
         ShopItemPrices.RangedResistance = prices[6];
     }
 
+    /**
+     * Determines a new price based on whether the price has spiked, is within range, or is adjusted randomly.
+     * @param isSpiked boolean array that indicates if the price has spiked
+     * @param i the index of the price being updated
+     * @param avg the average price of non-spiked items
+     * @param prices the array of current item prices
+     */
     private void determineNewPrice(boolean[] isSpiked, int i, double avg, int[] prices) {
         int newPrice;
         if (isSpiked[i]) {
