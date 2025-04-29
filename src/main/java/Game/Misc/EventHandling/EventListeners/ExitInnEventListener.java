@@ -10,6 +10,11 @@ import inf.elte.hu.gameengine_javafx.Systems.ResourceSystems.SceneManagementSyst
 import javafx.scene.layout.BorderPane;
 
 public class ExitInnEventListener implements EventListener<ExitInnEvent> {
+    /**
+     * Listens for a player position, if the position is inside the area, switches the scene.
+     *
+     * @param event The event instance to be processed.
+     */
     @Override
     public void onEvent(ExitInnEvent event) {
         SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeIslandScene(new BorderPane(), 1920, 1080, new Point(3 * MapConfig.scaledTileSize - MapConfig.scaledTileSize * 0.25 - 1, 2 * MapConfig.scaledTileSize + MapConfig.scaledTileSize * 0.25 - 1)));

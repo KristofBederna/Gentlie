@@ -19,6 +19,11 @@ import javafx.scene.layout.BorderPane;
 import java.io.File;
 
 public class ExitDungeonEventListener implements EventListener<ExitDungeonEvent> {
+    /**
+     * Listens for a pressed E key, if E is pressed, switches the scene, but before switching saves the dungeon state, if there are no enemies remaining the setup for a new map is made.
+     *
+     * @param event The event instance to be processed.
+     */
     @Override
     public void onEvent(ExitDungeonEvent event) {
         ((EnterEnemyIslandLabel) EntityHub.getInstance().getEntitiesWithType(EnterEnemyIslandLabel.class).getFirst()).addToUI();
@@ -32,6 +37,9 @@ public class ExitDungeonEventListener implements EventListener<ExitDungeonEvent>
         }
     }
 
+    /**
+     * Deletes the old map's file, updates the difficulty sliders.
+     */
     private void newMapSetup() {
         DungeonGenerationConfig.enemySpawnFactorReset = Math.min(-0.45, DungeonGenerationConfig.enemySpawnFactorReset += 0.02);
         DungeonGenerationConfig.chestSpawnFactorReset = Math.min(-0.45, DungeonGenerationConfig.chestSpawnFactorReset += 0.02);
@@ -43,6 +51,10 @@ public class ExitDungeonEventListener implements EventListener<ExitDungeonEvent>
             entities.delete();
     }
 
+    /**
+     * If the entity exits the event's tile, the label is removed.
+     * @param event The event instance to be processed.
+     */
     @Override
     public void onExit(ExitDungeonEvent event) {
         ((LabelEntity) EntityHub.getInstance().getEntitiesWithType(EnterEnemyIslandLabel.class).getFirst()).removeFromUI();

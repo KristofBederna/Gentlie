@@ -15,6 +15,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 
 public class GoHomeEventListener implements EventListener<GoHomeEvent> {
+    /**
+     * Listens for a pressed E key, if E is pressed, switches the scene.
+     *
+     * @param event The event instance to be processed.
+     */
     @Override
     public void onEvent(GoHomeEvent event) {
         ((GoHomeLabel) EntityHub.getInstance().getEntitiesWithType(GoHomeLabel.class).getFirst()).addToUI();
@@ -22,6 +27,10 @@ public class GoHomeEventListener implements EventListener<GoHomeEvent> {
             SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeIslandScene(new BorderPane(), 1920, 1080, new Point(13 * MapConfig.scaledTileSize - MapConfig.scaledTileSize * 0.25 - 1, 2 * MapConfig.scaledTileSize + MapConfig.scaledTileSize * 0.25 - 1)));
     }
 
+    /**
+     * If the entity exits the event's tile, the label is removed.
+     * @param event The event instance to be processed.
+     */
     @Override
     public void onExit(GoHomeEvent event) {
         ((LabelEntity)EntityHub.getInstance().getEntitiesWithType(GoHomeLabel.class).getFirst()).removeFromUI();

@@ -16,9 +16,18 @@ import javafx.scene.layout.BorderPane;
 
 import java.io.*;
 
+/**
+ * Utility class responsible for saving and loading various game-related data,
+ * including player and enemy stats, shop prices, dungeon entities, and time data.
+ */
 public class GameSaver {
+
+    /**
+     * Saves the current stats of the statistics to a file.
+     * This includes health, damage, resistance values, player position and spawning rates.
+     */
     public static void saveEntityStats() {
-        File file = new File(PlayerStats.currentSave + "/entityStats.txt");
+        File file = new File(PlayerStats.currentSave + "/statistics.txt");
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -27,7 +36,7 @@ public class GameSaver {
             }
         }
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(PlayerStats.currentSave + "/entityStats.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("PolarBears\n");
             writer.write(String.valueOf(EnemyStats.health));
             writer.newLine();
@@ -79,8 +88,12 @@ public class GameSaver {
         }
     }
 
+    /**
+     * Loads player and enemy stats from a previously saved file and restores the game state.
+     * Also triggers scene change based on saved player position and scene name.
+     */
     public static void loadEntityStats() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(PlayerStats.currentSave + "/entityStats.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(PlayerStats.currentSave + "/statistics.txt"))) {
             reader.readLine();
             EnemyStats.health = Double.parseDouble(reader.readLine());
             EnemyStats.meleeDamage = Double.parseDouble(reader.readLine());
@@ -124,6 +137,9 @@ public class GameSaver {
         }
     }
 
+    /**
+     * Saves the current prices of shop items to a file.
+     */
     public static void saveShopPrices() {
         File file = new File(PlayerStats.currentSave + "/shopPrices.txt");
         if (!file.exists()) {
@@ -134,7 +150,7 @@ public class GameSaver {
             }
         }
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(PlayerStats.currentSave + "/shopPrices.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(String.valueOf(ShopItemPrices.Health));
             writer.newLine();
             writer.write(String.valueOf(ShopItemPrices.MeleeDamage));
@@ -153,6 +169,9 @@ public class GameSaver {
         }
     }
 
+    /**
+     * Loads shop item prices from a saved file.
+     */
     public static void loadShopPrices() {
         try (BufferedReader reader = new BufferedReader(new FileReader(PlayerStats.currentSave + "/shopPrices.txt"))) {
             ShopItemPrices.Health = Integer.parseInt(reader.readLine());
@@ -167,6 +186,9 @@ public class GameSaver {
         }
     }
 
+    /**
+     * Saves the current positions of polar bears and chests in the dungeon to a file.
+     */
     public static void saveDungeonState() {
         var PolarBears = EntityHub.getInstance().getEntitiesWithType(PolarBearEntity.class);
         var Chests = EntityHub.getInstance().getEntitiesWithType(ChestEntity.class);
@@ -179,24 +201,17 @@ public class GameSaver {
             }
         }
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(PlayerStats.currentSave + "/dungeonEntities.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("PolarBears\n");
             for (Entity polarBear : PolarBears) {
                 PositionComponent pos = polarBear.getComponent(PositionComponent.class);
-                double x = pos.getGlobalX();
-                double y = pos.getGlobalY();
-
-                writer.write(x + " " + y);
-
+                writer.write(pos.getGlobalX() + " " + pos.getGlobalY());
                 writer.newLine();
             }
             writer.write("Chests\n");
             for (int i = 0; i < Chests.size(); i++) {
-                Entity chest = Chests.get(i);
-                CentralMassComponent pos = chest.getComponent(CentralMassComponent.class);
-                double x = pos.getCentralX();
-                double y = pos.getCentralY();
-                writer.write(x + " " + y);
+                CentralMassComponent pos = Chests.get(i).getComponent(CentralMassComponent.class);
+                writer.write(pos.getCentralX() + " " + pos.getCentralY());
                 if (i < Chests.size() - 1) {
                     writer.newLine();
                 }
@@ -206,6 +221,9 @@ public class GameSaver {
         }
     }
 
+    /**
+     * Saves the current in-game time and related data to a file.
+     */
     public static void saveTime() {
         File file = new File(PlayerStats.currentSave + "/time.txt");
         if (!file.exists()) {
@@ -215,7 +233,7 @@ public class GameSaver {
                 throw new RuntimeException(e);
             }
         }
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(PlayerStats.currentSave + "/time.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(DayTimeData.lastDayTime.toString());
             writer.newLine();
             writer.write(String.valueOf((int) DayTimeData.lastUpdate));
@@ -228,6 +246,9 @@ public class GameSaver {
         }
     }
 
+    /**
+     * Loads time-related data and adjusts internal time calculations based on real elapsed time.
+     */
     public static void loadTime() {
         try (BufferedReader reader = new BufferedReader(new FileReader(PlayerStats.currentSave + "/time.txt"))) {
             DayTimeData.lastDayTime = Daytime.valueOf(reader.readLine());

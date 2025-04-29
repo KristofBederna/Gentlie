@@ -14,6 +14,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 
 public class EnterInnListener implements EventListener<EnterInnEvent> {
+    /**
+     * Listens for a pressed E key, if E is pressed, switches the scene.
+     *
+     * @param event The event instance to be processed.
+     */
     @Override
     public void onEvent(EnterInnEvent event) {
         ((EnterInnLabel) EntityHub.getInstance().getEntitiesWithType(EnterInnLabel.class).getFirst()).addToUI();
@@ -21,6 +26,10 @@ public class EnterInnListener implements EventListener<EnterInnEvent> {
             SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new InnScene(new BorderPane(), 1920, 1080, new Point(5 * 150 + 150 / 2, 8 * 150)));
     }
 
+    /**
+     * If the entity exits the event's tile, the label is removed.
+     * @param event The event instance to be processed.
+     */
     @Override
     public void onExit(EnterInnEvent event) {
         ((LabelEntity)EntityHub.getInstance().getEntitiesWithType(EnterInnLabel.class).getFirst()).removeFromUI();

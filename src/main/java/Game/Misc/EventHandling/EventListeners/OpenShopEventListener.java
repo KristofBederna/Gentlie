@@ -27,6 +27,11 @@ import java.util.Random;
 public class OpenShopEventListener implements EventListener<OpenShopEvent> {
     private Pane shopWrapper = null;
 
+    /**
+     * Listens for a player position, if the position is inside the area, shows the shop panel.
+     *
+     * @param event The event instance to be processed.
+     */
     @Override
     public void onEvent(OpenShopEvent event) {
         if (shopWrapper == null) {
@@ -35,6 +40,10 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
         }
     }
 
+    /**
+     * If the entity exits the event's tile, the shop panel is removed.
+     * @param event The event instance to be processed.
+     */
     @Override
     public void onExit(OpenShopEvent event) {
         Platform.runLater(() -> {
@@ -43,6 +52,9 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
         });
     }
 
+    /**
+     * Creates the shop items to be displayed on the panel.
+     */
     private void addShopItems() {
         Random rand = new Random();
         EntityHub.getInstance().removeEntityManager(ShopItemEntity.class);
@@ -121,6 +133,9 @@ public class OpenShopEventListener implements EventListener<OpenShopEvent> {
         });
     }
 
+    /**
+     * Creates the panel that shows the items.
+     */
     private void createBuy() {
         VBox shopVBox = new VBox(20);
         shopVBox.setPadding(new Insets(20));

@@ -14,6 +14,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 
 public class EnterDungeonEventListener implements EventListener<EnterDungeonEvent> {
+    /**
+     * Listens for a pressed E key, if E is pressed, switches the scene.
+     *
+     * @param event The event instance to be processed.
+     */
     @Override
     public void onEvent(EnterDungeonEvent event) {
         ((DungeonLabel)EntityHub.getInstance().getEntitiesWithType(DungeonLabel.class).getFirst()).addToUI();
@@ -21,6 +26,10 @@ public class EnterDungeonEventListener implements EventListener<EnterDungeonEven
             SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new DungeonScene(new BorderPane(), 1920, 1080, new Point(200 + 200 / 2, 200 + 200 / 2)));
     }
 
+    /**
+     * If the entity exits the event's tile, the label is removed.
+     * @param event The event instance to be processed.
+     */
     @Override
     public void onExit(EnterDungeonEvent event) {
         ((LabelEntity)EntityHub.getInstance().getEntitiesWithType(DungeonLabel.class).getFirst()).removeFromUI();

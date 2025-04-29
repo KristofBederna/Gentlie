@@ -13,6 +13,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 
 public class EnterHomeEventListener implements EventListener<EnterHomeEvent> {
+    /**
+     * Listens for a pressed E key, if E is pressed, switches the scene.
+     *
+     * @param event The event instance to be processed.
+     */
     @Override
     public void onEvent(EnterHomeEvent event) {
         ((EnterHomeLabel)EntityHub.getInstance().getEntitiesWithType(EnterHomeLabel.class).getFirst()).addToUI();
@@ -20,6 +25,10 @@ public class EnterHomeEventListener implements EventListener<EnterHomeEvent> {
             SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), 1920, 1080, event.getSpawn()));
     }
 
+    /**
+     * If the entity exits the event's tile, the label is removed.
+     * @param event The event instance to be processed.
+     */
     @Override
     public void onExit(EnterHomeEvent event) {
         ((LabelEntity)EntityHub.getInstance().getEntitiesWithType(EnterHomeLabel.class).getFirst()).removeFromUI();
