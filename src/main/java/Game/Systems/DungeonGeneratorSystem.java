@@ -34,20 +34,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * The DynamicWorldLoaderSystem is responsible for dynamically loading and unloading chunks of the world
- * based on the player's position in the game world.
- */
 public class DungeonGeneratorSystem extends GameSystem {
     private final int width;
     private final int height;
 
-    /**
-     * Constructor to initialize the system with the specified world dimensions.
-     *
-     * @param width  The width of the world in chunks.
-     * @param height The height of the world in chunks.
-     */
     public DungeonGeneratorSystem(int width, int height) {
         this.width = width;
         this.height = height;
@@ -56,9 +46,6 @@ public class DungeonGeneratorSystem extends GameSystem {
         WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).setWorldHeight(height * MapConfig.chunkHeight);
     }
 
-    /**
-     * Starts the world loading process by loading the full world initially.
-     */
     @Override
     public void start() {
         this.active = true;
@@ -74,16 +61,13 @@ public class DungeonGeneratorSystem extends GameSystem {
                 try (BufferedReader br = new BufferedReader(new FileReader(dungeonEntityPositions.getPath()))) {
                     String line;
 
-                    // First read
                     br.readLine();
                     while ((line = br.readLine()) != null && !Objects.equals(line, "Chests")) {
                         String[] split = line.split(" ");
                         new PolarBearSpawner(Double.parseDouble(split[0]) + MapConfig.scaledTileSize * 0.75 / 2, Double.parseDouble(split[1]) + MapConfig.scaledTileSize * 0.75 / 2);
                     }
 
-                    // Skip the "Chests" line
                     if (line != null && Objects.equals(line, "Chests")) {
-                        // Now process chests
                         for (String chestLine = br.readLine(); chestLine != null; chestLine = br.readLine()) {
                             String[] split = chestLine.split(" ");
                             new ChestEntity(Double.parseDouble(split[0]), Double.parseDouble(split[1]), MapConfig.scaledTileSize * 0.7, MapConfig.scaledTileSize * 0.7);
@@ -251,7 +235,6 @@ public class DungeonGeneratorSystem extends GameSystem {
     public void runWalkerAlgorithm() {
         Random random = new Random();
 
-        // Start with one walker at a random position
         int startX = random.nextInt(MapConfig.chunkWidth * width);
         int startY = random.nextInt(MapConfig.chunkHeight * height);
         Walker walker = new Walker(startX, startY, WorldEntity.getInstance(), new ArrayList<>());
@@ -259,10 +242,6 @@ public class DungeonGeneratorSystem extends GameSystem {
         walker.walk();
     }
 
-
-    /**
-     * Updates the system by checking the player's position and loading/unloading chunks accordingly.
-     */
     @Override
     public void update() {
         CameraEntity camera = CameraEntity.getInstance();
@@ -281,9 +260,6 @@ public class DungeonGeneratorSystem extends GameSystem {
         unloadFarChunks(playerChunkX, playerChunkY);
     }
 
-    /**
-     * Loads the entire world initially, chunk by chunk.
-     */
     private void loadFullWorld() {
         for (int cy = 0; cy < width; cy++) {
             for (int cx = 0; cx < height; cx++) {
@@ -292,12 +268,6 @@ public class DungeonGeneratorSystem extends GameSystem {
         }
     }
 
-    /**
-     * Loads the chunks surrounding the player based on the player's chunk coordinates.
-     *
-     * @param playerChunkX The player's current chunk X coordinate.
-     * @param playerChunkY The player's current chunk Y coordinate.
-     */
     private void loadSurroundingChunks(int playerChunkX, int playerChunkY) {
         Set<Tuple<Integer, Integer>> loadedChunks = WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getWorld().keySet();
         for (int dx = -MapConfig.loadDistance; dx <= MapConfig.loadDistance; dx++) {
@@ -314,12 +284,6 @@ public class DungeonGeneratorSystem extends GameSystem {
         }
     }
 
-    /**
-     * Unloads chunks that are too far away from the player and stores them in the saved chunks map.
-     *
-     * @param playerChunkX The player's current chunk X coordinate.
-     * @param playerChunkY The player's current chunk Y coordinate.
-     */
     private void unloadFarChunks(int playerChunkX, int playerChunkY) {
         Iterator<Map.Entry<Tuple<Integer, Integer>, Chunk>> iterator = WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getWorld().entrySet().iterator();
         while (iterator.hasNext()) {
@@ -333,12 +297,6 @@ public class DungeonGeneratorSystem extends GameSystem {
         }
     }
 
-    /**
-     * Loads a chunk from saved data or generates it if it doesn't exist yet.
-     *
-     * @param chunkX The X coordinate of the chunk to load or generate.
-     * @param chunkY The Y coordinate of the chunk to load or generate.
-     */
     private void loadOrGenerateChunk(int chunkX, int chunkY) {
         Tuple<Integer, Integer> chunkKey = new Tuple<>(chunkX, chunkY);
 
@@ -352,9 +310,6 @@ public class DungeonGeneratorSystem extends GameSystem {
         addBoundaryWalls(WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getWorld().get(chunkKey), chunkX, chunkY);
     }
 
-    /**
-     * Adds a mesh for the world, creating a list of points for all tiles in the world.
-     */
     private void addWorldMesh() {
         WorldEntity map = WorldEntity.getInstance();
         if (map == null) return;
@@ -364,10 +319,9 @@ public class DungeonGeneratorSystem extends GameSystem {
             mapMesh.getMapCoordinates().clear();
         }
 
-        int worldWidth = width * MapConfig.chunkWidth;  // Total world width in tiles
-        int worldHeight = height * MapConfig.chunkHeight;  // Total world height in tiles
+        int worldWidth = width * MapConfig.chunkWidth;
+        int worldHeight = height * MapConfig.chunkHeight;
 
-        // Iterate over each row of the world
         for (int row = 0; row < worldHeight; row++) {
             List<Point> meshRow = new ArrayList<>();
             for (int col = 0; col < worldWidth; col++) {
@@ -379,19 +333,10 @@ public class DungeonGeneratorSystem extends GameSystem {
                 }
             }
 
-            // Add the full row to the map mesh
             mapMesh.addRow(meshRow);
         }
     }
 
-
-    /**
-     * Adds boundary walls to a chunk, determining wall types based on chunk and tile positions.
-     *
-     * @param chunk  The chunk to which boundary walls should be added.
-     * @param chunkX The X coordinate of the chunk.
-     * @param chunkY The Y coordinate of the chunk.
-     */
     private void addBoundaryWalls(Chunk chunk, int chunkX, int chunkY) {
         for (int x = 0; x < MapConfig.chunkWidth; x++) {
             for (int y = 0; y < MapConfig.chunkHeight; y++) {

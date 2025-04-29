@@ -38,21 +38,17 @@ public class PolarBearBufferSystem extends GameSystem {
             double health = EnemyStats.health;
 
             while (health > 0) {
-                // Calculate DPS
                 health -= PlayerStats.meleeDamage * (1 - EnemyStats.meleeResistance) * (1000.0 / PlayerStats.meleeCooldown);
                 health -= PlayerStats.rangedDamage * (1 - EnemyStats.rangedResistance) * (1000.0 / PlayerStats.rangedCooldown);
                 periods++;
             }
 
             if (periods > 2) {
-                break; // Enemy survived 2 periods, done
+                break;
             }
 
-            // If not enough periods survived, buff the health and retry
             EnemyStats.health += (PlayerStats.meleeDamage * (1 - EnemyStats.meleeResistance) +
                     PlayerStats.rangedDamage * (1 - EnemyStats.rangedResistance)) / 2;
-
-            System.out.println("Buffed Health: " + EnemyStats.health);
         }
 
 

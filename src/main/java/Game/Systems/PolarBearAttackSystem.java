@@ -135,7 +135,7 @@ public class PolarBearAttackSystem extends GameSystem {
                             new DamageLabel(String.format("%.1f", EnemyStats.meleeDamage * (1 - PlayerStats.meleeResistance)), pos.getCentralX(), pos.getCentralY(), 100, 0);
 
                             bear.removeComponentsByType(AttackBoxComponent.class);
-                            bear.addComponent(new AttackTimeOutComponent(4000));
+                            bear.addComponent(new AttackTimeOutComponent(3000));
                         }
                     }
                 }

@@ -32,27 +32,12 @@ import javafx.scene.paint.Color;
 
 import java.util.List;
 
-/**
- * The RenderSystem is responsible for rendering entities, pathfinding routes, map mesh, and other visual elements
- * in the game world. It manages the rendering process, sorting entities by their Z-index, and updating the visual representation
- * of the world, including entities, paths, and lighting.
- * It also ensures that only the entities within the camera's viewport are rendered.
- */
 public class CustomRenderSystem extends GameSystem {
-
-    /**
-     * Starts the RenderSystem by activating it.
-     */
     @Override
     public void start() {
         this.active = true;
     }
 
-    /**
-     * Updates the graphics context and processes the rendering of entities, map mesh, pathfinding routes,
-     * particles, and other visual elements in the game world.
-     * Ensures that entities within the camera's viewport are rendered in order based on their Z-index.
-     */
     @Override
     public void update() {
         if (CameraEntity.getInstance() == null) {
@@ -123,13 +108,6 @@ public class CustomRenderSystem extends GameSystem {
         }
     }
 
-    /**
-     * Processes and renders the entities inside the camera's viewport, sorted by their Z-index.
-     *
-     * @param sortedEntities List of entities that need to be rendered, sorted by Z-index.
-     * @param cameraEntity   The camera entity used to adjust the rendering coordinates.
-     * @param gc             The graphics context used to render the entities.
-     */
     private static void processEntities(List<Entity> sortedEntities, CameraEntity cameraEntity, GraphicsContext gc) {
         for (Entity entity : sortedEntities) {
             PositionComponent position = entity.getComponent(PositionComponent.class);
@@ -147,11 +125,6 @@ public class CustomRenderSystem extends GameSystem {
         }
     }
 
-    /**
-     * Renders particles that are associated with entities in the game world.
-     *
-     * @param gc The graphics context used to render the particles.
-     */
     private static void renderParticles(GraphicsContext gc) {
         for (Entity entity : EntityHub.getInstance().getEntitiesWithType(ParticleEntity.class)) {
             ((ParticleEntity) entity).alignShapeWithEntity(entity);
@@ -159,17 +132,6 @@ public class CustomRenderSystem extends GameSystem {
         }
     }
 
-    /**
-     * Renders a single entity by drawing its image and hitbox on the screen.
-     *
-     * @param entity       The entity to render.
-     * @param renderX      The X position of the entity relative to the camera.
-     * @param renderY      The Y position of the entity relative to the camera.
-     * @param width        The width of the entity.
-     * @param height       The height of the entity.
-     * @param imgComponent The image component containing the entity's image data.
-     * @param gc           The graphics context used to render the entity.
-     */
     private static void renderEntity(Entity entity, double renderX, double renderY, double width, double height, ImageComponent imgComponent, GraphicsContext gc) {
         ResourceManager<Image> imageManager = ResourceHub.getInstance().getResourceManager(Image.class);
         if (imageManager == null) return;
@@ -206,12 +168,6 @@ public class CustomRenderSystem extends GameSystem {
         entity.getComponent(AttackBoxComponent.class).getAttackBox().render(gc, Color.DARKCYAN);
     }
 
-    /**
-     * Renders the hitbox of an entity if it exists.
-     *
-     * @param entity The entity whose hitbox is to be rendered.
-     * @param gc     The graphics context used to render the hitbox.
-     */
     private static void renderHitBox(Entity entity, GraphicsContext gc) {
         HitBoxComponent hitBox = entity.getComponent(HitBoxComponent.class);
         if (hitBox != null) {
@@ -219,12 +175,6 @@ public class CustomRenderSystem extends GameSystem {
         }
     }
 
-    /**
-     * Sorts a list of entities by their Z-index in ascending order.
-     *
-     * @param visibleEntities List of entities to be sorted.
-     * @return A sorted list of entities based on their Z-index.
-     */
     private static List<Entity> sortByZIndex(List<Entity> visibleEntities) {
         return visibleEntities.stream()
                 .filter(entity -> entity.getComponent(ZIndexComponent.class) != null)
@@ -236,9 +186,6 @@ public class CustomRenderSystem extends GameSystem {
                 .toList();
     }
 
-    /**
-     * Renders the tile currently occupied by the player.
-     */
     private static void renderCurrentlyOccupiedTile() {
         if (EntityHub.getInstance().getEntitiesWithType(PlayerEntity.class).isEmpty()) {
             return;
@@ -248,20 +195,12 @@ public class CustomRenderSystem extends GameSystem {
         rectangle.renderFill(GameCanvas.getInstance().getGraphicsContext2D(), Color.ORANGE);
     }
 
-    /**
-     * Requests focus for the game canvas if it is not already focused.
-     */
     private static void setFocused() {
         if (!GameCanvas.getInstance().isFocused()) {
             GameCanvas.getInstance().requestFocus();
         }
     }
 
-    /**
-     * Renders the pathfinding route for entities that have a PathfindingComponent.
-     *
-     * @param gc The graphics context used to render the pathfinding route.
-     */
     private static void renderPathFindingRoute(GraphicsContext gc) {
         for (Entity entity : EntityHub.getInstance().getEntitiesWithComponent(PathfindingComponent.class)) {
             if (entity == null) continue;
@@ -288,11 +227,6 @@ public class CustomRenderSystem extends GameSystem {
         }
     }
 
-    /**
-     * Renders the map mesh, which is a grid of points representing the world map.
-     *
-     * @param gc The graphics context used to render the map mesh.
-     */
     private static void renderMapMesh(GraphicsContext gc) {
         MapMeshComponent meshComponent = WorldEntity.getInstance().getComponent(MapMeshComponent.class);
         if (meshComponent != null) {

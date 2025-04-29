@@ -28,7 +28,6 @@ public class ShopPriceUpdateSystem extends GameSystem {
     }
 
     private void runPriceUpdateCycle() {
-        System.out.println("updating prices");
         int[] prices = {
                 ShopItemPrices.Health,
                 ShopItemPrices.MeleeDamage,
