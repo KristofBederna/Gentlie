@@ -24,6 +24,16 @@ public class DayNightCycleSystem extends GameSystem {
         int periodsPassed = (int) (difference / time.getTimeBetweenOccurrences());
         long timePassedThisPeriod = difference % time.getTimeBetweenOccurrences();
 
+        handleDayTimeSwitching(periodsPassed, daytime);
+        updateDayTimeData(time, timePassedThisPeriod, periodsPassed);
+    }
+
+    private void updateDayTimeData(TimeComponent time, long timePassedThisPeriod, int periodsPassed) {
+        time.setLastOccurrence(System.currentTimeMillis() - timePassedThisPeriod);
+        DayTimeData.periodsPassed += periodsPassed;
+    }
+
+    private void handleDayTimeSwitching(int periodsPassed, DaytimeComponent daytime) {
         if (periodsPassed % 2 == 1) {
             if (DayTimeData.lastDayTime == Daytime.DAY) {
                 daytime.setDaytime(Daytime.NIGHT);
@@ -33,9 +43,6 @@ public class DayNightCycleSystem extends GameSystem {
         } else {
             daytime.setDaytime(DayTimeData.lastDayTime);
         }
-
-        time.setLastOccurrence(System.currentTimeMillis() - timePassedThisPeriod);
-        DayTimeData.periodsPassed += periodsPassed;
     }
 
 
@@ -46,20 +53,29 @@ public class DayNightCycleSystem extends GameSystem {
         DaytimeComponent daytime = skyBox.getComponent(DaytimeComponent.class);
         TimeComponent time = skyBox.getComponent(TimeComponent.class);
 
+        updateDayTimeComponent(time, daytime);
+
+        DayTimeData.lastUpdate = System.currentTimeMillis();
+    }
+
+    private void updateDayTimeComponent(TimeComponent time, DaytimeComponent daytime) {
         if (System.currentTimeMillis() >= time.getLastOccurrence() + time.getTimeBetweenOccurrences()) {
-            switch (daytime.getDaytime()) {
-                case DAY:
-                    daytime.setDaytime(Daytime.NIGHT);
-                    DayTimeData.lastDayTime = Daytime.NIGHT;
-                    break;
-                case NIGHT:
-                    daytime.setDaytime(Daytime.DAY);
-                    DayTimeData.lastDayTime = Daytime.DAY;
-                    break;
-            }
+            setNewDayTime(daytime);
             DayTimeData.periodsPassed++;
             time.setLastOccurrence();
         }
-        DayTimeData.lastUpdate = System.currentTimeMillis();
+    }
+
+    private void setNewDayTime(DaytimeComponent daytime) {
+        switch (daytime.getDaytime()) {
+            case DAY:
+                daytime.setDaytime(Daytime.NIGHT);
+                DayTimeData.lastDayTime = Daytime.NIGHT;
+                break;
+            case NIGHT:
+                daytime.setDaytime(Daytime.DAY);
+                DayTimeData.lastDayTime = Daytime.DAY;
+                break;
+        }
     }
 }

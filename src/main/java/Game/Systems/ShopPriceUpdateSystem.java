@@ -53,7 +53,7 @@ public class ShopPriceUpdateSystem extends GameSystem {
         int count = 0;
 
         for (int i = 0; i < prices.length; i++) {
-            if (prices[i] < baselines[i] * 5) {
+            if (prices[i] < baselines[i] * 8) {
                 total += prices[i];
                 count++;
             } else {
@@ -64,21 +64,13 @@ public class ShopPriceUpdateSystem extends GameSystem {
         double avg = (count > 0) ? total / count : 100;
 
         for (int i = 0; i < prices.length; i++) {
-            int newPrice;
-            if (isSpiked[i]) {
-                newPrice = (int) (avg * rand.nextDouble(0.95, 1.05));
-            } else if (rand.nextDouble() <= 0.05) {
-                newPrice = (int) (prices[i] * rand.nextDouble(8.5, 10.0));
-            } else if (rand.nextBoolean()) {
-                newPrice = (int) (prices[i] * rand.nextDouble(0.8, 1.2));
-                newPrice = Math.max(50, newPrice);
-            } else {
-                newPrice = prices[i];
-            }
-
-            prices[i] = newPrice;
+            determineNewPrice(isSpiked, i, avg, prices);
         }
 
+        updatePrices(prices);
+    }
+
+    private void updatePrices(int[] prices) {
         ShopItemPrices.Health = prices[0];
         ShopItemPrices.MeleeDamage = prices[1];
         ShopItemPrices.RangedDamage = prices[2];
@@ -86,5 +78,21 @@ public class ShopPriceUpdateSystem extends GameSystem {
         ShopItemPrices.RangedSpeed = prices[4];
         ShopItemPrices.MeleeResistance = prices[5];
         ShopItemPrices.RangedResistance = prices[6];
+    }
+
+    private void determineNewPrice(boolean[] isSpiked, int i, double avg, int[] prices) {
+        int newPrice;
+        if (isSpiked[i]) {
+            newPrice = (int) (avg * rand.nextDouble(0.95, 1.05));
+        } else if (rand.nextDouble() <= 0.05) {
+            newPrice = (int) (prices[i] * rand.nextDouble(8.5, 10.0));
+        } else if (rand.nextBoolean()) {
+            newPrice = (int) (prices[i] * rand.nextDouble(0.8, 1.2));
+            newPrice = Math.max(50, newPrice);
+        } else {
+            newPrice = prices[i];
+        }
+
+        prices[i] = newPrice;
     }
 }

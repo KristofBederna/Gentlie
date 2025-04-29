@@ -2,6 +2,7 @@ package Game.Misc.EventHandling.EventListeners;
 
 import Game.Entities.Labels.EnterEnemyIslandLabel;
 import Game.Entities.PolarBearEntity;
+import Game.Misc.DungeonGenerationConfig;
 import Game.Misc.EventHandling.Events.ExitDungeonEvent;
 import Game.Misc.GameSaver;
 import Game.Misc.PlayerStats;
@@ -25,15 +26,21 @@ public class ExitDungeonEventListener implements EventListener<ExitDungeonEvent>
             GameSaver.saveDungeonState();
             var PolarBears = EntityHub.getInstance().getEntitiesWithType(PolarBearEntity.class);
             if (PolarBears.isEmpty()) {
-                File map = new File(PlayerStats.currentSave + "/lastMapGenerated.txt");
-                if (map.exists())
-                    map.delete();
-                File entities = new File(PlayerStats.currentSave + "/dungeonEntities.txt");
-                if (entities.exists())
-                    entities.delete();
+                newMapSetup();
             }
             SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new EnemyIslandScene(new BorderPane(), 1920, 1080, event.getSpawn()));
         }
+    }
+
+    private void newMapSetup() {
+        DungeonGenerationConfig.enemySpawnFactorReset = Math.min(-0.45, DungeonGenerationConfig.enemySpawnFactorReset += 0.02);
+        DungeonGenerationConfig.chestSpawnFactorReset = Math.min(-0.45, DungeonGenerationConfig.chestSpawnFactorReset += 0.02);
+        File map = new File(PlayerStats.currentSave + "/lastMapGenerated.txt");
+        if (map.exists())
+            map.delete();
+        File entities = new File(PlayerStats.currentSave + "/dungeonEntities.txt");
+        if (entities.exists())
+            entities.delete();
     }
 
     @Override

@@ -4,6 +4,7 @@ import Game.Entities.ChestEntity;
 import Game.Entities.PathfindingEntity;
 import Game.Entities.PolarBearEntity;
 import Game.Entities.PolarBearSpawner;
+import Game.Misc.DungeonGenerationConfig;
 import Game.Misc.PlayerStats;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.FilePathComponent;
@@ -58,25 +59,7 @@ public class DungeonGeneratorSystem extends GameSystem {
             map.addComponent(new FilePathComponent(lastMap.getPath()));
             File dungeonEntityPositions = new File(saveDir, "dungeonEntities.txt");
             if (dungeonEntityPositions.exists()) {
-                try (BufferedReader br = new BufferedReader(new FileReader(dungeonEntityPositions.getPath()))) {
-                    String line;
-
-                    br.readLine();
-                    while ((line = br.readLine()) != null && !Objects.equals(line, "Chests")) {
-                        String[] split = line.split(" ");
-                        new PolarBearSpawner(Double.parseDouble(split[0]) + MapConfig.scaledTileSize * 0.75 / 2, Double.parseDouble(split[1]) + MapConfig.scaledTileSize * 0.75 / 2);
-                    }
-
-                    if (line != null && Objects.equals(line, "Chests")) {
-                        for (String chestLine = br.readLine(); chestLine != null; chestLine = br.readLine()) {
-                            String[] split = chestLine.split(" ");
-                            new ChestEntity(Double.parseDouble(split[0]), Double.parseDouble(split[1]), MapConfig.scaledTileSize * 0.7, MapConfig.scaledTileSize * 0.7);
-                        }
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
+                loadLastState(dungeonEntityPositions);
             }
             MapLoader.loadMap();
             return;
@@ -91,13 +74,7 @@ public class DungeonGeneratorSystem extends GameSystem {
             addWorldMesh();
             removeIsolated();
             double walkable = 0;
-            for (int i = 0; i < map.getComponent(MapMeshComponent.class).getMapCoordinates().size(); i++) {
-                for (int j = 0; j < map.getComponent(MapMeshComponent.class).getMapCoordinates().size(); j++) {
-                    if (map.getComponent(MapMeshComponent.class).getMapCoordinate(i, j) != null) {
-                        walkable++;
-                    }
-                }
-            }
+            walkable = getWalkability(map, walkable);
             walkablePercent = walkable / (MapConfig.chunkWidth * width * MapConfig.chunkHeight * height);
         }
         while (walkablePercent < 0.63);
@@ -105,6 +82,48 @@ public class DungeonGeneratorSystem extends GameSystem {
             MapSaver.saveMap(map, PlayerStats.currentSave + "/lastMapGenerated.txt");
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private double getWalkability(WorldEntity map, double walkable) {
+        for (int i = 0; i < map.getComponent(MapMeshComponent.class).getMapCoordinates().size(); i++) {
+            for (int j = 0; j < map.getComponent(MapMeshComponent.class).getMapCoordinates().size(); j++) {
+                if (map.getComponent(MapMeshComponent.class).getMapCoordinate(i, j) != null) {
+                    walkable++;
+                }
+            }
+        }
+        return walkable;
+    }
+
+    private void loadLastState(File dungeonEntityPositions) {
+        try (BufferedReader br = new BufferedReader(new FileReader(dungeonEntityPositions.getPath()))) {
+            String line;
+
+            br.readLine();
+            line = loadBears(br);
+
+            if (line != null && Objects.equals(line, "Chests")) {
+                loadChests(br);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String loadBears(BufferedReader br) throws IOException {
+        String line;
+        while ((line = br.readLine()) != null && !Objects.equals(line, "Chests")) {
+            String[] split = line.split(" ");
+            new PolarBearSpawner(Double.parseDouble(split[0]) + MapConfig.scaledTileSize * 0.75 / 2, Double.parseDouble(split[1]) + MapConfig.scaledTileSize * 0.75 / 2);
+        }
+        return line;
+    }
+
+    private void loadChests(BufferedReader br) throws IOException {
+        for (String chestLine = br.readLine(); chestLine != null; chestLine = br.readLine()) {
+            String[] split = chestLine.split(" ");
+            new ChestEntity(Double.parseDouble(split[0]), Double.parseDouble(split[1]), MapConfig.scaledTileSize * 0.7, MapConfig.scaledTileSize * 0.7);
         }
     }
 
@@ -131,13 +150,17 @@ public class DungeonGeneratorSystem extends GameSystem {
             for (Point p : row) {
                 if (p == null) continue;
                 List<Point> path = Pathfinding.selectPath(new PathfindingEntity(EntityHub.getInstance().getEntitiesWithType(PlayerEntity.class).getFirst().getComponent(CentralMassComponent.class).getCentral(), p.getCoordinates()));
-                if (path.isEmpty()) {
-                    row.set(row.indexOf(p), null);
-                    WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().setElementAt(p, 1);
-                }
+                removeUnreachable(row, p, path);
                 luckFactor = placeChests(p, path, random, luckFactor);
                 spawnFactor = placeEnemySpawns(p, path, random, spawnFactor);
             }
+        }
+    }
+
+    private void removeUnreachable(List<Point> row, Point p, List<Point> path) {
+        if (path.isEmpty()) {
+            row.set(row.indexOf(p), null);
+            WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().setElementAt(p, 1);
         }
     }
 
@@ -161,7 +184,7 @@ public class DungeonGeneratorSystem extends GameSystem {
 
                 if (count >= 3) {
                     new PolarBearSpawner(p.getX(), p.getY());
-                    spawnFactor = -1.0;
+                    spawnFactor = DungeonGenerationConfig.enemySpawnFactorReset;
                     return spawnFactor;
                 }
 
@@ -195,7 +218,7 @@ public class DungeonGeneratorSystem extends GameSystem {
 
                 if (count >= 2 && !isOpposingBlocked) {
                     new ChestEntity(p.getX(), p.getY(), MapConfig.scaledTileSize * 0.7, MapConfig.scaledTileSize * 0.7);
-                    luckFactor = -1;
+                    luckFactor = DungeonGenerationConfig.chestSpawnFactorReset;
                     return luckFactor;
                 }
 
@@ -208,28 +231,30 @@ public class DungeonGeneratorSystem extends GameSystem {
     }
 
     private void applyConditioning() {
-        WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getWorld().entrySet().forEach(entry -> {
-            Tuple<Integer, Integer> chunkKey = entry.getKey();
-            Chunk chunk = entry.getValue();
+        WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getWorld().forEach((chunkKey, chunk) -> {
 
             chunk.getChunk().forEach(tiles -> {
                 tiles.forEach(tile -> {
                     PositionComponent pos = tile.getComponent(PositionComponent.class);
                     //Spawn location
-                    if (chunkKey.first() == 0 && chunkKey.second() == 0
-                            && pos.getGlobal().getX() <= 3 * MapConfig.scaledTileSize
-                            && pos.getGlobal().getY() <= 3 * MapConfig.scaledTileSize
-                            && pos.getGlobal().getY() >= MapConfig.scaledTileSize) {
-                        if (pos.getGlobal().getX() < MapConfig.scaledTileSize) {
-                            tile.changeValues(0);
-                            return;
-                        }
-                        tile.changeValues(4);
-                    }
+                    carveOutSpawn(tile, chunkKey, pos);
                 });
             });
             WorldEntity.getInstance().getComponent(WorldDataComponent.class).getMapData().getSavedChunks().put(chunkKey, chunk);
         });
+    }
+
+    private void carveOutSpawn(TileEntity tile, Tuple<Integer, Integer> chunkKey, PositionComponent pos) {
+        if (chunkKey.first() == 0 && chunkKey.second() == 0
+                && pos.getGlobal().getX() <= 3 * MapConfig.scaledTileSize
+                && pos.getGlobal().getY() <= 3 * MapConfig.scaledTileSize
+                && pos.getGlobal().getY() >= MapConfig.scaledTileSize) {
+            if (pos.getGlobal().getX() < MapConfig.scaledTileSize) {
+                tile.changeValues(0);
+                return;
+            }
+            tile.changeValues(4);
+        }
     }
 
     public void runWalkerAlgorithm() {

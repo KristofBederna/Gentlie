@@ -8,7 +8,6 @@ import Game.Entities.PolarBearEntity;
 import Game.Entities.SnowBallEntity;
 import Game.Misc.CauseOfDeath;
 import Game.Misc.EnemyStats;
-import Game.Misc.IgnoreCollisions;
 import Game.Misc.PlayerStats;
 import inf.elte.hu.gameengine_javafx.Components.Default.PositionComponent;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponent;
@@ -24,6 +23,7 @@ import inf.elte.hu.gameengine_javafx.Maths.Geometry.ComplexShape;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Point;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Shape;
 import inf.elte.hu.gameengine_javafx.Misc.Configs.MapConfig;
+import inf.elte.hu.gameengine_javafx.Misc.IgnoreCollisions;
 
 import java.util.ArrayList;
 import java.util.HashSet;

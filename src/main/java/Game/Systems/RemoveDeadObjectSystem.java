@@ -41,73 +41,106 @@ public class RemoveDeadObjectSystem extends GameSystem {
         var entities = EntityHub.getInstance().getEntitiesWithComponent(HealthComponent.class);
         var dead = new ArrayList<Entity>();
         for (var entity : entities) {
-            if (!entity.getComponent(HealthComponent.class).isAlive()) {
-                dead.add(entity);
-            }
-            if (entity instanceof SnowBallEntity || entity instanceof BigSnowBallEntity) {
-                if (Math.abs(entity.getComponent(VelocityComponent.class).getVelocity().getDx()) < 0.5 && Math.abs(entity.getComponent(VelocityComponent.class).getVelocity().getDy()) < 0.5) {
-                    dead.add(entity);
-                }
-            }
+            addToDeadList(entity, dead);
         }
         for (var entity : dead) {
+            //Removes a sound effect that was associated with a now dead entity
             SoundEffectStore.getInstance().getSoundEffects().removeIf(e -> e.getOwner() == entity);
 
-            if (entity instanceof PlayerEntity) {
-                Random rand = new Random();
-                SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second(), new Point(10 * 100 + 100 / 2, 3 * 100)));
-                PlayerStats.gold = (int) (PlayerStats.gold * rand.nextDouble(0.5, 0.75));
-                PlayerStats.health = rand.nextInt(25, 100);
-                continue;
-            }
+            if (handlePlayerEntity(entity)) continue;
             EntityHub.getInstance().removeEntity(entity);
-            if (entity instanceof PolarBearEntity) {
-                Random rand = new Random();
-                int gold = rand.nextInt(10, 25);
-                handleGoldGained(entity, gold);
+            handlePolarBearEntity(entity);
+            handleChestEntity(entity);
+            handleBigSnowBallEntity(entity);
+            handleSnowBallEntity(entity);
+        }
+    }
 
-                switch (entity.getComponent(HealthComponent.class).getCauseOfDeath()) {
-                    case RANGED:
-                        PlayerStats.rangedKills++;
-                        break;
-                    case MELEE:
-                        PlayerStats.meleeKills++;
-                        break;
-                }
+    private void addToDeadList(Entity entity, ArrayList<Entity> dead) {
+        if (!entity.getComponent(HealthComponent.class).isAlive()) {
+            dead.add(entity);
+        }
+        killUnmovingSnowballs(entity, dead);
+    }
+
+    private void killUnmovingSnowballs(Entity entity, ArrayList<Entity> dead) {
+        if (entity instanceof SnowBallEntity || entity instanceof BigSnowBallEntity) {
+            if (Math.abs(entity.getComponent(VelocityComponent.class).getVelocity().getDx()) < 0.5 && Math.abs(entity.getComponent(VelocityComponent.class).getVelocity().getDy()) < 0.5) {
+                dead.add(entity);
             }
-            if (entity instanceof ChestEntity) {
-                Random rand = new Random();
-                int gold = rand.nextInt(25, 50);
-                handleGoldGained(entity, gold);
-                CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
-                new ParticleEmitterEntity(
-                        pos.getCentralX(), pos.getCentralY(),
-                        new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 15, 15,
-                                new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
-                                Color.BROWN, Color.SADDLEBROWN, 75),
-                        Direction.ALL, 10
-                );
-            }
-            if (entity instanceof BigSnowBallEntity) {
-                CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
-                new ParticleEmitterEntity(
-                        pos.getCentralX(), pos.getCentralY(),
-                        new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 15, 15,
-                                new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
-                                Color.SNOW, Color.GREY, 75),
-                        Direction.ALL, 5
-                );
-            }
-            if (entity instanceof SnowBallEntity) {
-                CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
-                new ParticleEmitterEntity(
-                        pos.getCentralX(), pos.getCentralY(),
-                        new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 10, 10,
-                                new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
-                                Color.SNOW, Color.GREY, 50),
-                        Direction.ALL, 3
-                );
-            }
+        }
+    }
+
+    private void handlePolarBearEntity(Entity entity) {
+        if (entity instanceof PolarBearEntity) {
+            Random rand = new Random();
+            int gold = rand.nextInt(10, 25);
+            handleGoldGained(entity, gold);
+            extractCauseOfDeath(entity);
+        }
+    }
+
+    private void extractCauseOfDeath(Entity entity) {
+        switch (entity.getComponent(HealthComponent.class).getCauseOfDeath()) {
+            case RANGED:
+                PlayerStats.rangedKills++;
+                break;
+            case MELEE:
+                PlayerStats.meleeKills++;
+                break;
+        }
+    }
+
+    private boolean handlePlayerEntity(Entity entity) {
+        if (entity instanceof PlayerEntity) {
+            Random rand = new Random();
+            SystemHub.getInstance().getSystem(SceneManagementSystem.class).requestSceneChange(new HomeScene(new BorderPane(), DisplayConfig.resolution.first(), DisplayConfig.resolution.second(), new Point(10 * 100 + 100 / 2, 3 * 100)));
+            PlayerStats.gold = (int) (PlayerStats.gold * rand.nextDouble(0.5, 0.75));
+            PlayerStats.health = rand.nextInt(25, 100);
+            return true;
+        }
+        return false;
+    }
+
+    private void handleChestEntity(Entity entity) {
+        if (entity instanceof ChestEntity) {
+            Random rand = new Random();
+            int gold = rand.nextInt(25, 50);
+            handleGoldGained(entity, gold);
+            CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
+            new ParticleEmitterEntity(
+                    pos.getCentralX(), pos.getCentralY(),
+                    new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 15, 15,
+                            new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
+                            Color.BROWN, Color.SADDLEBROWN, 75),
+                    Direction.ALL, 10
+            );
+        }
+    }
+
+    private void handleBigSnowBallEntity(Entity entity) {
+        if (entity instanceof BigSnowBallEntity) {
+            CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
+            new ParticleEmitterEntity(
+                    pos.getCentralX(), pos.getCentralY(),
+                    new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 15, 15,
+                            new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
+                            Color.SNOW, Color.GREY, 75),
+                    Direction.ALL, 5
+            );
+        }
+    }
+
+    private void handleSnowBallEntity(Entity entity) {
+        if (entity instanceof SnowBallEntity) {
+            CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
+            new ParticleEmitterEntity(
+                    pos.getCentralX(), pos.getCentralY(),
+                    new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 10, 10,
+                            new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
+                            Color.SNOW, Color.GREY, 50),
+                    Direction.ALL, 3
+            );
         }
     }
 
