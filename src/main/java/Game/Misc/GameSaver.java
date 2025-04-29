@@ -18,7 +18,7 @@ import java.io.*;
 
 public class GameSaver {
     public static void saveEntityStats() {
-        File file = new File(PlayerStats.currentSave + "/statistics.txt");
+        File file = new File(PlayerStats.currentSave + "/entityStats.txt");
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -27,7 +27,7 @@ public class GameSaver {
             }
         }
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(PlayerStats.currentSave + "/statistics.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(PlayerStats.currentSave + "/entityStats.txt"))) {
             writer.write("PolarBears\n");
             writer.write(String.valueOf(EnemyStats.health));
             writer.newLine();
@@ -80,7 +80,7 @@ public class GameSaver {
     }
 
     public static void loadEntityStats() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(PlayerStats.currentSave + "/statistics.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(PlayerStats.currentSave + "/entityStats.txt"))) {
             reader.readLine();
             EnemyStats.health = Double.parseDouble(reader.readLine());
             EnemyStats.meleeDamage = Double.parseDouble(reader.readLine());
@@ -119,9 +119,6 @@ public class GameSaver {
             PlayerStats.totalRangedKills = Integer.parseInt(reader.readLine());
             PlayerStats.meleeCooldown = Long.parseLong(reader.readLine());
             PlayerStats.rangedCooldown = Long.parseLong(reader.readLine());
-            reader.readLine();
-            DungeonGenerationConfig.enemySpawnFactorReset = Double.parseDouble(reader.readLine());
-            DungeonGenerationConfig.chestSpawnFactorReset = Double.parseDouble(reader.readLine());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
