@@ -38,14 +38,14 @@ public class CustomCameraSystem extends GameSystem {
         updateCameraPosition(playerPos, playerImg, cameraEntity);
     }
 
-    private static void updateWorldBoundary() {
+    private void updateWorldBoundary() {
         if (CameraEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldHeight() == 0 || CameraEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldWidth() == 0) {
             CameraEntity.getInstance().getComponent(WorldDimensionComponent.class).setWorldHeight(WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldHeight() * MapConfig.scaledTileSize);
             CameraEntity.getInstance().getComponent(WorldDimensionComponent.class).setWorldWidth(WorldEntity.getInstance().getComponent(WorldDimensionComponent.class).getWorldWidth() * MapConfig.scaledTileSize);
         }
     }
 
-    private static void updateCameraPosition(PositionComponent playerPos, ImageComponent playerImg, CameraEntity cameraEntity) {
+    private void updateCameraPosition(PositionComponent playerPos, ImageComponent playerImg, CameraEntity cameraEntity) {
         double playerCenterX = playerPos.getGlobalX() + playerImg.getWidth() / 2;
         double playerCenterY = playerPos.getGlobalY() + playerImg.getHeight() / 2;
 

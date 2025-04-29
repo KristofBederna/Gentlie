@@ -34,26 +34,36 @@ public class PolarBearBufferSystem extends GameSystem {
         PlayerStats.totalRangedKills += PlayerStats.rangedKills;
 
         while (true) {
-            int periods = 0;
-            double health = EnemyStats.health;
-
-            while (health > 0) {
-                health -= PlayerStats.meleeDamage * (1 - EnemyStats.meleeResistance) * (1000.0 / PlayerStats.meleeCooldown);
-                health -= PlayerStats.rangedDamage * (1 - EnemyStats.rangedResistance) * (1000.0 / PlayerStats.rangedCooldown);
-                periods++;
-            }
-
-            if (periods > 2) {
-                break;
-            }
-
-            EnemyStats.health += (PlayerStats.meleeDamage * (1 - EnemyStats.meleeResistance) +
-                    PlayerStats.rangedDamage * (1 - EnemyStats.rangedResistance)) / 2;
+            if (determineBearsHealth()) break;
         }
 
 
         PlayerStats.rangedKills = 0;
         PlayerStats.meleeKills = 0;
+    }
+
+    private boolean determineBearsHealth() {
+        int periods = 0;
+        double health = EnemyStats.health;
+
+        periods = simulateDPS(health, periods);
+
+        if (periods > 2) {
+            return true;
+        }
+
+        EnemyStats.health += (PlayerStats.meleeDamage * (1 - EnemyStats.meleeResistance) +
+                PlayerStats.rangedDamage * (1 - EnemyStats.rangedResistance)) / 2;
+        return false;
+    }
+
+    private int simulateDPS(double health, int periods) {
+        while (health > 0) {
+            health -= PlayerStats.meleeDamage * (1 - EnemyStats.meleeResistance) * (1000.0 / PlayerStats.meleeCooldown);
+            health -= PlayerStats.rangedDamage * (1 - EnemyStats.rangedResistance) * (1000.0 / PlayerStats.rangedCooldown);
+            periods++;
+        }
+        return periods;
     }
 
 

@@ -7,6 +7,7 @@ import Game.Misc.Scenes.DungeonScene;
 import inf.elte.hu.gameengine_javafx.Components.InteractiveComponent;
 import inf.elte.hu.gameengine_javafx.Components.TimeComponent;
 import inf.elte.hu.gameengine_javafx.Components.UIComponents.TextComponent;
+import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Core.SystemHub;
@@ -34,56 +35,25 @@ public class UserInterfaceSystem extends GameSystem {
         var damageLabels = EntityHub.getInstance().getEntitiesWithType(DamageLabel.class);
         var goldGainedLabels = EntityHub.getInstance().getEntitiesWithType(GoldGainedLabel.class);
         for (var entity : damageLabels) {
-            long currentTime = System.currentTimeMillis();
-            long lastOccurrence = entity.getComponent(TimeComponent.class).getLastOccurrence();
-            long timeBetweenOccurrences = entity.getComponent(TimeComponent.class).getTimeBetweenOccurrences();
-
-            if (currentTime - lastOccurrence > timeBetweenOccurrences) {
-                Platform.runLater(() -> {
-                    Node uiElement = entity.getComponent(TextComponent.class).getNode();
-                    if (uiElement != null) {
-                        uiRoot.getInstance().getChildren().remove(uiElement);
-                    }
-                });
+            if (entity == null) {
+                continue;
             }
+            handleLabels(entity);
         }
         for (var entity : goldGainedLabels) {
-            long currentTime = System.currentTimeMillis();
-            long lastOccurrence = entity.getComponent(TimeComponent.class).getLastOccurrence();
-            long timeBetweenOccurrences = entity.getComponent(TimeComponent.class).getTimeBetweenOccurrences();
-
-            if (currentTime - lastOccurrence > timeBetweenOccurrences) {
-                Platform.runLater(() -> {
-                    Node uiElement = entity.getComponent(TextComponent.class).getNode();
-                    if (uiElement != null) {
-                        uiRoot.getInstance().getChildren().remove(uiElement);
-                    }
-                });
+            if (entity == null) {
+                continue;
             }
+            handleLabels(entity);
         }
-
         var goldLabel = EntityHub.getInstance().getEntitiesWithType(GoldLabel.class).getFirst();
         var healthLabel = EntityHub.getInstance().getEntitiesWithType(HealthLabel.class).getFirst();
-        if (!EntityHub.getInstance().getEntitiesWithType(EnemyLabel.class).isEmpty()) {
-            var enemiesLabel = EntityHub.getInstance().getEntitiesWithType(EnemyLabel.class).getFirst();
-            var enemies = EntityHub.getInstance().getEntitiesWithType(PolarBearEntity.class);
-            int size = enemies.size();
-            if (size != lastEnemies) {
-                Platform.runLater(() -> {
-                    ((TextEntity) enemiesLabel).getTextNode().setText(String.valueOf(size));
-                    lastEnemies = size;
-                });
-            }
-        }
-        if (SystemHub.getInstance().getSystem(SceneManagementSystem.class).getCurrentScene() instanceof DungeonScene) {
-            PlayerEntity player = (PlayerEntity) EntityHub.getInstance().getEntitiesWithType(PlayerEntity.class).getFirst();
-            var meleeAttackLabel = EntityHub.getInstance().getEntitiesWithType(MeleeAttackLabel.class).getFirst();
-            var rangedAttackLabel = EntityHub.getInstance().getEntitiesWithType(RangedAttackLabel.class).getFirst();
-            Platform.runLater(() -> {
-                ((TextEntity) meleeAttackLabel).getTextNode().setText(String.valueOf(Math.max(0, player.getComponent(InteractiveComponent.class).getLastTimeCalled(new Tuple<>(null, MouseButton.PRIMARY)).second() == 20 ? 0 : PlayerStats.meleeCooldown + (player.getComponent(InteractiveComponent.class).getLastTimeCalled(new Tuple<>(null, MouseButton.PRIMARY)).first() - System.currentTimeMillis()))));
-                ((TextEntity) rangedAttackLabel).getTextNode().setText(String.valueOf(Math.max(0, player.getComponent(InteractiveComponent.class).getLastTimeCalled(new Tuple<>(null, MouseButton.SECONDARY)).second() == 20 ? 0 : PlayerStats.rangedCooldown + (player.getComponent(InteractiveComponent.class).getLastTimeCalled(new Tuple<>(null, MouseButton.SECONDARY)).first() - System.currentTimeMillis()))));
-            });
-        }
+        handleEnemiesLabel();
+        showCooldowns();
+        handleStatisticsLabels(goldLabel, healthLabel);
+    }
+
+    private void handleStatisticsLabels(Entity goldLabel, Entity healthLabel) {
         if (goldLabel != null && healthLabel != null) {
             if (PlayerStats.gold != lastGold) {
                 Platform.runLater(() -> {
@@ -98,5 +68,50 @@ public class UserInterfaceSystem extends GameSystem {
                 });
             }
         }
+    }
+
+    private void showCooldowns() {
+        if (SystemHub.getInstance().getSystem(SceneManagementSystem.class).getCurrentScene() instanceof DungeonScene) {
+            PlayerEntity player = (PlayerEntity) EntityHub.getInstance().getEntitiesWithType(PlayerEntity.class).getFirst();
+            var meleeAttackLabel = EntityHub.getInstance().getEntitiesWithType(MeleeAttackLabel.class).getFirst();
+            var rangedAttackLabel = EntityHub.getInstance().getEntitiesWithType(RangedAttackLabel.class).getFirst();
+            Platform.runLater(() -> {
+                ((TextEntity) meleeAttackLabel).getTextNode().setText(String.valueOf(Math.max(0, player.getComponent(InteractiveComponent.class).getLastTimeCalled(new Tuple<>(null, MouseButton.PRIMARY)).second() == 20 ? 0 : PlayerStats.meleeCooldown + (player.getComponent(InteractiveComponent.class).getLastTimeCalled(new Tuple<>(null, MouseButton.PRIMARY)).first() - System.currentTimeMillis()))));
+                ((TextEntity) rangedAttackLabel).getTextNode().setText(String.valueOf(Math.max(0, player.getComponent(InteractiveComponent.class).getLastTimeCalled(new Tuple<>(null, MouseButton.SECONDARY)).second() == 20 ? 0 : PlayerStats.rangedCooldown + (player.getComponent(InteractiveComponent.class).getLastTimeCalled(new Tuple<>(null, MouseButton.SECONDARY)).first() - System.currentTimeMillis()))));
+            });
+        }
+    }
+
+    private void handleEnemiesLabel() {
+        if (!EntityHub.getInstance().getEntitiesWithType(EnemyLabel.class).isEmpty()) {
+            var enemiesLabel = EntityHub.getInstance().getEntitiesWithType(EnemyLabel.class).getFirst();
+            var enemies = EntityHub.getInstance().getEntitiesWithType(PolarBearEntity.class);
+            int size = enemies.size();
+            if (size != lastEnemies) {
+                Platform.runLater(() -> {
+                    ((TextEntity) enemiesLabel).getTextNode().setText(String.valueOf(size));
+                    lastEnemies = size;
+                });
+            }
+        }
+    }
+
+    private void handleLabels(Entity entity) {
+        long currentTime = System.currentTimeMillis();
+        long lastOccurrence = entity.getComponent(TimeComponent.class).getLastOccurrence();
+        long timeBetweenOccurrences = entity.getComponent(TimeComponent.class).getTimeBetweenOccurrences();
+
+        if (currentTime - lastOccurrence > timeBetweenOccurrences) {
+            removeLabel(entity);
+        }
+    }
+
+    private void removeLabel(Entity entity) {
+        Platform.runLater(() -> {
+            Node uiElement = entity.getComponent(TextComponent.class).getNode();
+            if (uiElement != null) {
+                uiRoot.getInstance().getChildren().remove(uiElement);
+            }
+        });
     }
 }

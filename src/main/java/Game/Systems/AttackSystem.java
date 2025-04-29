@@ -9,10 +9,13 @@ import Game.Misc.EnemyStats;
 import Game.Misc.PlayerStats;
 import inf.elte.hu.gameengine_javafx.Components.HitBoxComponent;
 import inf.elte.hu.gameengine_javafx.Components.PropertyComponents.CentralMassComponent;
+import inf.elte.hu.gameengine_javafx.Core.Architecture.Entity;
 import inf.elte.hu.gameengine_javafx.Core.Architecture.GameSystem;
 import inf.elte.hu.gameengine_javafx.Core.EntityHub;
 import inf.elte.hu.gameengine_javafx.Entities.PlayerEntity;
 import inf.elte.hu.gameengine_javafx.Maths.Geometry.Shape;
+
+import java.util.List;
 
 public class AttackSystem extends GameSystem {
     @Override
@@ -29,30 +32,51 @@ public class AttackSystem extends GameSystem {
             return e instanceof SnowBallEntity || e.getComponent(HitBoxComponent.class) == null;
         });
         for (var entity : attackers) {
-            for (var otherEntity : entities) {
-                if (entity.equals(otherEntity)) {
-                    continue;
-                }
-                AttackBoxComponent attackBox = entity.getComponent(AttackBoxComponent.class);
-                HitBoxComponent hitBox = otherEntity.getComponent(HitBoxComponent.class);
+            processEntity(entity, entities);
+        }
+    }
 
-                if (Shape.intersect(attackBox.getAttackBox(), hitBox.getHitBox())) {
-                    if (entity instanceof PlayerEntity) {
-                        double effectiveDamage = PlayerStats.meleeDamage * (1 - EnemyStats.meleeResistance);
-                        effectiveDamage = Math.max(effectiveDamage, 0);
-
-                        otherEntity.getComponent(HealthComponent.class).decreaseHealth(effectiveDamage, CauseOfDeath.MELEE);
-                        entity.getComponent(AttackBoxComponent.class).setHasDamaged(true);
-
-                        CentralMassComponent pos = otherEntity.getComponent(CentralMassComponent.class);
-                        new DamageLabel(String.format("%.1f", effectiveDamage), pos.getCentralX(), pos.getCentralY(), 100, 0);
-                    }
-                }
-
+    private void processEntity(Entity entity, List<Entity> entities) {
+        if (entity == null) {
+            return;
+        }
+        for (var otherEntity : entities) {
+            if (otherEntity == null) {
+                continue;
             }
-            if (System.currentTimeMillis() > entity.getComponent(AttackBoxComponent.class).getStartTime() + entity.getComponent(AttackBoxComponent.class).getDuration() || entity.getComponent(AttackBoxComponent.class).hasDamaged()) {
-                entity.removeComponentsByType(AttackBoxComponent.class);
+            if (entity.equals(otherEntity)) {
+                continue;
             }
+            lookForCollision(entity, otherEntity);
+        }
+        removeAttackBoxIfExpiredOrUsed(entity);
+    }
+
+    private void removeAttackBoxIfExpiredOrUsed(Entity entity) {
+        if (System.currentTimeMillis() > entity.getComponent(AttackBoxComponent.class).getStartTime() + entity.getComponent(AttackBoxComponent.class).getDuration() || entity.getComponent(AttackBoxComponent.class).hasDamaged()) {
+            entity.removeComponentsByType(AttackBoxComponent.class);
+        }
+    }
+
+    private void lookForCollision(Entity entity, Entity otherEntity) {
+        AttackBoxComponent attackBox = entity.getComponent(AttackBoxComponent.class);
+        HitBoxComponent hitBox = otherEntity.getComponent(HitBoxComponent.class);
+
+        if (Shape.intersect(attackBox.getAttackBox(), hitBox.getHitBox())) {
+            handleCollision(entity, otherEntity);
+        }
+    }
+
+    private void handleCollision(Entity entity, Entity otherEntity) {
+        if (entity instanceof PlayerEntity) {
+            double effectiveDamage = PlayerStats.meleeDamage * (1 - EnemyStats.meleeResistance);
+            effectiveDamage = Math.max(effectiveDamage, 0);
+
+            otherEntity.getComponent(HealthComponent.class).decreaseHealth(effectiveDamage, CauseOfDeath.MELEE);
+            entity.getComponent(AttackBoxComponent.class).setHasDamaged(true);
+
+            CentralMassComponent pos = otherEntity.getComponent(CentralMassComponent.class);
+            new DamageLabel(String.format("%.1f", effectiveDamage), pos.getCentralX(), pos.getCentralY(), 100, 0);
         }
     }
 }
