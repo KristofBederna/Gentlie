@@ -61,8 +61,6 @@ public class RemoveDeadObjectSystem extends GameSystem {
             EntityHub.getInstance().removeEntity(entity);
             handlePolarBearEntity(entity);
             handleChestEntity(entity);
-            handleBigSnowBallEntity(entity);
-            handleSnowBallEntity(entity);
         }
     }
 
@@ -73,6 +71,7 @@ public class RemoveDeadObjectSystem extends GameSystem {
      * @param dead   the list of dead entities
      */
     private void addToDeadList(Entity entity, ArrayList<Entity> dead) {
+        if (entity == null) return;
         if (!entity.getComponent(HealthComponent.class).isAlive()) {
             dead.add(entity);
         }
@@ -137,7 +136,7 @@ public class RemoveDeadObjectSystem extends GameSystem {
     }
 
     /**
-     * Handles the removal of a chest entity, including adding gold and creating particle effects.
+     * Handles the removal of a chest entity, including adding gold.
      * @param entity the chest entity to handle
      */
     private void handleChestEntity(Entity entity) {
@@ -145,48 +144,6 @@ public class RemoveDeadObjectSystem extends GameSystem {
             Random rand = new Random();
             int gold = rand.nextInt(25, 50);
             handleGoldGained(entity, gold);
-            CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
-            new ParticleEmitterEntity(
-                    pos.getCentralX(), pos.getCentralY(),
-                    new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 15, 15,
-                            new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
-                            Color.BROWN, Color.SADDLEBROWN, 75),
-                    Direction.ALL, 10
-            );
-        }
-    }
-
-    /**
-     * Handles the removal of a big snowball entity, creating particle effects at its location.
-     * @param entity the big snowball entity to handle
-     */
-    private void handleBigSnowBallEntity(Entity entity) {
-        if (entity instanceof BigSnowBallEntity) {
-            CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
-            new ParticleEmitterEntity(
-                    pos.getCentralX(), pos.getCentralY(),
-                    new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 15, 15,
-                            new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
-                            Color.SNOW, Color.GREY, 75),
-                    Direction.ALL, 5
-            );
-        }
-    }
-
-    /**
-     * Handles the removal of a snowball entity, creating particle effects at its location.
-     * @param entity the snowball entity to handle
-     */
-    private void handleSnowBallEntity(Entity entity) {
-        if (entity instanceof SnowBallEntity) {
-            CentralMassComponent pos = entity.getComponent(CentralMassComponent.class);
-            new ParticleEmitterEntity(
-                    pos.getCentralX(), pos.getCentralY(),
-                    new ParticleEntity(pos.getCentralX(), pos.getCentralY(), 10, 10,
-                            new NSidedShape(new Point(pos.getCentralX(), pos.getCentralY()), 5, 32),
-                            Color.SNOW, Color.GREY, 50),
-                    Direction.ALL, 3
-            );
         }
     }
 
