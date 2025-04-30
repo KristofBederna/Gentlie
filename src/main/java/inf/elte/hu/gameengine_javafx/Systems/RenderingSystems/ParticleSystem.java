@@ -113,6 +113,7 @@ public class ParticleSystem extends GameSystem {
      * @param toBeRemoved A set of particles to be removed.
      */
     private void processParticle(Entity entity, HashSet<ParticleEmitterEntity> emittersToRemove, Entity particle, Direction direction, Set<Entity> toBeRemoved) {
+        if (particle == null) {return;}
         ParticleEntity particleEntity = (ParticleEntity) particle;
         AccelerationComponent acceleration = particleEntity.getComponent(AccelerationComponent.class);
         PositionComponent position = particleEntity.getComponent(PositionComponent.class);
